@@ -75,7 +75,7 @@ export default function Signin() {
 
           <Pressable
             onPress={() => {
-              router.push("/signup");
+              router.push("/find");
             }}
             className="mt-6"
           >
