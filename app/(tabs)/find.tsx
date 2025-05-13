@@ -94,7 +94,6 @@ export default function Find() {
     ),
     onPanResponderRelease: (_, gesture) => {
       if (gesture.dx > 120) {
-        // Swiped right
         Animated.timing(position, {
           toValue: { x: SCREEN_WIDTH + 100, y: gesture.dy },
           duration: 200,
@@ -104,7 +103,6 @@ export default function Find() {
           position.setValue({ x: 0, y: 0 });
         });
       } else if (gesture.dx < -120) {
-        // Swiped left
         Animated.timing(position, {
           toValue: { x: -SCREEN_WIDTH - 100, y: gesture.dy },
           duration: 200,
@@ -114,7 +112,6 @@ export default function Find() {
           position.setValue({ x: 0, y: 0 });
         });
       } else {
-        // Return to center
         Animated.spring(position, {
           toValue: { x: 0, y: 0 },
           useNativeDriver: false,
@@ -135,69 +132,79 @@ export default function Find() {
     const ghost = DUMMY_DATA[currentIndex];
 
     return (
-      <Animated.View
-        {...panResponder.panHandlers}
-        style={[
-          styles.card,
-          {
-            transform: [...position.getTranslateTransform(), { rotate }],
-          },
-        ]}
-      >
-        <View className="flex flex-col gap-2">
-          <Text className="text-2xl font-cinzelBold">{ghost.name}</Text>
-          <Text className="font-cinzel text-xl text-[#330202]">
-            {ghost.era}
-          </Text>
-          <Text className="font-cinzel">Died from: {ghost.deathCause}</Text>
-        </View>
-        <View>
-          <Text className="font-cinzelBold tex-lg text-[#330202] ">
-            What I&apos;m looking for:
-          </Text>
-          <Text className="text-xs font-cinzel">{ghost.lookingFor}</Text>
-        </View>
-
+      <>
         <Animated.View
+          {...panResponder.panHandlers}
           style={[
-            styles.heart,
+            styles.card,
             {
-              opacity: position.x.interpolate({
-                inputRange: [0, 150],
-                outputRange: [0, 1],
-                extrapolate: "clamp",
-              }),
+              transform: [...position.getTranslateTransform(), { rotate }],
             },
           ]}
         >
-          <Text style={{ fontSize: 40 }}>❤️</Text>
-        </Animated.View>
+          <View className="flex flex-col gap-2">
+            <Text className="text-2xl font-cinzelBold">{ghost.name}</Text>
+            <Text className="font-cinzel text-xl text-[#330202]">
+              {ghost.era}
+            </Text>
+            <Text className="font-cinzel">Died from: {ghost.deathCause}</Text>
+          </View>
+          <View>
+            <Text className="font-cinzelBold tex-lg text-[#330202] ">
+              What I&apos;m looking for:
+            </Text>
+            <Text className="text-xs font-cinzel">{ghost.lookingFor}</Text>
+          </View>
 
-        <Animated.View
-          style={[
-            styles.cross,
-            {
-              opacity: position.x.interpolate({
-                inputRange: [-150, 0],
-                outputRange: [1, 0],
-                extrapolate: "clamp",
-              }),
-            },
-          ]}
-        >
-          <Text style={{ fontSize: 40 }}>❌</Text>
+          <Animated.View
+            style={[
+              styles.heart,
+              {
+                opacity: position.x.interpolate({
+                  inputRange: [0, 150],
+                  outputRange: [0, 1],
+                  extrapolate: "clamp",
+                }),
+              },
+            ]}
+          >
+            <Text style={{ fontSize: 40 }}>❤️</Text>
+          </Animated.View>
+
+          <Animated.View
+            style={[
+              styles.cross,
+              {
+                opacity: position.x.interpolate({
+                  inputRange: [-150, 0],
+                  outputRange: [1, 0],
+                  extrapolate: "clamp",
+                }),
+              },
+            ]}
+          >
+            <Text style={{ fontSize: 40 }}>❌</Text>
+          </Animated.View>
         </Animated.View>
-      </Animated.View>
+      </>
     );
   };
 
-  return <View style={styles.container}>{renderCard()}</View>;
+  return (
+    <View className="flex-1 bg-purple-950">
+      <View>
+        <Text className="text-2xl font-cinzelBold text-gray-200 text-center mt-4">
+          Summon Your Soulmate
+        </Text>
+      </View>
+      <View style={styles.container}>{renderCard()}</View>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#330202",
     justifyContent: "center",
     alignItems: "center",
   },
