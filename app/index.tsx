@@ -3,6 +3,7 @@ import * as Font from "expo-font";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { StatusBar, Text, TouchableOpacity, View } from "react-native";
+import Animated, { SlideInDown } from "react-native-reanimated";
 
 export default function Index() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -36,10 +37,13 @@ export default function Index() {
         </View>
       </View>
       {signInClicked === false && (
-        <View className="mt-12 flex flex-col gap-3">
+        <Animated.View
+          entering={SlideInDown}
+          className="mt-12 flex flex-col gap-3"
+        >
           <TouchableOpacity
             onPress={() => {
-              router.push("/signin");
+              router.push("/(create)/username");
             }}
             className="bg-purple-700  flex flex-col items-center justify-center py-5  w-[300px] rounded-full"
           >
@@ -51,14 +55,17 @@ export default function Index() {
             onPress={() => {
               setSignInClicked(true);
             }}
-            className="  flex flex-col items-center justify-center py-3  w-[250px] rounded-lg"
+            className="  flex flex-col items-center justify-center py-3  rounded-lg"
           >
             <Text className="text-purple-700 font-semibold">Sign in</Text>
           </TouchableOpacity>
-        </View>
+        </Animated.View>
       )}
       {signInClicked && (
-        <View className="mt-12 flex flex-col gap-3">
+        <Animated.View
+          entering={SlideInDown.duration(200)}
+          className="mt-12 flex flex-col gap-3"
+        >
           <TouchableOpacity
             onPress={() => {
               router.push("/signin");
@@ -85,11 +92,11 @@ export default function Index() {
             onPress={() => {
               setSignInClicked(false);
             }}
-            className="  flex flex-col items-center justify-center py-3  w-[250px] rounded-lg"
+            className="  flex flex-col items-center justify-center py-3  rounded-lg"
           >
             <Text className="text-purple-700 font-semibold">Back</Text>
           </TouchableOpacity>
-        </View>
+        </Animated.View>
       )}
     </View>
   );

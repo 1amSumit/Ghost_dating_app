@@ -1,0 +1,31 @@
+import React from "react";
+import { Text, TextInput, View } from "react-native";
+
+interface CustomInputProps {
+  placeholder: string | undefined;
+  value: string;
+  label: string;
+  onChange: (text: string) => void;
+}
+
+export default function CustomInput({
+  value,
+  onChange,
+  label,
+  placeholder,
+}: CustomInputProps) {
+  return (
+    <>
+      <Text className="text-lg font-cinzelBold text-gray-700">{label}</Text>
+      <TextInput
+        autoFocus={false}
+        autoCorrect
+        value={value}
+        onChangeText={onChange}
+        className=" w-[350px] font-cinzelBold text-2xl text-gray-500  rounded-lg"
+        placeholder={placeholder}
+      />
+      <View className="w-[350px]  h-[3px] bg-gray-600 rounded-full"></View>
+    </>
+  );
+}

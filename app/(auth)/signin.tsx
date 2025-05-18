@@ -1,13 +1,16 @@
+import { signin } from "@/actions/signin";
+import CustomInput from "@/components/CustomInput";
 import FloatingButton from "@/components/FloatingButton";
 import { SimpleLineIcons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Text, TextInput, View } from "react-native";
+import { Text, View } from "react-native";
+import Animated, { SlideInLeft } from "react-native-reanimated";
 
 export default function Signin() {
   const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  const router = useRouter();
   return (
     <View className="relative flex-1 flex flex-col bg-gray-200 items-center pt-[6rem]">
       <View className="flex flex-col gap-4 items-center justify-center">
@@ -17,22 +20,45 @@ export default function Signin() {
         </Text>
       </View>
       <View className="mt-[3rem] flex flex-col gap-[2rem]">
-        <View className="flex flex-col">
-          <TextInput
-            autoFocus={false}
-            autoCorrect
-            value={email}
-            onChangeText={setEmail}
-            className=" w-[350px] font-cinzelBold text-2xl text-gray-500  rounded-lg"
-            placeholder="john@example.com"
-          />
-          <View className="w-[350px]  h-[3px] bg-gray-600 rounded-full"></View>
-        </View>
+        {showPassword === false && (
+          <Animated.View
+            entering={SlideInLeft.duration(500)}
+            className="flex flex-col"
+          >
+            <CustomInput
+              label="Provide your email"
+              value={email}
+              placeholder="bloodymarry@ghostmail.com"
+              onChange={(text) => setEmail(text)}
+            />
+          </Animated.View>
+        )}
+        {showPassword && (
+          <Animated.View
+            entering={SlideInLeft.duration(500)}
+            className="flex flex-col"
+          >
+            <CustomInput
+              label="Provide your password"
+              value="password"
+              placeholder=""
+              onChange={(text) => setPassword(text)}
+            />
+          </Animated.View>
+        )}
       </View>
       <View className="absolute bottom-5 right-10">
         <FloatingButton
           onPress={() => {
-            console.log("pressed");
+            if (password.trim().length !== 0) {
+              signin({ email, password });
+            }
+
+            if (!email || !email.includes("@")) {
+              return;
+            } else {
+              setShowPassword(true);
+            }
           }}
         />
       </View>
