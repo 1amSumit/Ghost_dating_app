@@ -1,9 +1,25 @@
-import { useState } from "react";
-import { Pressable, Text, TextInput, View } from "react-native";
+import { useRef, useState } from "react";
+import { Text, TextInput, View } from "react-native";
 
 export default function OtpInput() {
-  const [otp, setOtp] = useState("");
-  const otpLength = [0, 0, 0, 0, 0, 0];
+  const [otp, setOtp] = useState(Array(6).fill(""));
+  const inputRefs = useRef<(TextInput | null)[]>([]);
+
+  const handleChange = (text: string, index: number) => {
+    if (/^\d$/.test(text)) {
+      const newOtp = [...otp];
+      newOtp[index] = text;
+      setOtp(newOtp);
+
+      if (index < 5) {
+        inputRefs.current[index + 1]?.focus();
+      }
+    } else if (text === "") {
+      const newOtp = [...otp];
+      newOtp[index] = "";
+      setOtp(newOtp);
+    }
+  };
   return (
     <View className="px-4">
       <View>
@@ -13,18 +29,17 @@ export default function OtpInput() {
         <Text className="font-cinzel text-xs mt-4">send to youremail.com</Text>
       </View>
       <View className="mt-[10rem] flex flex-row gap-[1.5rem] items-center justify-center">
-        {otpLength.map((el, i: number) => (
-          <View key={i.toString()} className="flex flex-col">
+        {otp.map((digit, i: number) => (
+          <View key={i} className="flex flex-col items-center">
             <TextInput
-              maxLength={6}
+              //@ts-ignore
+              ref={(el) => (inputRefs.current[i] = el)}
               keyboardType="numeric"
-              value={otp[i]}
-              onChangeText={(text) => setOtp(text)}
-              className="text-2xl font-cinzelBold"
+              maxLength={1}
+              value={digit}
+              onChangeText={(text) => handleChange(text, i)}
+              className="text-2xl text-center w-[40px] h-[50px] font-cinzelBold border-b-[2px] border-gray-800"
             />
-            <Pressable onPress={() => {}}>
-              <View className="w-[40px] h-[3px] bg-gray-800"></View>
-            </Pressable>
           </View>
         ))}
       </View>
