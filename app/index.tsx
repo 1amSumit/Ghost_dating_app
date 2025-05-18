@@ -1,4 +1,4 @@
-import { SimpleLineIcons } from "@expo/vector-icons";
+import { Ionicons, SimpleLineIcons } from "@expo/vector-icons";
 import * as Font from "expo-font";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
@@ -18,7 +18,7 @@ export default function Index() {
 
   if (!fontsLoaded) return null;
   return (
-    <View className="flex-1 bg-purple-950 items-center justify-center">
+    <View className="flex-1 relative bg-gray-200 items-center justify-center">
       <StatusBar backgroundColor="#111827" barStyle="light-content" />
 
       <View className="items-center">
@@ -26,24 +26,28 @@ export default function Index() {
           <SimpleLineIcons name="ghost" size={40} color="white" />
         </View>
         <View className="mt-[2rem] flex flex-col items-center gap-4 justify-center">
-          <Text className="text-4xl text-gray-100 font-cinzelBold">
+          <Text className="text-4xl text-gray-700 font-cinzelBold">
             Ghosted
           </Text>
-          <Text className="text-purple-200 text-2xl ">
+          <Text className="text-purple-700 text-2xl ">
             Dead. Single. Still picky.
           </Text>
         </View>
-
-        <View className="mt-12">
-          <TouchableOpacity
-            onPress={() => {
-              router.push("/signin");
-            }}
-            className="bg-purple-500 flex flex-col items-center justify-center py-3  w-[250px] rounded-lg"
-          >
-            <Text className="text-gray-200 font-semibold">Get Started</Text>
-          </TouchableOpacity>
-        </View>
+      </View>
+      <View className="mt-12 absolute bottom-5 right-10 ">
+        <TouchableOpacity
+          onPress={() => {
+            router.push("/signin");
+          }}
+          className="bg-purple-800  realtive  rounded-full w-[50px] h-[50px]"
+        >
+          <Ionicons
+            className="absolute top-[50%] left-[53%] translate-x-[-50%] translate-y-[-50%]"
+            name="chevron-forward"
+            size={28}
+            color="white"
+          />
+        </TouchableOpacity>
       </View>
     </View>
   );
