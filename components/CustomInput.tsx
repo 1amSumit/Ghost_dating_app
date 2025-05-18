@@ -15,17 +15,19 @@ export default function CustomInput({
   placeholder,
 }: CustomInputProps) {
   return (
-    <>
-      <Text className="text-lg font-cinzelBold text-gray-700">{label}</Text>
+    <View className="px-4">
+      <Text className=" w-screen text-2xl  font-cinzelBold text-gray-700">
+        {label}
+      </Text>
       <TextInput
         autoFocus={false}
         autoCorrect
         value={value}
         onChangeText={onChange}
-        className=" w-[350px] font-cinzelBold text-2xl text-gray-500  rounded-lg"
+        className=" w-[350px] font-cinzelBold text-lg  text-gray-500  rounded-lg"
         placeholder={placeholder}
       />
       <View className="w-[350px]  h-[3px] bg-gray-600 rounded-full"></View>
-    </>
+    </View>
   );
 }

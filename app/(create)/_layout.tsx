@@ -1,5 +1,4 @@
 import { Stack } from "expo-router";
-import React from "react";
 
 export default function RootLayout() {
   return (
@@ -21,7 +20,10 @@ export default function RootLayout() {
       <Stack.Screen name="hometown" />
       <Stack.Screen name="work" />
       <Stack.Screen name="education" />
-      <Stack.Screen name="" />
+      <Stack.Screen name="political" />
+      <Stack.Screen name="religious" />
+      <Stack.Screen name="howyoudie" />
+      <Stack.Screen name="bio" />
     </Stack>
   );
 }

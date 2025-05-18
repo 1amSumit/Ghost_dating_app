@@ -1,12 +1,14 @@
 import CustomInput from "@/components/CustomInput";
 import FloatingButton from "@/components/FloatingButton";
 import { SimpleLineIcons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Text, View } from "react-native";
 import Animated, { SlideInLeft } from "react-native-reanimated";
 
-export default function Index() {
+export default function Username() {
   const [username, setUsername] = useState<string>("");
+  const router = useRouter();
 
   return (
     <View className=" relative flex-1 flex flex-col bg-gray-200 items-center pt-[6rem]">
@@ -32,7 +34,10 @@ export default function Index() {
       <View className="absolute bottom-5 right-10">
         <FloatingButton
           onPress={() => {
-            console.log("username");
+            if (!username || username.length < 6) {
+              return;
+            }
+            router.push("/(create)/email");
           }}
         />
       </View>
