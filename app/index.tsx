@@ -1,4 +1,4 @@
-import { Ionicons, SimpleLineIcons } from "@expo/vector-icons";
+import { FontAwesome, Fontisto, SimpleLineIcons } from "@expo/vector-icons";
 import * as Font from "expo-font";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
@@ -6,6 +6,7 @@ import { StatusBar, Text, TouchableOpacity, View } from "react-native";
 
 export default function Index() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
+  const [signInClicked, setSignInClicked] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -18,7 +19,7 @@ export default function Index() {
 
   if (!fontsLoaded) return null;
   return (
-    <View className="flex-1 relative bg-gray-200 items-center justify-center">
+    <View className="flex-1 bg-gray-200 items-center justify-between pt-[6rem] pb-[1rem]">
       <StatusBar backgroundColor="#111827" barStyle="light-content" />
 
       <View className="items-center">
@@ -34,21 +35,62 @@ export default function Index() {
           </Text>
         </View>
       </View>
-      <View className="mt-12 absolute bottom-5 right-10 ">
-        <TouchableOpacity
-          onPress={() => {
-            router.push("/signin");
-          }}
-          className="bg-purple-800  realtive  rounded-full w-[50px] h-[50px]"
-        >
-          <Ionicons
-            className="absolute top-[50%] left-[53%] translate-x-[-50%] translate-y-[-50%]"
-            name="chevron-forward"
-            size={28}
-            color="white"
-          />
-        </TouchableOpacity>
-      </View>
+      {signInClicked === false && (
+        <View className="mt-12 flex flex-col gap-3">
+          <TouchableOpacity
+            onPress={() => {
+              router.push("/signin");
+            }}
+            className="bg-purple-700  flex flex-col items-center justify-center py-5  w-[300px] rounded-full"
+          >
+            <Text className="text-gray-100 text-xl font-semibold">
+              Create Account
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              setSignInClicked(true);
+            }}
+            className="  flex flex-col items-center justify-center py-3  w-[250px] rounded-lg"
+          >
+            <Text className="text-purple-700 font-semibold">Sign in</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+      {signInClicked && (
+        <View className="mt-12 flex flex-col gap-3">
+          <TouchableOpacity
+            onPress={() => {
+              router.push("/signin");
+            }}
+            className="bg-white  flex flex-row items-center justify-center py-5  w-[300px] rounded-full gap-3"
+          >
+            <FontAwesome name="google" size={24} />
+            <Text className="text-gray-700 text-lg font-semibold">
+              Sign in with Google
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              router.push("/signin");
+            }}
+            className="bg-purple-700  flex flex-row gap-3 items-center justify-center py-5  w-[300px] rounded-full"
+          >
+            <Fontisto name="email" size={24} color={"white"} />
+            <Text className="text-white text-lg font-semibold">
+              Sign in with email
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              setSignInClicked(false);
+            }}
+            className="  flex flex-col items-center justify-center py-3  w-[250px] rounded-lg"
+          >
+            <Text className="text-purple-700 font-semibold">Back</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 }
