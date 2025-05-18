@@ -16,7 +16,7 @@ export default function CustomInput({
 }: CustomInputProps) {
   return (
     <View className="px-4">
-      <Text className=" w-screen text-2xl  font-cinzelBold text-gray-700">
+      <Text className=" w-full text-xl  font-cinzelBold text-gray-700">
         {label}
       </Text>
       <TextInput

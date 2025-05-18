@@ -12,7 +12,7 @@ export default function Signin() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   return (
-    <View className="relative flex-1 flex flex-col bg-gray-200 items-center pt-[6rem]">
+    <View className="relative flex-1 px-[3rem] flex flex-col bg-gray-200 items-center pt-[6rem]">
       <View className="flex flex-col gap-4 items-center justify-center">
         <SimpleLineIcons name="ghost" size={40} color={"#C084FC"} />
         <Text className="text-gray-700 font-cinzelBold text-3xl">

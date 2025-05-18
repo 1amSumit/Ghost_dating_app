@@ -2,12 +2,10 @@ import FloatingButton from "@/components/FloatingButton";
 import OtpInput from "@/components/OtpInput";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { useState } from "react";
 import { View } from "react-native";
 import Animated, { SlideInLeft } from "react-native-reanimated";
 
 export default function Otp() {
-  const [email, setEmail] = useState<string>("");
   const router = useRouter();
 
   return (
@@ -26,10 +24,7 @@ export default function Otp() {
       <View className="absolute bottom-5 right-10">
         <FloatingButton
           onPress={() => {
-            if (!email || !email.includes("@")) {
-              return;
-            }
-            router.push("/(create)/password");
+            router.push("/(create)/dob");
           }}
         />
       </View>
