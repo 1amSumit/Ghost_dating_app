@@ -20,6 +20,7 @@ export default function OtpInput() {
       setOtp(newOtp);
     }
   };
+
   return (
     <View className="px-4">
       <View>
@@ -32,7 +33,7 @@ export default function OtpInput() {
         {otp.map((digit, i: number) => (
           <View key={i} className="flex flex-col items-center">
             <TextInput
-              //@ts-ignore
+              // @ts-ignore
               ref={(el) => (inputRefs.current[i] = el)}
               keyboardType="numeric"
               maxLength={1}
