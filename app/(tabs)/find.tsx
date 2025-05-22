@@ -7,6 +7,7 @@ import {
   Text,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 
@@ -191,14 +192,14 @@ export default function Find() {
   };
 
   return (
-    <View className="flex-1 bg-purple-950">
+    <SafeAreaView className="flex-1 bg-purple-950">
       <View>
         <Text className="text-2xl font-cinzelBold text-gray-200 text-center mt-4">
           Summon Your Soulmate
         </Text>
       </View>
       <View style={styles.container}>{renderCard()}</View>
-    </View>
+    </SafeAreaView>
   );
 }
 

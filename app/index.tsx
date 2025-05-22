@@ -18,9 +18,10 @@ export default function Index() {
     }).then(() => setFontsLoaded(true));
   }, []);
 
-  if (!fontsLoaded) return null;
+  if (!fontsLoaded) return <Text>Loading...</Text>;
+
   return (
-    <View className="flex-1 bg-gray-200 items-center justify-between pt-[6rem] pb-[1rem]">
+    <View className="flex-1 bg-gray-200 items-center justify-between pt-[6rem] pb-[2rem]">
       <StatusBar backgroundColor="#111827" barStyle="light-content" />
 
       <View className="items-center">
@@ -31,7 +32,7 @@ export default function Index() {
           <Text className="text-4xl text-gray-700 font-cinzelBold">
             Ghosted
           </Text>
-          <Text className="text-purple-700 text-2xl ">
+          <Text className="text-purple-700 text-2xl font-cinzel">
             Dead. Single. Still picky.
           </Text>
         </View>
@@ -43,11 +44,11 @@ export default function Index() {
         >
           <TouchableOpacity
             onPress={() => {
-              router.push("/(create)/dob");
+              router.push("/(create)/pronouns");
             }}
             className="bg-purple-700  flex flex-col items-center justify-center py-5  w-[300px] rounded-full"
           >
-            <Text className="text-gray-100 text-xl font-semibold">
+            <Text className="text-gray-100 font-cinzel text-xl font-semibold">
               Create Account
             </Text>
           </TouchableOpacity>
@@ -55,9 +56,9 @@ export default function Index() {
             onPress={() => {
               setSignInClicked(true);
             }}
-            className="  flex flex-col items-center justify-center py-3  rounded-lg"
+            className="   flex flex-col items-center justify-center  rounded-lg"
           >
-            <Text className="text-purple-700 font-semibold">Sign in</Text>
+            <Text className="text-purple-700 font-cinzel ">Sign in</Text>
           </TouchableOpacity>
         </Animated.View>
       )}
@@ -73,7 +74,7 @@ export default function Index() {
             className="bg-white  flex flex-row items-center justify-center py-5  w-[300px] rounded-full gap-3"
           >
             <FontAwesome name="google" size={24} />
-            <Text className="text-gray-700 text-lg font-semibold">
+            <Text className="text-gray-700 font-cinzel text-lg font-semibold">
               Sign in with Google
             </Text>
           </TouchableOpacity>
@@ -84,7 +85,7 @@ export default function Index() {
             className="bg-purple-700  flex flex-row gap-3 items-center justify-center py-5  w-[300px] rounded-full"
           >
             <Fontisto name="email" size={24} color={"white"} />
-            <Text className="text-white text-lg font-semibold">
+            <Text className="text-white font-cinzel text-lg font-semibold">
               Sign in with email
             </Text>
           </TouchableOpacity>
@@ -92,9 +93,11 @@ export default function Index() {
             onPress={() => {
               setSignInClicked(false);
             }}
-            className="  flex flex-col items-center justify-center py-3  rounded-lg"
+            className="  flex flex-col items-center justify-center pt-3  rounded-lg"
           >
-            <Text className="text-purple-700 font-semibold">Back</Text>
+            <Text className="text-purple-700 font-cinzel font-semibold">
+              Back
+            </Text>
           </TouchableOpacity>
         </Animated.View>
       )}

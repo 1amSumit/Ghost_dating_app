@@ -33,12 +33,6 @@ export default function TabBar({
     <View className="absolute bottom-[15px] right-0 left-0  mx-5 bg-gray-900 px-8 flex flex-row items-center justify-between py-3 rounded-full shadow-xl shadow-black/30">
       {state.routes.map((route: any, index: any) => {
         const { options } = descriptors[route.key];
-        // const label =
-        //   options.tabBarLabel !== undefined
-        //     ? options.tabBarLabel
-        //     : options.title !== undefined
-        //     ? options.title
-        //     : route.name;
 
         const isFocused = state.index === index;
 
@@ -76,11 +70,6 @@ export default function TabBar({
             {icons[routeName]({
               color: isFocused ? "#C084FC" : "white",
             })}
-            {/* <Text
-              className={`${isFocused ? "text-purple-950" : "text-gray-800"}`}
-            >
-              {label}
-            </Text> */}
           </TouchableOpacity>
         );
       })}

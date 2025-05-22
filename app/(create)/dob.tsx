@@ -21,7 +21,7 @@ export default function Dob() {
       <View className="absolute bottom-5 right-10">
         <FloatingButton
           onPress={() => {
-            router.push("/(create)/dob");
+            router.push("/(create)/pronouns");
           }}
         />
       </View>

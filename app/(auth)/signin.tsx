@@ -5,6 +5,7 @@ import { SimpleLineIcons } from "@expo/vector-icons";
 import { useState } from "react";
 import { Text, View } from "react-native";
 import Animated, { SlideInLeft } from "react-native-reanimated";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Signin() {
   const [email, setEmail] = useState<string>("");
@@ -12,14 +13,14 @@ export default function Signin() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   return (
-    <View className="relative flex-1 px-[3rem] flex flex-col bg-gray-200 items-center pt-[6rem]">
+    <SafeAreaView className="relative flex-1 px-[3rem] flex flex-col bg-gray-200 items-center pt-[6rem]">
       <View className="flex flex-col gap-4 items-center justify-center">
         <SimpleLineIcons name="ghost" size={40} color={"#C084FC"} />
         <Text className="text-gray-700 font-cinzelBold text-3xl">
           Welcome Back
         </Text>
       </View>
-      <View className="mt-[3rem] flex flex-col gap-[2rem]">
+      <View className="mt-[4rem] flex flex-col gap-[2rem]">
         {showPassword === false && (
           <Animated.View
             entering={SlideInLeft.duration(500)}
@@ -40,7 +41,7 @@ export default function Signin() {
           >
             <CustomInput
               label="Provide your password"
-              value="password"
+              value={password}
               placeholder=""
               onChange={(text) => setPassword(text)}
             />
@@ -62,6 +63,6 @@ export default function Signin() {
           }}
         />
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
