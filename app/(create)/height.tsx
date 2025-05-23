@@ -21,7 +21,7 @@ export default function Height() {
       <View className="absolute bottom-5 right-10">
         <FloatingButton
           onPress={() => {
-            router.push("/(create)/ethnicity");
+            router.push("/(create)/education");
           }}
         />
       </View>

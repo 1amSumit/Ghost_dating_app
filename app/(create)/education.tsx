@@ -1,10 +1,30 @@
+import EducationInput from "@/components/EducationInput";
+import FloatingButton from "@/components/FloatingButton";
+import { SimpleLineIcons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import React from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
+import Animated, { SlideInLeft } from "react-native-reanimated";
 
-export default function education() {
+export default function Education() {
+  const router = useRouter();
   return (
-    <View>
-      <Text>education</Text>
+    <View className=" relative flex-1 flex flex-col bg-gray-200 items-center pt-[6rem]">
+      <View className="flex flex-col gap-4 ">
+        <SimpleLineIcons name="ghost" size={40} color={"#C084FC"} />
+      </View>
+      <View className="mt-[3rem] flex flex-col gap-[2rem]">
+        <Animated.View entering={SlideInLeft.duration(500)}>
+          <EducationInput />
+        </Animated.View>
+      </View>
+      <View className="absolute bottom-5 right-10">
+        <FloatingButton
+          onPress={() => {
+            router.push("/(create)/bio");
+          }}
+        />
+      </View>
     </View>
   );
 }
