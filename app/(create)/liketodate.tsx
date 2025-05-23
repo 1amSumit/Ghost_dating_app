@@ -21,7 +21,7 @@ export default function Liketodate() {
       <View className="absolute bottom-5 right-10">
         <FloatingButton
           onPress={() => {
-            router.push("/(create)/liketodate");
+            router.push("/(create)/intension");
           }}
         />
       </View>
