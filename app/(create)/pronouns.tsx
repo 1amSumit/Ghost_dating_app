@@ -21,7 +21,7 @@ export default function Pronounce() {
       <View className="absolute bottom-5 right-10">
         <FloatingButton
           onPress={() => {
-            router.push("/(create)/pronouns");
+            router.push("/(create)/gender");
           }}
         />
       </View>
