@@ -21,7 +21,7 @@ export default function Sexuality() {
       <View className="absolute bottom-5 right-10">
         <FloatingButton
           onPress={() => {
-            router.push("/(create)/sexuality");
+            router.push("/(create)/liketodate");
           }}
         />
       </View>

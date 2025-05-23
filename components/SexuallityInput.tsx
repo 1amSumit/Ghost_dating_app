@@ -1,6 +1,6 @@
-import { Checkbox } from "expo-checkbox";
 import React, { useState } from "react";
 import { FlatList, Text, View } from "react-native";
+import CustomCheckBox from "./CustomCheckBox";
 
 const sexualitiesData = [
   { label: "Prefer not to say" },
@@ -23,21 +23,18 @@ export default function SexuallityInput() {
   return (
     <View className="px-[1rem]">
       <Text className="text-3xl font-cinzelBold">
-        Which gender best describs you?
+        What&apos; your sexuality?
       </Text>
 
       <View className="mt-[3rem] flex flex-col gap-4">
         <FlatList
           data={sexualitiesData}
           renderItem={({ item }) => (
-            <View className="flex flex-row justify-between">
-              <Text className="font-cinzel">{item.label}</Text>
-              <Checkbox
-                value={item.label === sexuality}
-                onValueChange={() => setSexuality(item.label)}
-                color={sexuality ? "#7322ec" : ""}
-              />
-            </View>
+            <CustomCheckBox
+              value={sexuality}
+              label={item.label}
+              onValueChange={() => setSexuality(item.label)}
+            />
           )}
           keyExtractor={(item) => item.label}
           ItemSeparatorComponent={() => <View className="h-[30px]" />}
