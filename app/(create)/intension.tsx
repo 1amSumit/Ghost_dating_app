@@ -21,7 +21,7 @@ export default function Intension() {
       <View className="absolute bottom-5 right-10">
         <FloatingButton
           onPress={() => {
-            router.push("/(create)/intension");
+            router.push("/(create)/height");
           }}
         />
       </View>
