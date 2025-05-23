@@ -41,7 +41,8 @@
     "react-native-web": "~0.20.0",
     "react-native-webview": "13.13.5",
     "tailwindcss": "^3.4.17",
-    "react-native-gesture-handler": "~2.24.0"
+    "react-native-gesture-handler": "~2.24.0",
+    "expo-checkbox": "~4.1.4"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

@@ -1,5 +1,5 @@
-import DobInput from "@/components/DobInput";
 import FloatingButton from "@/components/FloatingButton";
+import PronouncInput from "@/components/PronouncInput";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React from "react";
@@ -15,7 +15,7 @@ export default function Pronounce() {
       </View>
       <View className="mt-[3rem] flex flex-col gap-[2rem]">
         <Animated.View entering={SlideInLeft.duration(500)}>
-          <DobInput />
+          <PronouncInput />
         </Animated.View>
       </View>
       <View className="absolute bottom-5 right-10">
