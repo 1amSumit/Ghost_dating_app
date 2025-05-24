@@ -44,7 +44,7 @@ export default function Index() {
         >
           <TouchableOpacity
             onPress={() => {
-              router.push("/(create)/pronouns");
+              router.push("/(create)/address");
             }}
             className="bg-purple-700  flex flex-col items-center justify-center py-5  w-[300px] rounded-full"
           >

@@ -12,11 +12,21 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.ghostdate.sumit",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyDG3jxfcdNhzpXfmVYtPLxy0nkYbvrH43U"
+        }
+      },
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "permissions": [
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -34,10 +44,39 @@
           "backgroundColor": "#ffffff"
         }
       ],
-      "expo-font"
+      [
+        "react-native-maps",
+        {
+          "config": {
+            "googleMapsApiKey": "AIzaSyDG3jxfcdNhzpXfmVYtPLxy0nkYbvrH43U"
+          }
+        }
+      ],
+      "expo-font",
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+        }
+      ],
+      [
+        "expo-maps",
+        {
+          "requestLocationPermission": true,
+          "apiKey": {
+            "android": "AIzaSyDG3jxfcdNhzpXfmVYtPLxy0nkYbvrH43U"
+          }
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "c37b34cd-08a4-41a3-8d26-6fbdf1c41032"
+      }
     }
   }
 }
