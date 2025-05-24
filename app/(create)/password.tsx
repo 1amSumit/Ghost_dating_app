@@ -30,10 +30,8 @@ export default function Password() {
       </View>
       <View className="absolute bottom-5 right-10">
         <FloatingButton
+          active={!password || password.trim().length < 6 ? false : true}
           onPress={() => {
-            if (!password || password.trim().length < 6) {
-              return;
-            }
             router.push("/(create)/otp");
           }}
         />

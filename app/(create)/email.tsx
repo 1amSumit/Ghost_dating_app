@@ -30,10 +30,8 @@ export default function Email() {
       </View>
       <View className="absolute bottom-5 right-10">
         <FloatingButton
+          active={!email || !email.includes("@") ? false : true}
           onPress={() => {
-            if (!email || !email.includes("@")) {
-              return;
-            }
             router.push("/(create)/password");
           }}
         />

@@ -33,10 +33,8 @@ export default function Username() {
       </View>
       <View className="absolute bottom-5 right-10">
         <FloatingButton
+          active={username.trim().length > 5 ? true : false}
           onPress={() => {
-            if (!username || username.length < 6) {
-              return;
-            }
             router.push("/(create)/email");
           }}
         />

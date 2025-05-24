@@ -23,8 +23,9 @@ export default function Otp() {
       </View>
       <View className="absolute bottom-5 right-10">
         <FloatingButton
+          active={false}
           onPress={() => {
-            router.push("/(create)/dob");
+            router.push("/(create)/username");
           }}
         />
       </View>
