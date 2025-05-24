@@ -1,13 +1,17 @@
 import { generateOtp } from "@/actions/signupAction";
 import CustomInput from "@/components/CustomInput";
 import FloatingButton from "@/components/FloatingButton";
+import { RootState } from "@/store/store";
+import { addEmail } from "@/store/userSlice";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { useState } from "react";
 import { ActivityIndicator, ToastAndroid, View } from "react-native";
 import Animated, { SlideInLeft } from "react-native-reanimated";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Email() {
-  const [email, setEmail] = useState<string>("");
+  const { email } = useSelector((state: RootState) => state.userReducer);
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
 
   const handleSubmitEmail = async () => {
@@ -43,7 +47,7 @@ export default function Email() {
             label="Please provide your Email"
             value={email}
             placeholder="bloddymarry@ghostmail.com"
-            onChange={(text) => setEmail(text)}
+            onChange={(text) => dispatch(addEmail(text))}
           />
         </Animated.View>
       </View>
