@@ -1,12 +1,35 @@
+import { verifyOtp } from "@/actions/verifyOtp";
 import FloatingButton from "@/components/FloatingButton";
 import OtpInput from "@/components/OtpInput";
+import { RootState } from "@/store/store";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { View } from "react-native";
+import { ToastAndroid, View } from "react-native";
 import Animated, { SlideInLeft } from "react-native-reanimated";
+import { useSelector } from "react-redux";
 
 export default function Otp() {
   const router = useRouter();
+  const { email, password, otp } = useSelector(
+    (state: RootState) => state.userReducer
+  );
+
+  const handleOtp = async () => {
+    try {
+      const res = await verifyOtp(email, password, otp.join(""));
+      ToastAndroid.show("User created successfully", ToastAndroid.SHORT);
+      router.push("/(create)/username");
+    } catch (err: any) {
+      console.error(
+        "OTP Verification Error:",
+        err?.response?.data || err.message
+      );
+      ToastAndroid.show(
+        err?.response?.data?.message || "Failed to verify OTP",
+        ToastAndroid.SHORT
+      );
+    }
+  };
 
   return (
     <View className=" relative flex-1 flex flex-col bg-gray-200 items-center pt-[6rem]">
@@ -25,7 +48,7 @@ export default function Otp() {
         <FloatingButton
           active={false}
           onPress={() => {
-            router.push("/(create)/username");
+            handleOtp();
           }}
         />
       </View>

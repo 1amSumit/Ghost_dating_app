@@ -1,13 +1,16 @@
 import CustomInput from "@/components/CustomInput";
 import FloatingButton from "@/components/FloatingButton";
+import { RootState } from "@/store/store";
+import { addPassword } from "@/store/userSlice";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { useState } from "react";
 import { View } from "react-native";
 import Animated, { SlideInLeft } from "react-native-reanimated";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Password() {
-  const [password, setPassword] = useState<string>("");
+  const { password } = useSelector((state: RootState) => state.userReducer);
+  const dispatch = useDispatch();
   const router = useRouter();
 
   return (
@@ -24,7 +27,7 @@ export default function Password() {
             label="Please provide your Passowrd"
             value={password}
             placeholder=""
-            onChange={(text) => setPassword(text)}
+            onChange={(text) => dispatch(addPassword(text))}
           />
         </Animated.View>
       </View>

@@ -1,15 +1,19 @@
-import { useRef, useState } from "react";
+import { RootState } from "@/store/store";
+import { addOtp } from "@/store/userSlice";
+import { useRef } from "react";
 import { Text, TextInput, View } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function OtpInput() {
-  const [otp, setOtp] = useState(Array(6).fill(""));
+  const { otp } = useSelector((state: RootState) => state.userReducer);
+  const displatch = useDispatch();
   const inputRefs = useRef<(TextInput | null)[]>([]);
 
   const handleChange = (text: string, index: number) => {
     if (/^\d$/.test(text)) {
       const newOtp = [...otp];
       newOtp[index] = text;
-      setOtp(newOtp);
+      displatch(addOtp(newOtp));
 
       if (index < 5) {
         inputRefs.current[index + 1]?.focus();
@@ -17,7 +21,7 @@ export default function OtpInput() {
     } else if (text === "") {
       const newOtp = [...otp];
       newOtp[index] = "";
-      setOtp(newOtp);
+      displatch(addOtp(newOtp));
     }
   };
 
