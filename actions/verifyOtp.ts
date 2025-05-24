@@ -1,4 +1,3 @@
-// utils/verifyOtp.ts
 import axios from "axios";
 
 export const verifyOtp = async (

@@ -4,6 +4,7 @@ import FloatingButton from "@/components/FloatingButton";
 import { RootState } from "@/store/store";
 import { addEmail } from "@/store/userSlice";
 import { SimpleLineIcons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { ActivityIndicator, ToastAndroid, View } from "react-native";
 import Animated, { SlideInLeft } from "react-native-reanimated";
@@ -13,14 +14,16 @@ export default function Email() {
   const { email } = useSelector((state: RootState) => state.userReducer);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const handleSubmitEmail = async () => {
     setLoading(true);
     try {
       const res = await generateOtp(email);
-      ToastAndroid.show(res, ToastAndroid.SHORT);
+      router.push("/(create)/password");
     } catch (err: any) {
-      ToastAndroid.show("User Already Exists", ToastAndroid.SHORT);
+      console.log(err.message);
+      ToastAndroid.show("User Already Exists" + err, ToastAndroid.SHORT);
     }
     setLoading(false);
   };
@@ -28,7 +31,7 @@ export default function Email() {
   if (loading) {
     return (
       <View className="h-screen flex flex-col items-center justify-center">
-        <ActivityIndicator />
+        <ActivityIndicator size="large" color="#7322ec" />
       </View>
     );
   }

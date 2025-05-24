@@ -67,7 +67,8 @@
             "android": "AIzaSyDG3jxfcdNhzpXfmVYtPLxy0nkYbvrH43U"
           }
         }
-      ]
+      ],
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true

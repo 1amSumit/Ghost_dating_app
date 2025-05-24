@@ -4,32 +4,44 @@ import OtpInput from "@/components/OtpInput";
 import { RootState } from "@/store/store";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { ToastAndroid, View } from "react-native";
+import * as SecureStore from "expo-secure-store";
+import { useState } from "react";
+import { ActivityIndicator, ToastAndroid, View } from "react-native";
 import Animated, { SlideInLeft } from "react-native-reanimated";
 import { useSelector } from "react-redux";
 
 export default function Otp() {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const { email, password, otp } = useSelector(
     (state: RootState) => state.userReducer
   );
 
   const handleOtp = async () => {
+    setLoading(true);
     try {
       const res = await verifyOtp(email, password, otp.join(""));
+
+      await SecureStore.setItemAsync("token", res.user);
+
       ToastAndroid.show("User created successfully", ToastAndroid.SHORT);
       router.push("/(create)/username");
     } catch (err: any) {
-      console.error(
-        "OTP Verification Error:",
-        err?.response?.data || err.message
-      );
       ToastAndroid.show(
         err?.response?.data?.message || "Failed to verify OTP",
         ToastAndroid.SHORT
       );
     }
+    setLoading(false);
   };
+
+  if (loading) {
+    return (
+      <View className="h-screen flex flex-col items-center justify-center">
+        <ActivityIndicator size="large" color="#7322ec" />
+      </View>
+    );
+  }
 
   return (
     <View className=" relative flex-1 flex flex-col bg-gray-200 items-center pt-[6rem]">
@@ -46,7 +58,7 @@ export default function Otp() {
       </View>
       <View className="absolute bottom-5 right-10">
         <FloatingButton
-          active={false}
+          active={otp ? true : false}
           onPress={() => {
             handleOtp();
           }}
