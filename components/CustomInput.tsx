@@ -1,4 +1,3 @@
-import React from "react";
 import { Text, TextInput, View } from "react-native";
 
 interface CustomInputProps {
@@ -24,7 +23,7 @@ export default function CustomInput({
         autoCorrect
         value={value}
         onChangeText={onChange}
-        className=" w-[350px] placeholder:text-gray-400 font-cinzelBold text-lg  text-gray-700  rounded-lg"
+        className=" w-[350px]  font-cinzelBold text-lg  placeholder:text-gray-700  rounded-lg"
         placeholder={placeholder}
       />
       <View className="w-[350px]  h-[3px] bg-gray-600 rounded-full"></View>
