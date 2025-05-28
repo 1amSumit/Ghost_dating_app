@@ -1,6 +1,38 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-const intiState = {
+interface Location {
+  coords: {
+    latitude: string;
+    longitude: string;
+  };
+}
+
+interface IntensionItem {
+  label: string;
+  isChecked: boolean;
+}
+interface PronounsItem {
+  label: string;
+  isChecked: boolean;
+}
+
+interface CreateUserState {
+  username: string;
+  address: string;
+  bio: string;
+  dob: string;
+  education: string;
+  gender: string;
+  height: string;
+  howyoudie: string;
+  intension: IntensionItem[];
+  liketodate: string;
+  sexuality: string;
+  location: Location;
+  pronouns: PronounsItem[];
+}
+
+const initialState: CreateUserState = {
   username: "",
   address: "",
   bio: "",
@@ -9,52 +41,66 @@ const intiState = {
   gender: "",
   height: "",
   howyoudie: "",
-  intension: "",
+  intension: [],
+  pronouns: [],
   liketodate: "",
   sexuality: "",
+  location: {
+    coords: {
+      latitude: "",
+      longitude: "",
+    },
+  },
 };
 
 const createUserSlice = createSlice({
   name: "createUser",
-  initialState: intiState,
+  initialState,
   reducers: {
-    addUsername: (state, action) => {
+    addUsername: (state, action: PayloadAction<string>) => {
       state.username = action.payload;
     },
-    addAddress: (state, action) => {
+    addAddress: (state, action: PayloadAction<string>) => {
       state.address = action.payload;
     },
-    addBio: (state, action) => {
+    addBio: (state, action: PayloadAction<string>) => {
       state.bio = action.payload;
     },
-    addDob: (state, action) => {
+    addDob: (state, action: PayloadAction<string>) => {
       state.dob = action.payload;
     },
-    addEducation: (state, action) => {
+    addEducation: (state, action: PayloadAction<string>) => {
       state.education = action.payload;
     },
-    addGender: (state, action) => {
+    addGender: (state, action: PayloadAction<string>) => {
       state.gender = action.payload;
     },
-    addHeight: (state, action) => {
+    addHeight: (state, action: PayloadAction<string>) => {
       state.height = action.payload;
     },
-    addHowyoudie: (state, action) => {
+    addHowyoudie: (state, action: PayloadAction<string>) => {
       state.howyoudie = action.payload;
     },
-    addIntension: (state, action) => {
-      state.intension = action.payload;
+    addIntension: (state, action: PayloadAction<IntensionItem>) => {
+      state.intension.push(action.payload);
     },
-    addSexuality: (state, action) => {
+    addPronouns: (state, action: PayloadAction<PronounsItem>) => {
+      state.pronouns.push(action.payload);
+    },
+    addLiketoDate: (state, action: PayloadAction<string>) => {
+      state.liketodate = action.payload;
+    },
+    addSexuality: (state, action: PayloadAction<string>) => {
       state.sexuality = action.payload;
     },
-    addLiketoDate: (state, action) => {
-      state.liketodate = action.payload;
+    addLocation: (state, action: PayloadAction<Location>) => {
+      state.location = action.payload;
     },
   },
 });
 
 export const {
+  addUsername,
   addAddress,
   addBio,
   addDob,
@@ -65,7 +111,8 @@ export const {
   addIntension,
   addLiketoDate,
   addSexuality,
-  addUsername,
+  addPronouns,
+  addLocation,
 } = createUserSlice.actions;
 
 export default createUserSlice;

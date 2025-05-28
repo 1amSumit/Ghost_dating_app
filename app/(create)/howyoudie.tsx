@@ -1,11 +1,18 @@
 import FloatingButton from "@/components/FloatingButton";
+import { addHowyoudie } from "@/store/createUserSlice";
+import { RootState } from "@/store/store";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React from "react";
 import { Text, TextInput, View } from "react-native";
 import Animated, { SlideInLeft } from "react-native-reanimated";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Howyoudie() {
+  const { howyoudie } = useSelector(
+    (state: RootState) => state.createUserSlice
+  );
+  const dispatch = useDispatch();
   const router = useRouter();
 
   return (
@@ -26,8 +33,10 @@ export default function Howyoudie() {
                 multiline={true}
                 className="border-[2px] h-[200px] placeholder:text-gray-600 border-gray-300 text-gray-900 font-cinzel"
                 numberOfLines={4}
+                value={howyoudie}
                 placeholder="Tell us how you die."
                 textAlignVertical="top"
+                onChangeText={(text) => dispatch(addHowyoudie(text))}
               />
             </View>
           </View>
@@ -35,6 +44,7 @@ export default function Howyoudie() {
       </View>
       <View className="absolute bottom-5 right-10">
         <FloatingButton
+          active={howyoudie.trim().length > 0 ? true : false}
           onPress={() => {
             router.push("/(create)/education");
           }}

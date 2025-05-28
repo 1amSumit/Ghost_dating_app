@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { addGender } from "@/store/createUserSlice";
+import { RootState } from "@/store/store";
 import { Pressable, Text, View } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function GenderInput() {
-  const [gender, setGender] = useState("");
+  const { gender } = useSelector((state: RootState) => state.createUserSlice);
+  const dispatch = useDispatch();
   return (
     <View className="px-[1rem]">
       <Text className="text-3xl font-cinzelBold">
@@ -10,7 +13,7 @@ export default function GenderInput() {
       </Text>
 
       <View className="mt-[3rem] flex flex-col gap-4">
-        <Pressable onPress={() => setGender("MALE")}>
+        <Pressable onPress={() => dispatch(addGender("MALE"))}>
           <Text
             className={`${
               gender === "MALE" ? "text-purple-500" : ""
@@ -19,7 +22,7 @@ export default function GenderInput() {
             Male
           </Text>
         </Pressable>
-        <Pressable onPress={() => setGender("FEMALE")}>
+        <Pressable onPress={() => dispatch(addGender("FEMALE"))}>
           <Text
             className={`${
               gender === "FEMALE" ? "text-purple-500" : ""
@@ -28,7 +31,7 @@ export default function GenderInput() {
             Female
           </Text>
         </Pressable>
-        <Pressable onPress={() => setGender("OTHERS")}>
+        <Pressable onPress={() => dispatch(addGender("OTHERS"))}>
           <Text
             className={`${
               gender === "OTHERS" ? "text-purple-500" : ""

@@ -1,14 +1,17 @@
+import { addAddress, addLocation } from "@/store/createUserSlice";
+import { RootState } from "@/store/store";
 import * as Location from "expo-location";
 import { GoogleMaps } from "expo-maps";
 import { GoogleMapsColorScheme } from "expo-maps/build/google/GoogleMaps.types";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Text, TextInput, View } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function LocationInput() {
-  const [address, setAddress] = useState("");
-  const [location, setLocation] = useState<Location.LocationObject | null>(
-    null
-  );
+  const { address } = useSelector((state: RootState) => state.createUserSlice);
+  const { location } = useSelector((state: RootState) => state.createUserSlice);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const getLocation = async () => {
@@ -19,7 +22,7 @@ export default function LocationInput() {
       }
 
       let loca = await Location.getCurrentPositionAsync({});
-      setLocation(loca);
+      dispatch(addLocation(loca));
     };
 
     getLocation();
@@ -33,9 +36,9 @@ export default function LocationInput() {
 
       <View className="mt-[4rem]">
         <TextInput
-          className="font-cinzel border placeholder:text-gray-600 border-gray-400 text-gray-800 rounded-lg p-2"
+          className="font-cinzel border placeholder:text-gray-700 border-gray-400 text-gray-800 rounded-lg p-2"
           value={address}
-          onChangeText={setAddress}
+          onChangeText={(text) => dispatch(addAddress(text))}
           placeholder="Enter your address, area or pincode"
         />
       </View>
@@ -47,8 +50,8 @@ export default function LocationInput() {
           markers={[
             {
               coordinates: {
-                latitude: location?.coords.latitude,
-                longitude: location?.coords.longitude,
+                latitude: Number(location?.coords.latitude),
+                longitude: Number(location?.coords.longitude),
               },
               title: "Your current location",
               draggable: true,
@@ -56,8 +59,8 @@ export default function LocationInput() {
           ]}
           cameraPosition={{
             coordinates: {
-              latitude: location?.coords.latitude,
-              longitude: location?.coords.longitude,
+              latitude: Number(location?.coords.latitude),
+              longitude: Number(location?.coords.longitude),
             },
             zoom: 15,
           }}

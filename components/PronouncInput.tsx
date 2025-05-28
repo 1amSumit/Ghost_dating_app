@@ -1,6 +1,9 @@
+import { addPronouns } from "@/store/createUserSlice";
+import { RootState } from "@/store/store";
 import { Checkbox } from "expo-checkbox";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 
 const pronounsData = [
   { label: "she", isChecked: false },
@@ -17,6 +20,10 @@ const pronounsData = [
 export default function PronouncInput() {
   const [pronouns, setPronouns] = useState(pronounsData);
 
+  const { pronouns: ReduxPronouns } = useSelector(
+    (state: RootState) => state.createUserSlice
+  );
+
   const togglePronouns = (i: number) => {
     const updatedPronons = pronouns.map((p, index) =>
       i === index ? { ...p, isChecked: !p.isChecked } : p
@@ -25,7 +32,12 @@ export default function PronouncInput() {
     setPronouns(updatedPronons);
   };
 
-  const selectedPronouns = pronouns.filter((p) => p.isChecked);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const selectedPronouns = pronouns.filter((p) => p.isChecked);
+    selectedPronouns.forEach((el) => dispatch(addPronouns(el)));
+  }, [pronouns]);
 
   return (
     <View className="px-[1rem]">
@@ -34,7 +46,7 @@ export default function PronouncInput() {
       </Text>
 
       <View className="mt-[2rem] flex flex-row gap-[1rem]">
-        {selectedPronouns.map((p, i) => (
+        {ReduxPronouns.map((p, i) => (
           <View
             key={i}
             className="bg-purple-400 px-3 py-2 rounded-full flex items-center justify-center"

@@ -1,12 +1,17 @@
 import FloatingButton from "@/components/FloatingButton";
 import SexuallityInput from "@/components/SexuallityInput";
+import { RootState } from "@/store/store";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React from "react";
 import { View } from "react-native";
 import Animated, { SlideInLeft } from "react-native-reanimated";
+import { useSelector } from "react-redux";
 
 export default function Sexuality() {
+  const { sexuality } = useSelector(
+    (state: RootState) => state.createUserSlice
+  );
   const router = useRouter();
   return (
     <View className=" relative flex-1 flex flex-col bg-gray-200 items-center pt-[6rem]">
@@ -20,6 +25,7 @@ export default function Sexuality() {
       </View>
       <View className="absolute bottom-5 right-10">
         <FloatingButton
+          active={sexuality ? true : false}
           onPress={() => {
             router.push("/(create)/liketodate");
           }}

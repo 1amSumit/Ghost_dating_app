@@ -1,5 +1,7 @@
-import { useRef, useState } from "react";
+import { addDob } from "@/store/createUserSlice";
+import { useEffect, useRef, useState } from "react";
 import { Text, TextInput, View } from "react-native";
+import { useDispatch } from "react-redux";
 
 export default function DobInput() {
   const [day, setDay] = useState(Array(2).fill(""));
@@ -8,6 +10,14 @@ export default function DobInput() {
   const dayRef = useRef<(TextInput | null)[]>([]);
   const monthRef = useRef<(TextInput | null)[]>([]);
   const yearRef = useRef<(TextInput | null)[]>([]);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (day.length === 2 && month.length === 2 && year.length === 4) {
+      dispatch(addDob(day.join("") + "/" + month + "/" + year));
+    }
+  }, [day, month, year, dispatch]);
 
   const handleChangeDay = (text: string, i: number) => {
     if (text) {

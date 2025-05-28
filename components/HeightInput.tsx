@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import { addHeight } from "@/store/createUserSlice";
+import { RootState } from "@/store/store";
+import React from "react";
 import { Text, View } from "react-native";
 import ScrollPicker from "react-native-wheel-scrollview-picker";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function HeightInput() {
-  const [selectedHeight, setSelectedHeight] = useState<string>("5");
+  const { height } = useSelector((state: RootState) => state.createUserSlice);
+  const dispatch = useDispatch();
 
   const heightOptions = Array.from({ length: 49 }, (_, i) => {
     const totalInches = i + 36;
@@ -20,7 +24,7 @@ export default function HeightInput() {
 
       <ScrollPicker
         dataSource={heightOptions}
-        selectedIndex={heightOptions.indexOf(selectedHeight)}
+        selectedIndex={heightOptions.indexOf(height)}
         renderItem={(data: string, index: number) => (
           <View className="items-center">
             <Text className="text-xl font-cinzelBold">{data}</Text>
@@ -28,7 +32,7 @@ export default function HeightInput() {
         )}
         //@ts-ignore
         onValueChange={(value: string, index: number) => {
-          setSelectedHeight(value);
+          dispatch(addHeight(value));
         }}
         wrapperHeight={180}
         wrapperBackground="#e5e7eb"

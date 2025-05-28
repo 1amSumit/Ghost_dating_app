@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import { addSexuality } from "@/store/createUserSlice";
+import { RootState } from "@/store/store";
+import React from "react";
 import { FlatList, Text, View } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import CustomCheckBox from "./CustomCheckBox";
 
 const sexualitiesData = [
@@ -19,7 +22,10 @@ const sexualitiesData = [
 ];
 
 export default function SexuallityInput() {
-  const [sexuality, setSexuality] = useState("");
+  const { sexuality } = useSelector(
+    (state: RootState) => state.createUserSlice
+  );
+  const dispatch = useDispatch();
   return (
     <View className="px-[1rem]">
       <Text className="text-3xl font-cinzelBold">
@@ -33,7 +39,8 @@ export default function SexuallityInput() {
             <CustomCheckBox
               value={sexuality}
               label={item.label}
-              onValueChange={() => setSexuality(item.label)}
+              fontSize="text-xl"
+              onValueChange={() => dispatch(addSexuality(item.label))}
             />
           )}
           keyExtractor={(item) => item.label}

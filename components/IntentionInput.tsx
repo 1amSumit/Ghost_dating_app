@@ -1,8 +1,15 @@
+import { addIntension } from "@/store/createUserSlice";
 import { Checkbox } from "expo-checkbox";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList, Text, View } from "react-native";
+import { useDispatch } from "react-redux";
 
-const datingIntentions = [
+export type Intension = {
+  label: string;
+  isChecked: boolean;
+};
+
+const initialIntentions: Intension[] = [
   { label: "Just looking around", isChecked: false },
   { label: "Looking for new friends", isChecked: false },
   { label: "Looking for something casual", isChecked: false },
@@ -21,20 +28,25 @@ const datingIntentions = [
 ];
 
 export default function IntentionInput() {
-  const [selectedIntentions, setSelectedIntention] = useState(datingIntentions);
-  const finalIntension = selectedIntentions.filter((int) => int.isChecked);
-  console.log(finalIntension);
+  const [selectedIntentions, setSelectedIntention] =
+    useState<Intension[]>(initialIntentions);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const finalIntension = selectedIntentions.filter((int) => int.isChecked);
+    finalIntension.forEach((el) => dispatch(addIntension(el)));
+  }, [selectedIntentions]);
+
   return (
     <View className="px-[1rem]">
       <Text className="font-cinzelBold text-3xl">
-        What&apos; your dating intention?
+        What&apos;s your dating intention?
       </Text>
-      <View className=" mt-[2rem] h-[70vh] pb-[7rem] px-[1rem]">
+      <View className="mt-[2rem] h-[70vh] pb-[7rem] px-[1rem]">
         <FlatList
           data={selectedIntentions}
           keyExtractor={(item) => item.label}
           ItemSeparatorComponent={() => <View className="h-[40px]" />}
-          scrollEnabled
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
             <View className="flex flex-row items-center justify-between">
@@ -43,12 +55,12 @@ export default function IntentionInput() {
                 color="#7322ec"
                 value={item.isChecked}
                 onValueChange={() => {
-                  const updateIntension = selectedIntentions.map((selInt) =>
-                    item.label === selInt.label
-                      ? { ...selInt, isChecked: !selInt.isChecked }
-                      : selInt
+                  const updated = selectedIntentions.map((intention) =>
+                    intention.label === item.label
+                      ? { ...intention, isChecked: !intention.isChecked }
+                      : intention
                   );
-                  setSelectedIntention(updateIntension);
+                  setSelectedIntention(updated);
                 }}
               />
             </View>

@@ -1,12 +1,17 @@
 import FloatingButton from "@/components/FloatingButton";
 import LocationInput from "@/components/LocationInput";
+import { RootState } from "@/store/store";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React from "react";
 import { View } from "react-native";
 import Animated, { SlideInLeft } from "react-native-reanimated";
+import { useSelector } from "react-redux";
 
 export default function Address() {
+  const adddress = useSelector(
+    (state: RootState) => state.createUserSlice.address
+  );
   const router = useRouter();
   return (
     <View className=" relative flex-1 flex flex-col bg-gray-200 items-center pt-[6rem]">
@@ -20,6 +25,7 @@ export default function Address() {
       </View>
       <View className="absolute bottom-5 right-10">
         <FloatingButton
+          active={adddress.trim().length > 0 ? true : false}
           onPress={() => {
             router.push("/(create)/sexuality");
           }}

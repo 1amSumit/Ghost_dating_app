@@ -1,13 +1,16 @@
 import CustomInput from "@/components/CustomInput";
 import FloatingButton from "@/components/FloatingButton";
+import { addUsername } from "@/store/createUserSlice";
+import { RootState } from "@/store/store";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { useState } from "react";
 import { Text, View } from "react-native";
 import Animated, { SlideInLeft } from "react-native-reanimated";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Username() {
-  const [username, setUsername] = useState<string>("");
+  const { username } = useSelector((state: RootState) => state.createUserSlice);
+  const dispatch = useDispatch();
   const router = useRouter();
 
   return (
@@ -27,7 +30,7 @@ export default function Username() {
             label="Please provide your Username"
             value={username}
             placeholder="Bloody Marry"
-            onChange={(text) => setUsername(text)}
+            onChange={(text) => dispatch(addUsername(text))}
           />
         </Animated.View>
       </View>
@@ -35,7 +38,7 @@ export default function Username() {
         <FloatingButton
           active={username.trim().length > 5 ? true : false}
           onPress={() => {
-            router.push("/(create)/email");
+            router.push("/(create)/dob");
           }}
         />
       </View>
