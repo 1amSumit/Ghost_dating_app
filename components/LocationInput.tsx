@@ -22,6 +22,7 @@ export default function LocationInput() {
       }
 
       let loca = await Location.getCurrentPositionAsync({});
+
       dispatch(addLocation(loca));
     };
 
@@ -36,7 +37,7 @@ export default function LocationInput() {
 
       <View className="mt-[4rem]">
         <TextInput
-          className="font-cinzel border placeholder:text-gray-700 border-gray-400 text-gray-800 rounded-lg p-2"
+          className="font-cinzelBold placeholder:font-cinzel border placeholder:text-gray-700 border-gray-400 text-gray-800 rounded-lg p-2"
           value={address}
           onChangeText={(text) => dispatch(addAddress(text))}
           placeholder="Enter your address, area or pincode"

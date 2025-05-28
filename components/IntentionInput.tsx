@@ -32,9 +32,9 @@ export default function IntentionInput() {
     useState<Intension[]>(initialIntentions);
   const dispatch = useDispatch();
 
+  const finalIntension = selectedIntentions.filter((int) => int.isChecked);
   useEffect(() => {
-    const finalIntension = selectedIntentions.filter((int) => int.isChecked);
-    finalIntension.forEach((el) => dispatch(addIntension(el)));
+    dispatch(addIntension(finalIntension));
   }, [selectedIntentions]);
 
   return (

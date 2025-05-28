@@ -25,7 +25,7 @@ export default function Gender() {
         <FloatingButton
           active={gender ? true : false}
           onPress={() => {
-            router.push("/(create)/sexuality");
+            router.push("/(create)/pronouns");
           }}
         />
       </View>

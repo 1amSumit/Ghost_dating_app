@@ -25,7 +25,7 @@ export default function Height() {
         <FloatingButton
           active={height ? true : false}
           onPress={() => {
-            router.push("/(create)/education");
+            router.push("/(create)/sexuality");
           }}
         />
       </View>

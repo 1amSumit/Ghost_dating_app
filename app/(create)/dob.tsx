@@ -25,7 +25,7 @@ export default function Dob() {
         <FloatingButton
           active={dob.trim().length > 0 ? true : false}
           onPress={() => {
-            router.push("/(create)/pronouns");
+            router.push("/(create)/gender");
           }}
         />
       </View>

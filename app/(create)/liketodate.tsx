@@ -27,7 +27,7 @@ export default function Liketodate() {
         <FloatingButton
           active={liketodate.length > 0 ? true : false}
           onPress={() => {
-            router.push("/(create)/intension");
+            router.push("/(create)/address");
           }}
         />
       </View>

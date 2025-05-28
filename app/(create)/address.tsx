@@ -27,7 +27,7 @@ export default function Address() {
         <FloatingButton
           active={adddress.trim().length > 0 ? true : false}
           onPress={() => {
-            router.push("/(create)/sexuality");
+            console.log("done");
           }}
         />
       </View>

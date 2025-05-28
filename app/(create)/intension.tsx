@@ -31,7 +31,7 @@ export default function Intension() {
               : false
           }
           onPress={() => {
-            router.push("/(create)/height");
+            router.push("/(create)/education");
           }}
         />
       </View>

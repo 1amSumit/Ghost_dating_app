@@ -27,7 +27,7 @@ export default function Education() {
         <FloatingButton
           active={education.trim().length > 0 ? true : false}
           onPress={() => {
-            router.push("/(create)/bio");
+            router.push("/(create)/liketodate");
           }}
         />
       </View>

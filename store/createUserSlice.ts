@@ -2,8 +2,8 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface Location {
   coords: {
-    latitude: string;
-    longitude: string;
+    latitude: number;
+    longitude: number;
   };
 }
 
@@ -47,8 +47,8 @@ const initialState: CreateUserState = {
   sexuality: "",
   location: {
     coords: {
-      latitude: "",
-      longitude: "",
+      latitude: 0,
+      longitude: 0,
     },
   },
 };
@@ -81,11 +81,11 @@ const createUserSlice = createSlice({
     addHowyoudie: (state, action: PayloadAction<string>) => {
       state.howyoudie = action.payload;
     },
-    addIntension: (state, action: PayloadAction<IntensionItem>) => {
-      state.intension.push(action.payload);
+    addIntension: (state, action: PayloadAction<IntensionItem[]>) => {
+      state.intension = action.payload;
     },
-    addPronouns: (state, action: PayloadAction<PronounsItem>) => {
-      state.pronouns.push(action.payload);
+    addPronouns: (state, action: PayloadAction<PronounsItem[]>) => {
+      state.pronouns = action.payload;
     },
     addLiketoDate: (state, action: PayloadAction<string>) => {
       state.liketodate = action.payload;

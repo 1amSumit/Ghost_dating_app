@@ -25,7 +25,7 @@ export default function Bio() {
             </Text>
             <View className="mt-[4rem]">
               <TextInput
-                className=" h-[300px] font-cinzel border-[2px] border-gray-300 rounded-lg"
+                className=" h-[300px] placeholder:text-gray-500 text-gray-800  font-cinzelBold border-[2px] border-gray-300 rounded-lg"
                 value={bio}
                 onChangeText={(text) => dispatch(addBio(text))}
                 textAlignVertical="top"
@@ -39,7 +39,7 @@ export default function Bio() {
         <FloatingButton
           active={bio.trim().length > 0 ? true : false}
           onPress={() => {
-            router.push("/(create)/address");
+            router.push("/(create)/howyoudie");
           }}
         />
       </View>

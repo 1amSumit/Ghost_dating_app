@@ -23,7 +23,7 @@ export default function CustomInput({
         autoCorrect
         value={value}
         onChangeText={onChange}
-        className=" w-[350px]  font-cinzelBold text-lg  placeholder:text-gray-700  rounded-lg"
+        className=" w-[350px]  font-cinzelBold placeholder:font-cinzelBold text-lg placeholder:text-gray-500  text-gray-800  rounded-lg"
         placeholder={placeholder}
       />
       <View className="w-[350px]  h-[3px] bg-gray-600 rounded-full"></View>

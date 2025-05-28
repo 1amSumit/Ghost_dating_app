@@ -31,7 +31,7 @@ export default function Howyoudie() {
             <View className="mt-[4rem]">
               <TextInput
                 multiline={true}
-                className="border-[2px] h-[200px] placeholder:text-gray-600 border-gray-300 text-gray-900 font-cinzel"
+                className="border-[2px] h-[200px] placeholder:text-gray-500 text-gray-800 border-gray-300  font-cinzelBold "
                 numberOfLines={4}
                 value={howyoudie}
                 placeholder="Tell us how you die."
@@ -46,7 +46,7 @@ export default function Howyoudie() {
         <FloatingButton
           active={howyoudie.trim().length > 0 ? true : false}
           onPress={() => {
-            router.push("/(create)/education");
+            router.push("/(create)/intension");
           }}
         />
       </View>

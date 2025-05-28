@@ -33,10 +33,10 @@ export default function PronouncInput() {
   };
 
   const dispatch = useDispatch();
+  const selectedPronouns = pronouns.filter((p) => p.isChecked);
 
   useEffect(() => {
-    const selectedPronouns = pronouns.filter((p) => p.isChecked);
-    selectedPronouns.forEach((el) => dispatch(addPronouns(el)));
+    dispatch(addPronouns(selectedPronouns));
   }, [pronouns]);
 
   return (
@@ -45,13 +45,13 @@ export default function PronouncInput() {
         What&apos; your pronouns?
       </Text>
 
-      <View className="mt-[2rem] flex flex-row gap-[1rem]">
+      <View className="mt-[2rem] flex flex-row items-center gap-[1rem] h-[50px]">
         {ReduxPronouns.map((p, i) => (
           <View
             key={i}
-            className="bg-purple-400 px-3 py-2 rounded-full flex items-center justify-center"
+            className="bg-purple-400 h-[50px] w-[50px]  rounded-full flex items-center justify-center"
           >
-            <Text className="font-cinzel">{p.label}</Text>
+            <Text className="font-cinzel text-sm">{p.label}</Text>
           </View>
         ))}
       </View>
@@ -60,7 +60,7 @@ export default function PronouncInput() {
         <Text className="font-cinzelBold text-sm ">Select up to 4</Text>
       </View>
 
-      <View className="mt-[2rem] flex flex-col gap-4">
+      <View className="mt-[2rem] flex flex-col justify-center gap-4">
         {pronouns.map((pro, i) => (
           <View key={i} className="flex flex-row items-center justify-between">
             <Text className="font-cinzel text-xl">{pro.label}</Text>
