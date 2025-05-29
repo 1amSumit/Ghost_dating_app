@@ -35,7 +35,7 @@ export default function Password() {
         <FloatingButton
           active={!password || password.trim().length < 6 ? false : true}
           onPress={() => {
-            router.push("/(create)/otp");
+            router.replace("/(create)/otp");
           }}
         />
       </View>

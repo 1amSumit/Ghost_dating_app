@@ -25,7 +25,7 @@ export default function Otp() {
       await SecureStore.setItemAsync("token", res.user);
 
       ToastAndroid.show("User created successfully", ToastAndroid.SHORT);
-      router.push("/(create)/username");
+      router.replace("/(create)/username");
     } catch (err: any) {
       ToastAndroid.show(
         err?.response?.data?.message || "Failed to verify OTP",

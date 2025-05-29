@@ -12,11 +12,18 @@ export default function RootLayout() {
   useEffect(() => {
     const checkUser = async () => {
       const token = await SecureStore.getItemAsync("token");
+      const userToken = await SecureStore.getItemAsync("userToken");
+      console.log(userToken);
+
+      if (userToken) {
+        router.replace("/(tabs)/find");
+        return;
+      }
 
       if (token) {
         router.replace("/(create)/username");
       } else {
-        router.replace("/(create)/email");
+        router.replace("/");
       }
     };
 
