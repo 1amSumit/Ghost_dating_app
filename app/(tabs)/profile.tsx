@@ -1,9 +1,21 @@
-import { Text, View } from "react-native";
+import { useRouter } from "expo-router";
+import * as SecureStore from "expo-secure-store";
+import { Pressable, Text, View } from "react-native";
 
 export default function Profile() {
+  const router = useRouter();
   return (
-    <View>
-      <Text>Profile</Text>
+    <View className="flex-1 items-center justify-center">
+      <Pressable
+        onPress={async () => {
+          await SecureStore.deleteItemAsync("token");
+          await SecureStore.deleteItemAsync("userToken");
+          router.replace("/");
+        }}
+        className="text-xl font-cinzelBold text-gray-800"
+      >
+        <Text>Log out</Text>
+      </Pressable>
     </View>
   );
 }

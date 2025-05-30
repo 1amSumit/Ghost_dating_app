@@ -13,7 +13,6 @@ export default function RootLayout() {
     const checkUser = async () => {
       const token = await SecureStore.getItemAsync("token");
       const userToken = await SecureStore.getItemAsync("userToken");
-      console.log(userToken);
 
       if (userToken) {
         router.replace("/(tabs)/find");

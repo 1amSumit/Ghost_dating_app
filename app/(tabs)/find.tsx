@@ -1,5 +1,9 @@
-import React, { useState } from "react";
+import { getUnMatchedUsers } from "@/actions/getUnmatchedUsers";
+import { userObject } from "@/lib/types";
+import { AntDesign, Entypo } from "@expo/vector-icons";
+import React, { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   Animated,
   Dimensions,
   PanResponder,
@@ -11,75 +15,31 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 
-const DUMMY_DATA = [
-  {
-    name: "ABS DFG",
-    era: "Medivial (2000)",
-    deathCause: "Broken heart",
-    lookingFor:
-      "A spirit who appreciates poetry, moonlit walks through abandoned mansions, and the occasional haunting of my ex-husband's descendants.",
-  },
-  {
-    name: "Zena the Lost",
-    era: "Victorian (1854)",
-    deathCause: "Tea overdose",
-    lookingFor:
-      "A ghost who’ll join me in floating through foggy cemeteries and sipping invisible tea under the moonlight.",
-  },
-  {
-    name: "Sir Booington",
-    era: "Renaissance (1600)",
-    deathCause: "Swordplay accident",
-    lookingFor:
-      "A gallant specter who can duel with words and waltz through walls.",
-  },
-  {
-    name: "Sir Booington",
-    era: "Renaissance (1600)",
-    deathCause: "Swordplay accident",
-    lookingFor:
-      "A gallant specter who can duel with words and waltz through walls.",
-  },
-  {
-    name: "Sir Booington",
-    era: "Renaissance (1600)",
-    deathCause: "Swordplay accident",
-    lookingFor:
-      "A gallant specter who can duel with words and waltz through walls.",
-  },
-  {
-    name: "Sir Booington",
-    era: "Renaissance (1600)",
-    deathCause: "Swordplay accident",
-    lookingFor:
-      "A gallant specter who can duel with words and waltz through walls.",
-  },
-  {
-    name: "Sir Booington",
-    era: "Renaissance (1600)",
-    deathCause: "Swordplay accident",
-    lookingFor:
-      "A gallant specter who can duel with words and waltz through walls.",
-  },
-  {
-    name: "Sir Booington",
-    era: "Renaissance (1600)",
-    deathCause: "Swordplay accident",
-    lookingFor:
-      "A gallant specter who can duel with words and waltz through walls.",
-  },
-  {
-    name: "Sir Booington",
-    era: "Renaissance (1600)",
-    deathCause: "Swordplay accident",
-    lookingFor:
-      "A gallant specter who can duel with words and waltz through walls.",
-  },
-];
-
 export default function Find() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [likedProfile, setLikedProfile] = useState<number[]>([]);
+  const [unlikedProfile, setUnLikedProfile] = useState<number[]>([]);
   const position = new Animated.ValueXY();
+  const [data, setData] = useState<userObject[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+    const getUnMatchedHandler = async () => {
+      try {
+        const res = await getUnMatchedUsers();
+        console.log("res");
+        console.log(res.user[0].user_details);
+        setData(res.user);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getUnMatchedHandler();
+  }, []);
 
   const rotate = position.x.interpolate({
     inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
@@ -101,6 +61,7 @@ export default function Find() {
           useNativeDriver: false,
         }).start(() => {
           setCurrentIndex((prev) => prev + 1);
+          setLikedProfile((prev) => [...prev, currentIndex]);
           position.setValue({ x: 0, y: 0 });
         });
       } else if (gesture.dx < -120) {
@@ -110,6 +71,7 @@ export default function Find() {
           useNativeDriver: false,
         }).start(() => {
           setCurrentIndex((prev) => prev + 1);
+          setUnLikedProfile((prev) => [...prev, currentIndex]);
           position.setValue({ x: 0, y: 0 });
         });
       } else {
@@ -121,8 +83,16 @@ export default function Find() {
     },
   });
 
+  if (loading) {
+    return (
+      <View className="flex-1 items-center justify-center">
+        <ActivityIndicator color={"purple"} size={"large"} />
+      </View>
+    );
+  }
+
   const renderCard = () => {
-    if (currentIndex >= DUMMY_DATA.length) {
+    if (!data || currentIndex >= data.length) {
       return (
         <View style={styles.noMoreCards}>
           <Text style={styles.endText}>No more souls 👻</Text>
@@ -130,7 +100,7 @@ export default function Find() {
       );
     }
 
-    const ghost = DUMMY_DATA[currentIndex];
+    const ghost = data[currentIndex];
 
     return (
       <>
@@ -144,17 +114,23 @@ export default function Find() {
           ]}
         >
           <View className="flex flex-col gap-2">
-            <Text className="text-2xl font-cinzelBold">{ghost.name}</Text>
-            <Text className="font-cinzel text-xl text-[#330202]">
-              {ghost.era}
+            <Text className="text-2xl font-cinzelBold">
+              {ghost.user_details.first_name}
             </Text>
-            <Text className="font-cinzel">Died from: {ghost.deathCause}</Text>
+            <Text className="font-cinzel text-xl text-[#330202]">
+              {ghost.user_details.date_of_birth.split("T")[0]}
+            </Text>
+            <Text className="font-cinzel">
+              Died from: {ghost.user_details.howyoudie}
+            </Text>
           </View>
           <View>
             <Text className="font-cinzelBold tex-lg text-[#330202] ">
               What I&apos;m looking for:
             </Text>
-            <Text className="text-xs font-cinzel">{ghost.lookingFor}</Text>
+            <Text className="text-xs font-cinzel">
+              {ghost.user_details.interested_in_gender}
+            </Text>
           </View>
 
           <Animated.View
@@ -169,7 +145,7 @@ export default function Find() {
               },
             ]}
           >
-            <Text style={{ fontSize: 40 }}>❤️</Text>
+            <AntDesign name="heart" size={60} color="purple" />
           </Animated.View>
 
           <Animated.View
@@ -184,7 +160,7 @@ export default function Find() {
               },
             ]}
           >
-            <Text style={{ fontSize: 40 }}>❌</Text>
+            <Entypo name="cross" size={60} color="black" />
           </Animated.View>
         </Animated.View>
       </>
@@ -192,9 +168,9 @@ export default function Find() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-purple-950">
+    <SafeAreaView className="flex-1 bg-gary-200">
       <View>
-        <Text className="text-2xl font-cinzelBold text-gray-200 text-center mt-4">
+        <Text className="text-2xl font-cinzelBold text-purple-800 text-center mt-4">
           Summon Your Soulmate
         </Text>
       </View>
@@ -244,7 +220,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   endText: {
-    color: "#fff",
+    color: "#000",
     fontSize: 24,
   },
   heart: {
