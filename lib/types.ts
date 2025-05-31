@@ -1,6 +1,7 @@
 export interface userObject {
   email: string;
   user_details: {
+    user_id: string;
     first_name: string;
     last_name: string;
     address: string;

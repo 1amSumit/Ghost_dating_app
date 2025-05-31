@@ -17,27 +17,47 @@ const SCREEN_WIDTH = Dimensions.get("window").width;
 
 export default function Find() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [likedProfile, setLikedProfile] = useState<number[]>([]);
-  const [unlikedProfile, setUnLikedProfile] = useState<number[]>([]);
+  const [likedProfile, setLikedProfile] = useState<string[]>([]);
+  const [unlikedProfile, setUnLikedProfile] = useState<string[]>([]);
+  const [dataIndex, setDataIndex] = useState<number>(0);
+  const [seenUser, setSeenUser] = useState<string[]>([]);
   const position = new Animated.ValueXY();
   const [data, setData] = useState<userObject[]>([]);
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+
+  console.log(seenUser);
+
+  const getUnMatchedHandler = async () => {
+    try {
+      const res = await getUnMatchedUsers(page);
+      setPage((prev) => prev + 1);
+      console.log("res");
+      console.log(res.user);
+      setData((prev) => [...prev, ...res.user]);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (currentIndex === 8) {
+      getUnMatchedHandler();
+      setCurrentIndex(0);
+      console.log("done");
+    }
+  }, [currentIndex]);
+
+  useEffect(() => {
+    setInterval(() => {
+      //call the data base
+    }, 5 * 60 * 1000);
+  });
 
   useEffect(() => {
     setLoading(true);
-    const getUnMatchedHandler = async () => {
-      try {
-        const res = await getUnMatchedUsers();
-        console.log("res");
-        console.log(res.user[0].user_details);
-        setData(res.user);
-      } catch (err) {
-        console.log(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     getUnMatchedHandler();
   }, []);
 
@@ -61,7 +81,15 @@ export default function Find() {
           useNativeDriver: false,
         }).start(() => {
           setCurrentIndex((prev) => prev + 1);
-          setLikedProfile((prev) => [...prev, currentIndex]);
+          setDataIndex((prev) => prev + 1);
+          setLikedProfile((prev) => [
+            ...prev,
+            data[dataIndex].user_details.user_id,
+          ]);
+          setSeenUser((prev) => [
+            ...prev,
+            data[currentIndex].user_details.user_id,
+          ]);
           position.setValue({ x: 0, y: 0 });
         });
       } else if (gesture.dx < -120) {
@@ -71,8 +99,16 @@ export default function Find() {
           useNativeDriver: false,
         }).start(() => {
           setCurrentIndex((prev) => prev + 1);
-          setUnLikedProfile((prev) => [...prev, currentIndex]);
+          setDataIndex((prev) => prev + 1);
+          setUnLikedProfile((prev) => [
+            ...prev,
+            data[dataIndex].user_details.user_id,
+          ]);
           position.setValue({ x: 0, y: 0 });
+          setSeenUser((prev) => [
+            ...prev,
+            data[currentIndex].user_details.user_id,
+          ]);
         });
       } else {
         Animated.spring(position, {
@@ -100,7 +136,7 @@ export default function Find() {
       );
     }
 
-    const ghost = data[currentIndex];
+    const ghost = data[dataIndex];
 
     return (
       <>
