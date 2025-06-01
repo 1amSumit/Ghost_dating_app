@@ -1,4 +1,5 @@
 import { getUnMatchedUsers } from "@/actions/getUnmatchedUsers";
+import { setSeenUsersToCache } from "@/actions/setSeenUsers";
 import { userObject } from "@/lib/types";
 import { AntDesign, Entypo } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
@@ -26,8 +27,6 @@ export default function Find() {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
 
-  console.log(seenUser);
-
   const getUnMatchedHandler = async () => {
     try {
       const res = await getUnMatchedUsers(page);
@@ -46,15 +45,25 @@ export default function Find() {
     if (currentIndex === 8) {
       getUnMatchedHandler();
       setCurrentIndex(0);
-      console.log("done");
     }
   }, [currentIndex]);
 
   useEffect(() => {
-    setInterval(() => {
-      //call the data base
-    }, 5 * 60 * 1000);
-  });
+    if (seenUser.length === 0) {
+      return;
+    } else {
+      const interval = setInterval(async () => {
+        try {
+          const res = await setSeenUsersToCache(seenUser);
+          console.log(res);
+          setSeenUser([]);
+        } catch (err) {
+          console.log(err);
+        }
+      }, 3 * 60 * 1000);
+      return () => clearInterval(interval);
+    }
+  }, [seenUser]);
 
   useEffect(() => {
     setLoading(true);
