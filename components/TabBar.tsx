@@ -30,7 +30,7 @@ export default function TabBar({
   };
 
   return (
-    <View className="absolute bottom-[15px] right-0 left-0  mx-5 bg-gray-900 px-8 flex flex-row items-center justify-between py-3 rounded-full shadow-xl shadow-black/30">
+    <View className="absolute bottom-[10px] right-0 left-0  mx-5 bg-gray-900 px-8 flex flex-row items-center justify-between py-3 rounded-full shadow-xl shadow-black/30">
       {state.routes.map((route: any, index: any) => {
         const { options } = descriptors[route.key];
 

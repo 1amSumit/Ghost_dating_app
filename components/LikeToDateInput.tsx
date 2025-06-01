@@ -20,21 +20,21 @@ export default function LikeToDateInput() {
       <View className="mt-[4rem] px-4 flex felx-col gap-4">
         <CustomCheckBox
           fontSize="text-xl"
-          label="Men"
+          label="Male"
           value={liketodate}
-          onValueChange={() => dispatch(addLiketoDate("Men"))}
+          onValueChange={() => dispatch(addLiketoDate("Male"))}
         />
         <CustomCheckBox
-          label="Women"
+          label="Female"
           fontSize="text-xl"
           value={liketodate}
-          onValueChange={() => dispatch(addLiketoDate("Women"))}
+          onValueChange={() => dispatch(addLiketoDate("Female"))}
         />
         <CustomCheckBox
-          label="Non-binary people"
+          label="Non binary"
           fontSize="text-xl"
           value={liketodate}
-          onValueChange={() => dispatch(addLiketoDate("Non-binary people"))}
+          onValueChange={() => dispatch(addLiketoDate("Non Binary"))}
         />
         <CustomCheckBox
           label="Everyone"

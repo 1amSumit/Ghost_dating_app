@@ -4,7 +4,7 @@ export interface userObject {
     user_id: string;
     first_name: string;
     last_name: string;
-    address: string;
+    location: string;
     bio: string;
     date_of_birth: string;
     education: string;
@@ -14,7 +14,7 @@ export interface userObject {
     intension: IntensionItem[];
     interested_in_gender: string;
     sexuality: string;
-    location: Location;
+
     pronouns: PronounsItem[];
   };
   preferences: {
