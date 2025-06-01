@@ -1,3 +1,4 @@
+import { ImageSlot } from "@/components/AddImages";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface Location {
@@ -30,6 +31,7 @@ interface CreateUserState {
   sexuality: string;
   location: Location;
   pronouns: PronounsItem[];
+  images: ImageSlot[];
 }
 
 const initialState: CreateUserState = {
@@ -43,6 +45,7 @@ const initialState: CreateUserState = {
   howyoudie: "",
   intension: [],
   pronouns: [],
+  images: [],
   liketodate: "",
   sexuality: "",
   location: {
@@ -96,6 +99,9 @@ const createUserSlice = createSlice({
     addLocation: (state, action: PayloadAction<Location>) => {
       state.location = action.payload;
     },
+    addImages: (state, action: PayloadAction<ImageSlot[]>) => {
+      state.images = action.payload;
+    },
   },
 });
 
@@ -113,6 +119,7 @@ export const {
   addSexuality,
   addPronouns,
   addLocation,
+  addImages,
 } = createUserSlice.actions;
 
 export default createUserSlice;

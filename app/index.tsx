@@ -69,7 +69,7 @@ export default function Index() {
         >
           <TouchableOpacity
             onPress={() => {
-              router.replace("/signin");
+              router.replace("/(create)/uploadImages");
             }}
             className="bg-white  flex flex-row items-center justify-center py-5  w-[300px] rounded-full gap-3"
           >

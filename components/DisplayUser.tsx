@@ -1,11 +1,12 @@
 import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
-import { Text, View } from "react-native";
+import { ImageBackground, Text, View } from "react-native";
 
 interface DisplayuserProps {
   firstName: string;
   lastName: string;
   location: string;
   interests: string[];
+  pictures: string[];
 }
 
 export default function DisplayUser({
@@ -13,16 +14,25 @@ export default function DisplayUser({
   lastName,
   location,
   interests,
+  pictures,
 }: DisplayuserProps) {
+  console.log(pictures);
   return (
     <View>
-      <View className="relative bg-gray-300 h-[500px] w-[350px] rounded-3xl shadow-2xl shadow-purple-600 ">
-        <View className="absolute bottom-[10px] right-0 left-0  mx-[1rem] gap-[2px]">
+      <View
+        className={`relative overflow-hidden bg-gray-300 h-[500px] w-[350px] rounded-[3rem] shadow-2xl shadow-purple-600`}
+      >
+        <ImageBackground
+          source={{ uri: pictures[2] }}
+          className="h-full w-full"
+          resizeMode="cover"
+        />
+        <View className="absolute bottom-0 p-2 right-0 left-0 backdrop-blur-2xl bg-gray-800/30  px-[1.4rem] gap-[2px]">
           <View className="flex flex-row gap-2 items-center ">
-            <FontAwesome5 name="map-marker-alt" size={20} color="black" />
-            <Text className="font-cinzel">{location}</Text>
+            <FontAwesome5 name="map-marker-alt" size={20} color="white" />
+            <Text className="font-cinzelBold text-white">{location}</Text>
           </View>
-          <Text className="font-cinzelBold text-3xl ">
+          <Text className="font-cinzelBold text-3xl text-white ">
             {firstName} {lastName}
           </Text>
           <View className="flex flex-row gap-[8px]">

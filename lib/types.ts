@@ -14,7 +14,6 @@ export interface userObject {
     intension: IntensionItem[];
     interested_in_gender: string;
     sexuality: string;
-
     pronouns: PronounsItem[];
   };
   preferences: {
@@ -26,6 +25,11 @@ export interface userObject {
     show_on_feed: boolean;
     is_ghost_mode: boolean;
     verified: boolean;
+    user_id: string;
+  };
+  media: {
+    id: string;
+    gallery: string[];
     user_id: string;
   };
 }

@@ -18,6 +18,7 @@ export default function RootLayout() {
       <Stack.Screen name="education" />
       <Stack.Screen name="howyoudie" />
       <Stack.Screen name="bio" />
+      <Stack.Screen name="uploadImages" />
     </Stack>
   );
 }

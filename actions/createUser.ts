@@ -1,3 +1,4 @@
+import { ImageSlot } from "@/components/AddImages";
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 
@@ -15,6 +16,7 @@ interface userObject {
   sexuality: string;
   location: Location;
   pronouns: PronounsItem[];
+  images: ImageSlot[];
 }
 
 interface Location {
@@ -65,6 +67,7 @@ export const createUser = async (userObject: userObject) => {
       sexuality: userObject.sexuality,
       howyoudie: userObject.howyoudie,
       education: userObject.education,
+      images: userObject.images,
     },
     {
       headers: {
