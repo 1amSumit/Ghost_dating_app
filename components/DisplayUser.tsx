@@ -77,6 +77,23 @@ export default function DisplayUser({
       <View
         className={`relative overflow-hidden bg-gray-300 h-[500px] w-[350px] rounded-[3rem] shadow-2xl shadow-purple-600`}
       >
+        <View className="flex flex-row gap-2 mx-[1rem] z-[10000] w-[100px] h-[10px] absolute top-5 left-0">
+          <View
+            className={`${
+              activeIndex === 0 ? "bg-purple-800" : "bg-gray-100"
+            } w-4 h-4 rounded-full`}
+          ></View>
+          <View
+            className={`${
+              activeIndex === 1 ? "bg-purple-800" : "bg-gray-100"
+            } w-4 h-4 rounded-full`}
+          ></View>
+          <View
+            className={`${
+              activeIndex === 2 ? "bg-purple-800" : "bg-gray-100"
+            } w-4 h-4 rounded-full`}
+          ></View>
+        </View>
         <GestureDetector gesture={panGesture}>
           <Animated.View
             style={[{ flex: 1, width: SCREEN_WIDTH }, animatedStyle]}
@@ -140,14 +157,20 @@ export default function DisplayUser({
       <View className="w-[350px] h-[100px]  mt-[1.8rem] rounded-full flex flex-row justify-between px-[4px] py-[4px]">
         <Pressable
           disabled={loading}
-          onPress={updateCurrentIndex}
+          onPress={() => {
+            updateCurrentIndex();
+            setActiveIndex(0);
+          }}
           className="flex items-center border-[1px] border-purple-300 justify-center bg-gray-100 w-[170px] rounded-full"
         >
           <AntDesign name="close" size={24} color="black" />
         </Pressable>
         <Pressable
           disabled={loading}
-          onPress={updateCurrentIndex}
+          onPress={() => {
+            updateCurrentIndex();
+            setActiveIndex(0);
+          }}
           className="flex items-center justify-center bg-purple-700 w-[170px] rounded-full"
         >
           <AntDesign name="hearto" size={24} color="white" />
