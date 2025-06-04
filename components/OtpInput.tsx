@@ -8,6 +8,7 @@ export default function OtpInput() {
   const { otp } = useSelector((state: RootState) => state.userReducer);
   const displatch = useDispatch();
   const inputRefs = useRef<(TextInput | null)[]>([]);
+  const { email } = useSelector((state: RootState) => state.userReducer);
 
   const handleChange = (text: string, index: number) => {
     if (/^\d$/.test(text)) {
@@ -31,7 +32,7 @@ export default function OtpInput() {
         <Text className="text-3xl font-cinzelBold">
           Enter your verification code
         </Text>
-        <Text className="font-cinzel text-xs mt-4">send to youremail.com</Text>
+        <Text className="font-cinzel text-xs mt-4">send to {email}</Text>
       </View>
       <View className="mt-[10rem] flex flex-row gap-[1.5rem] items-center justify-center">
         {otp.map((digit, i: number) => (

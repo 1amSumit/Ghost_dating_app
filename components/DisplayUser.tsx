@@ -19,21 +19,25 @@ import Animated, {
 } from "react-native-reanimated";
 
 interface DisplayuserProps {
+  user_id: string;
   firstName: string;
   lastName: string;
   location: string;
   interests: string[];
   pictures: string[];
   updateCurrentIndex: () => void;
+  updateLikedUser: (id: string) => void;
 }
 
 export default function DisplayUser({
+  user_id,
   firstName,
   lastName,
   location,
   interests,
   pictures,
   updateCurrentIndex,
+  updateLikedUser,
 }: DisplayuserProps) {
   const [loading, setLoading] = useState(false);
   const translateX = useSharedValue(0);
@@ -168,6 +172,7 @@ export default function DisplayUser({
         <Pressable
           disabled={loading}
           onPress={() => {
+            updateLikedUser(user_id);
             updateCurrentIndex();
             setActiveIndex(0);
           }}

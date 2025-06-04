@@ -15,6 +15,7 @@ export default function Profile() {
         className="text-xl font-cinzelBold text-gray-800"
       >
         <Text>Log out</Text>
+        <Text>{}</Text>
       </Pressable>
     </View>
   );
