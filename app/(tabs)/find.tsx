@@ -56,11 +56,7 @@ export default function Find() {
     } else {
       const interval = setInterval(async () => {
         try {
-          const res = await setSeenUsersToCache(seenUser);
-          const resp = await likedUserToDb(likedUser);
-          console.log(res);
-          console.log(resp);
-          setSeenUser([]);
+          await setSeenUsersToCache(seenUser);
         } catch (err) {
           console.log(err);
         }
@@ -68,6 +64,22 @@ export default function Find() {
       return () => clearInterval(interval);
     }
   }, [seenUser]);
+
+  useEffect(() => {
+    if (likedUser.length === 0) {
+      return;
+    } else {
+      const interval = setInterval(async () => {
+        try {
+          await likedUserToDb(likedUser);
+          setLikedUser([]);
+        } catch (err) {
+          console.log(err);
+        }
+      }, 3 * 60 * 1000);
+      return () => clearInterval(interval);
+    }
+  }, [likedUser]);
 
   useEffect(() => {
     setLoading(true);
