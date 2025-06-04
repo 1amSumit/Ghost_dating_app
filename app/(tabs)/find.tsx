@@ -16,6 +16,7 @@ export default function Find() {
   const [page, setPage] = useState(1);
 
   const updateCurrentIndex = () => {
+    setSeenUser((prev) => [...prev, data[dataIndex].user_details.user_id]);
     setCurrentIndex((prev) => prev + 1);
     setDataIndex((prev) => prev + 1);
   };

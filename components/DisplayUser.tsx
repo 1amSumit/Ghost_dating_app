@@ -81,17 +81,17 @@ export default function DisplayUser({
           <View
             className={`${
               activeIndex === 0 ? "bg-purple-800" : "bg-gray-100"
-            } w-4 h-4 rounded-full`}
+            } w-3 h-3 rounded-full`}
           ></View>
           <View
             className={`${
               activeIndex === 1 ? "bg-purple-800" : "bg-gray-100"
-            } w-4 h-4 rounded-full`}
+            } w-3 h-3 rounded-full`}
           ></View>
           <View
             className={`${
               activeIndex === 2 ? "bg-purple-800" : "bg-gray-100"
-            } w-4 h-4 rounded-full`}
+            } w-3 h-3 rounded-full`}
           ></View>
         </View>
         <GestureDetector gesture={panGesture}>
