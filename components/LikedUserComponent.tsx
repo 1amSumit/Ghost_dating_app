@@ -1,5 +1,6 @@
+import { AntDesign } from "@expo/vector-icons";
 import React, { useState } from "react";
-import { Dimensions, Image, View } from "react-native";
+import { Dimensions, Image, Text, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   runOnJS,
@@ -10,8 +11,14 @@ import Animated, {
 
 export default function LikedUserComponent({
   pictures,
+  firstName,
+  lastName,
+  age,
 }: {
   pictures: string[];
+  firstName: string;
+  lastName: string;
+  age: number;
 }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const SCREEN_WIDTH = Dimensions.get("window").width;
@@ -51,6 +58,52 @@ export default function LikedUserComponent({
 
   return (
     <View className="relative overflow-hidden  h-[300px] w-[350px] rounded-[3rem]">
+      <View className="absolute top-5 left-6 z-[10000] flex flex-row gap-2">
+        <View className="rounded-xl border-[2px] border-orange-600 shadow-xl shadow-orange-700 w-10 h-10">
+          <Image
+            source={{ uri: pictures[2] }}
+            className="w-full h-full rounded-xl"
+          />
+        </View>
+        <View className="flex flex-col ">
+          <View className="flex flex-row gap-1">
+            <Text className="font-cinzelBold text-white">{firstName}</Text>
+            <Text className="font-cinzelBold text-white">{lastName}</Text>
+          </View>
+          <View>
+            <Text className="font-cinzelBold text-sm text-white">
+              {age} years
+            </Text>
+          </View>
+        </View>
+      </View>
+
+      <View className="absolute bottom-10 z-[10000] right-10">
+        <View className="bg-purple-600 items-center justify-center w-[50px] h-[50px] rounded-xl border-[2px] border-black">
+          <View>
+            <AntDesign name="heart" size={30} color={"white"} />
+          </View>
+        </View>
+      </View>
+
+      <View className="absolute  bottom-10 z-[10000] left-10 flex flex-row gap-2">
+        <View
+          className={`${
+            activeIndex === 0 ? "bg-purple-800 w-8" : "bg-gray-100 w-3"
+          } h-3 rounded-full`}
+        ></View>
+        <View
+          className={`${
+            activeIndex === 1 ? "bg-purple-800 w-8" : "bg-gray-100 w-3"
+          }  h-3 rounded-full`}
+        ></View>
+        <View
+          className={`${
+            activeIndex === 2 ? "bg-purple-800 w-8 " : "bg-gray-100 w-3"
+          }  h-3 rounded-full`}
+        ></View>
+      </View>
+
       <GestureDetector gesture={panGesture}>
         <Animated.View style={[{ width: SCREEN_WIDTH }, animatedStyle]}>
           {pictures.map((picture, i) => (

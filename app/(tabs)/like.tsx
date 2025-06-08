@@ -73,7 +73,12 @@ export default function Liked() {
             return (
               <GestureHandlerRootView>
                 <View className="flex items-center justify-center">
-                  <LikedUserComponent pictures={item.liked_by.media.gallery} />
+                  <LikedUserComponent
+                    pictures={item.liked_by.media.gallery}
+                    firstName={item.liked_by.user_details.first_name}
+                    lastName={item.liked_by.user_details.last_name}
+                    age={age}
+                  />
                 </View>
               </GestureHandlerRootView>
             );
