@@ -2,7 +2,6 @@ import { store } from "@/store/store";
 import { Stack, useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import { useEffect } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { Provider } from "react-redux";
 import "../globals.css";
 
@@ -30,10 +29,8 @@ export default function RootLayout() {
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <Provider store={store}>
-        <Stack screenOptions={{ headerShown: false }} />
-      </Provider>
-    </SafeAreaView>
+    <Provider store={store}>
+      <Stack screenOptions={{ headerShown: false }} />
+    </Provider>
   );
 }

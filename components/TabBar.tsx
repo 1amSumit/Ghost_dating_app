@@ -1,7 +1,7 @@
-import { Ionicons, SimpleLineIcons } from "@expo/vector-icons";
+import { AntDesign, Ionicons, SimpleLineIcons } from "@expo/vector-icons";
 import { TouchableOpacity, View } from "react-native";
 
-type RouteName = "find" | "matches" | "profile";
+type RouteName = "find" | "like" | "matches" | "profile";
 
 export default function TabBar({
   state,
@@ -14,6 +14,7 @@ export default function TabBar({
 }) {
   const icons = {
     find: (props: any) => <SimpleLineIcons size={28} name="ghost" {...props} />,
+    like: (props: any) => <AntDesign name="hearto" size={24} {...props} />,
     matches: (props: any) => (
       <Ionicons size={28} name="chatbubbles-outline" {...props} />
     ),
@@ -30,7 +31,7 @@ export default function TabBar({
   };
 
   return (
-    <View className="absolute bottom-[10px] right-0 left-0  mx-5 bg-gray-900 px-8 flex flex-row items-center justify-between py-3 rounded-full shadow-xl shadow-black/30">
+    <View className="absolute bottom-[20px] right-0 left-0  mx-5 bg-gray-900 px-8 flex flex-row items-center justify-between py-3 rounded-full shadow-xl shadow-black/30">
       {state.routes.map((route: any, index: any) => {
         const { options } = descriptors[route.key];
 
