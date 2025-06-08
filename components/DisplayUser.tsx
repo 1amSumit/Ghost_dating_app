@@ -148,7 +148,7 @@ export default function DisplayUser({
               {interests.map((inter, i) => (
                 <View
                   key={i.toString()}
-                  className="bg-purple-900 px-2 py-1 rounded-full"
+                  className="bg-gray-900/70 px-2 py-1 rounded-full"
                 >
                   <Text className="text-gray-100">{inter}</Text>
                 </View>

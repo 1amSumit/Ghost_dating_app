@@ -6,7 +6,6 @@ import { userObject } from "@/lib/types";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Find() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -88,8 +87,8 @@ export default function Find() {
 
   if (loading) {
     return (
-      <View className="flex-1 items-center justify-center">
-        <ActivityIndicator color={"purple"} size={"large"} />
+      <View className="flex-1 bg-black items-center justify-center">
+        <ActivityIndicator color={"white"} size={"large"} />
       </View>
     );
   }
@@ -97,8 +96,8 @@ export default function Find() {
   const renderCard = () => {
     if (!data || currentIndex >= data.length) {
       return (
-        <View className="flex-1 items-center justify-center">
-          <Text className="text-2xl font-cinzelBold text-purple-600">
+        <View className="flex-1 bg-black items-center justify-center">
+          <Text className="text-2xl font-cinzelBold text-purple-400">
             No more souls 👻
           </Text>
         </View>
@@ -108,7 +107,7 @@ export default function Find() {
     const ghost = data[dataIndex];
 
     return (
-      <View className="flex flex-col h-[100vh] items-center mt-[5rem]  mx-[10px] ">
+      <View className="flex flex-col  h-[100vh] items-center mt-[5rem]  mx-[10px] ">
         <GestureHandlerRootView>
           <DisplayUser
             user_id={ghost.user_details.user_id}
@@ -126,13 +125,13 @@ export default function Find() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-gary-200">
+    <View className="flex-1 pt-10 bg-black">
       <View>
-        <Text className="text-2xl font-cinzelBold text-purple-800 text-center mt-4">
+        <Text className="text-2xl font-cinzelBold text-gray-100 text-center mt-4">
           Summon Your Soulmate
         </Text>
       </View>
       <View>{renderCard()}</View>
-    </SafeAreaView>
+    </View>
   );
 }

@@ -1,9 +1,11 @@
 import { getLikedUsers } from "@/actions/getLikedUser";
+import LikedUserComponent from "@/components/LikedUserComponent";
 import { LickedUser } from "@/lib/types";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, Image, Text, View } from "react-native";
+import { ActivityIndicator, FlatList, Text, View } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
-export default function Like() {
+export default function Liked() {
   const [likedUsers, setLikedUsers] = useState<LickedUser[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -25,62 +27,57 @@ export default function Like() {
 
   if (loading) {
     return (
-      <View>
-        <ActivityIndicator size={"large"} color="purple" />
+      <View className="flex-1 items-center justify-center">
+        <ActivityIndicator size={"large"} color="white" />
       </View>
     );
   }
 
   if (!likedUsers || likedUsers.length === 0) {
     return (
-      <View className="px-2 flex-1 items-center justify-center">
-        <Text className="text-xl text-purple-700 text-center font-cinzelBold">
+      <View className="px-2 flex-1 bg-black items-center justify-center">
+        <Text className="text-xl text-purple-400 text-center font-cinzelBold">
           Apparently Love Is Still in the Coffin...
         </Text>
       </View>
     );
   }
   return (
-    <View className="px-4 mt-10">
+    <View className="px-4 pt-10 bg-black">
       <View>
-        <Text className="text-purple-900  mt-4 font-cinzelBold text-2xl">
+        <Text className="text-gray-100  pt-4 font-cinzelBold text-2xl">
           You&apos;ve Haunted Their Heart
         </Text>
-        <Text className="mt-1 font-cinzelBold text-sm text-purple-600">
+        <Text className="pt-1 font-cinzelBold text-sm text-gray-200">
           It wasn&apos;t a cold breeze... it was love.
         </Text>
       </View>
 
-      <View className="mt-[3rem] h-[75vh] flex flex-col items-center justify-center">
+      <View className="pt-[3rem] h-screen flex flex-col items-center justify-center">
         <FlatList
+          showsVerticalScrollIndicator={false}
           data={likedUsers}
           keyExtractor={(_, index) => index.toString()}
-          numColumns={2}
           //@ts-ignore
-          columnWrapperStyle={{
-            justifyContent: "space-between",
-            marginHorizontal: "10px",
-          }}
-          ItemSeparatorComponent={() => <View className="h-[10px]" />}
+          ItemSeparatorComponent={() => <View className="h-[50px]" />}
           className="w-full "
-          renderItem={({ item }) => (
-            <View className="w-[48%] h-[250px]">
-              <View>
-                <Image
-                  source={{ uri: item.liked_by.media.gallery[0] }}
-                  className="w-full h-[150px]"
-                  resizeMode="cover"
-                />
-              </View>
+          renderItem={({ item }) => {
+            const currentDate = new Date();
+            const userDateOfBirth = new Date(
+              item.liked_by.user_details.date_of_birth
+            );
 
-              <View>
-                <Text>
-                  {item.liked_by.user_details.first_name}{" "}
-                  {item.liked_by.user_details.last_name}
-                </Text>
-              </View>
-            </View>
-          )}
+            const age =
+              currentDate.getFullYear() - userDateOfBirth.getFullYear();
+
+            return (
+              <GestureHandlerRootView>
+                <View className="flex items-center justify-center">
+                  <LikedUserComponent pictures={item.liked_by.media.gallery} />
+                </View>
+              </GestureHandlerRootView>
+            );
+          }}
         />
       </View>
     </View>
