@@ -1,7 +1,11 @@
 import { AntDesign } from "@expo/vector-icons";
-import React, { useState } from "react";
-import { Dimensions, Image, Text, View } from "react-native";
-import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import React, { useEffect, useState } from "react";
+import { Dimensions, Image, Text, Vibration, View } from "react-native";
+import {
+  Gesture,
+  GestureDetector,
+  Pressable,
+} from "react-native-gesture-handler";
 import Animated, {
   runOnJS,
   useAnimatedStyle,
@@ -14,15 +18,21 @@ export default function LikedUserComponent({
   firstName,
   lastName,
   age,
+  handleLikedUser,
+  userId,
 }: {
   pictures: string[];
   firstName: string;
   lastName: string;
   age: number;
+  userId: string;
+  handleLikedUser: (userId: string) => void;
 }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const SCREEN_WIDTH = Dimensions.get("window").width;
   const translateX = useSharedValue(0);
+  const [liked, setLiked] = useState(false);
+  const scale = useSharedValue(1);
 
   const clampIndex = (index: number) => {
     "worklet";
@@ -56,6 +66,22 @@ export default function LikedUserComponent({
     };
   });
 
+  useEffect(() => {
+    if (liked) {
+      scale.value = withSpring(1.3, { damping: 5 }, () => {
+        scale.value = withSpring(1);
+      });
+
+      Vibration.vibrate(50);
+    } else {
+      Vibration.vibrate(20);
+    }
+  }, [liked]);
+
+  const animatedHeartStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
+
   return (
     <View className="relative overflow-hidden  h-[300px] w-[350px] rounded-[3rem]">
       <View className="absolute top-5 left-6 z-[10000] flex flex-row gap-2">
@@ -81,7 +107,26 @@ export default function LikedUserComponent({
       <View className="absolute bottom-10 z-[10000] right-10">
         <View className="bg-purple-600 items-center justify-center w-[50px] h-[50px] rounded-xl border-[2px] border-black">
           <View>
-            <AntDesign name="heart" size={30} color={"white"} />
+            {!liked ? (
+              <Pressable
+                onPress={() => {
+                  setLiked(true);
+                  setTimeout(() => {
+                    handleLikedUser(userId);
+                  }, 600);
+                }}
+              >
+                <Animated.View>
+                  <AntDesign name="heart" size={30} color={"white"} />
+                </Animated.View>
+              </Pressable>
+            ) : (
+              <Pressable onPress={() => setLiked(false)}>
+                <Animated.View style={animatedHeartStyle}>
+                  <AntDesign name="heart" size={30} color={"black"} />
+                </Animated.View>
+              </Pressable>
+            )}
           </View>
         </View>
       </View>
