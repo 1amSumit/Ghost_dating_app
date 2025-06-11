@@ -83,7 +83,7 @@ export default function LikedUserComponent({
   }));
 
   return (
-    <View className="relative overflow-hidden  h-[300px] w-[350px] rounded-[3rem]">
+    <View className="relative overflow-hidden  h-[350px] w-[350px] rounded-[3rem]">
       <View className="absolute top-5 left-6 z-[10000] flex flex-row gap-2">
         <View className="rounded-xl border-[2px] border-orange-600 shadow-xl shadow-orange-700 w-10 h-10">
           <Image

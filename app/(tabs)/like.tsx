@@ -87,7 +87,7 @@ export default function Liked() {
           contentContainerStyle={{ paddingBottom: 200 }}
           contentContainerClassName="bg-black"
           keyExtractor={(item) => item.liked_by.user_details.user_id}
-          ItemSeparatorComponent={() => <View className="h-[50px]" />}
+          ItemSeparatorComponent={() => <View className="h-[20px]" />}
           className="w-full"
           ListHeaderComponent={
             <View className="mb-12">

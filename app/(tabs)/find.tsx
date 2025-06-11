@@ -127,7 +127,7 @@ export default function Find() {
   return (
     <View className="flex-1 pt-10 bg-black">
       <View>
-        <Text className="text-2xl font-cinzelBold text-gray-100 text-center mt-4">
+        <Text className="text-2xl font-cinzelBold text-gray-100 px-6 mt-4">
           Summon Your Soulmate
         </Text>
       </View>
