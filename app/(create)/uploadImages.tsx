@@ -6,11 +6,13 @@ import { SimpleLineIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import React, { useState } from "react";
-import { View } from "react-native";
+import { ActivityIndicator, View } from "react-native";
+
 import Animated, { SlideInLeft } from "react-native-reanimated";
 import { useSelector } from "react-redux";
 
 export default function UploadImages() {
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [imagesCount, setImagesCount] = useState(0);
   const requiredImage = (count: number) => {
@@ -31,6 +33,7 @@ export default function UploadImages() {
     gender,
     pronouns,
     images,
+    profilePic,
   } = useSelector((state: RootState) => state.createUserSlice);
 
   const handleSubmit = async () => {
@@ -49,16 +52,28 @@ export default function UploadImages() {
       gender,
       pronouns,
       images,
+      profilePic,
     };
 
     try {
+      setLoading(true);
       const res = await createUser(userObject);
       await SecureStore.setItem("userToken", res.token);
       router.replace("/(tabs)/find");
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (loading) {
+    return (
+      <View className="flex-1 items-center justify-center">
+        <ActivityIndicator color={"purple"} size={"large"} />
+      </View>
+    );
+  }
   return (
     <View className=" relative flex-1 flex flex-col bg-gray-200 items-center pt-[6rem]">
       <View className="flex flex-col gap-4 ">

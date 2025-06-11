@@ -6,17 +6,19 @@ interface ProfileProp {
   name: string;
   lastMessage: string;
   lastMessageTime: string;
+  profile_pic: string;
 }
 
 export default function Profile({
   name,
   lastMessage,
   lastMessageTime,
+  profile_pic,
 }: ProfileProp) {
   return (
     <View className="flex flex-row justify-between px-[1rem] items-center">
       <View className="flex flex-row gap-3 items-center ">
-        <ChatProfile />
+        <ChatProfile profilePic={profile_pic} />
         <View className="flex flex-col gap-1">
           <Text className="font-cinzelBold text-gray-100 text-sm">{name}</Text>
           <Text className="font-cinzel text-gray-300 text-xs">

@@ -17,6 +17,7 @@ interface userObject {
   location: Location;
   pronouns: PronounsItem[];
   images: ImageSlot[];
+  profilePic: string;
 }
 
 interface Location {
@@ -49,7 +50,7 @@ export const createUser = async (userObject: userObject) => {
   formData.append("bio", userObject.bio);
   formData.append("dateOfBirth", userObject.dob);
   formData.append("location", userObject.address);
-  formData.append("profilePic", "https//abc.xom/sumit");
+
   formData.append("latitude", String(userObject.location.coords.latitude));
   formData.append("longitude", String(userObject.location.coords.longitude));
   formData.append("interestedInGender", userObject.liketodate);
@@ -67,6 +68,12 @@ export const createUser = async (userObject: userObject) => {
   userObject.pronouns.forEach((p, i) => {
     formData.append(`pronounce[${i}]`, p.label);
   });
+
+  formData.append("profile-pic", {
+    uri: userObject.profilePic,
+    name: `profile-pic-${userID}.jpg`,
+    type: "image/jpeg",
+  } as any);
 
   userObject.intension.forEach((intt, i) => {
     formData.append(`intensions[${i}]`, intt.label);

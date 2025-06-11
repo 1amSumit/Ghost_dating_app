@@ -88,3 +88,25 @@ export interface LickedUser {
     };
   };
 }
+
+export interface MatchedUser {
+  match_id: string;
+  matched_user_id: string;
+  user_details: {
+    user_id: string;
+    first_name: string;
+    last_name: string;
+    location: string;
+    bio: string;
+    date_of_birth: string;
+    education: string;
+    gender: string;
+    height: string;
+    howyoudie: string;
+    intension: IntensionItem[];
+    interested_in_gender: string;
+    sexuality: string;
+    profile_pic: string;
+    pronouns: PronounsItem[];
+  };
+}

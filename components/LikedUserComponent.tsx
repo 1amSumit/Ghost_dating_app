@@ -105,7 +105,7 @@ export default function LikedUserComponent({
       </View>
 
       <View className="absolute bottom-10 z-[10000] right-10">
-        <View className="bg-purple-600 items-center justify-center w-[50px] h-[50px] rounded-xl border-[2px] border-black">
+        <View className="flex items-center justify-center w-[50px] h-[50px]">
           <View>
             {!liked ? (
               <Pressable
@@ -117,13 +117,13 @@ export default function LikedUserComponent({
                 }}
               >
                 <Animated.View>
-                  <AntDesign name="heart" size={30} color={"white"} />
+                  <AntDesign name="heart" size={40} color={"white"} />
                 </Animated.View>
               </Pressable>
             ) : (
               <Pressable onPress={() => setLiked(false)}>
                 <Animated.View style={animatedHeartStyle}>
-                  <AntDesign name="heart" size={30} color={"black"} />
+                  <AntDesign name="heart" size={40} color={"black"} />
                 </Animated.View>
               </Pressable>
             )}

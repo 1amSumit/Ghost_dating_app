@@ -32,6 +32,7 @@ interface CreateUserState {
   location: Location;
   pronouns: PronounsItem[];
   images: ImageSlot[];
+  profilePic: string;
 }
 
 const initialState: CreateUserState = {
@@ -48,6 +49,7 @@ const initialState: CreateUserState = {
   images: [],
   liketodate: "",
   sexuality: "",
+  profilePic: "",
   location: {
     coords: {
       latitude: 0,
@@ -96,6 +98,9 @@ const createUserSlice = createSlice({
     addSexuality: (state, action: PayloadAction<string>) => {
       state.sexuality = action.payload;
     },
+    addProfilePic: (state, action: PayloadAction<string>) => {
+      state.profilePic = action.payload;
+    },
     addLocation: (state, action: PayloadAction<Location>) => {
       state.location = action.payload;
     },
@@ -120,6 +125,7 @@ export const {
   addPronouns,
   addLocation,
   addImages,
+  addProfilePic,
 } = createUserSlice.actions;
 
 export default createUserSlice;
