@@ -1,14 +1,18 @@
 import { getMatchedUsers } from "@/actions/getMatchedUSers";
 import Profile from "@/components/Profile";
 import SearchBox from "@/components/SearchBox";
+import { generateUSerID } from "@/lib/genRoomId";
 import { MatchedUser } from "@/lib/types";
 import { useRouter } from "expo-router";
+import * as SecureStore from "expo-secure-store";
 import { useEffect, useState } from "react";
 import { FlatList, Pressable, Text, View } from "react-native";
 
 export default function Matches() {
   const [matchedUsers, setMatchedUsers] = useState<MatchedUser[]>([]);
+
   const router = useRouter();
+  const loggedInUserId = SecureStore.getItem("userToken");
 
   useEffect(() => {
     const getUserMatched = async () => {
@@ -41,7 +45,17 @@ export default function Matches() {
         renderItem={({ item }) => (
           <Pressable
             onPress={() => {
-              router.push("/chat/1");
+              router.push({
+                pathname: "/chat/[chatId]",
+                params: {
+                  chatId: generateUSerID(
+                    loggedInUserId!,
+                    item.user_details.user_id
+                  ),
+                  name: item.user_details.first_name,
+                  recieverUserId: item.user_details.user_id,
+                },
+              });
             }}
           >
             <Profile

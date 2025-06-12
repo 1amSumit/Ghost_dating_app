@@ -3,7 +3,8 @@ import SendChatBubble from "@/components/SendChatBubble";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams } from "expo-router";
-import React, { useEffect, useRef } from "react";
+import * as SecureStore from "expo-secure-store";
+import React, { useEffect, useRef, useState } from "react";
 import {
   FlatList,
   Image,
@@ -74,18 +75,75 @@ const data = [
 ];
 
 export default function Chat() {
-  const { chatId } = useLocalSearchParams();
-  const loggedInUser = "sumit";
-  console.log(chatId);
+  const [message, setMessage] = useState<string>("");
+  const { chatId, name, recieverUserId } = useLocalSearchParams();
   const ws = useRef<WebSocket>(null);
+  const [loggedInUserId, setLoggedInUserId] = useState<string | null>(null);
+  const flatListRef = useRef<FlatList>(null);
+
+  console.log("chatId");
+  console.log(chatId);
 
   useEffect(() => {
-    ws.current = new WebSocket("ws://192.168.1.3:8080");
+    const initWebSocket = async () => {
+      const logedInUser = await SecureStore.getItemAsync("userToken");
+      setLoggedInUserId(logedInUser);
+      const socket = new WebSocket("ws://192.168.1.3:8080");
+      ws.current = socket;
 
-    ws.current.onopen = () => {
-      console.log("websocket connect");
+      ws.current.onopen = () => {
+        console.log("websocket connect");
+
+        socket.send(
+          JSON.stringify({
+            type: "roomID",
+            loggedInUserId: loggedInUserId,
+            recieverUserId: recieverUserId,
+          })
+        );
+
+        socket.onmessage = (event) => {
+          const data = event.data;
+          console.log(JSON.parse(data));
+          setTimeout(() => {
+            flatListRef.current?.scrollToEnd({ animated: true });
+          }, 100);
+        };
+
+        socket.onerror = (err) => {
+          console.log(err);
+        };
+
+        socket.onclose = () => {
+          console.log("WebSocket disconnected");
+        };
+      };
     };
-  }, []);
+    initWebSocket();
+
+    return () => {
+      ws.current?.close();
+    };
+  }, [chatId, recieverUserId]);
+
+  const sendMessage = (message: string) => {
+    if (message.length === 0) {
+      return;
+    }
+    ws.current?.send(
+      JSON.stringify({
+        type: "message",
+        roomId: chatId,
+        to: recieverUserId,
+        from: loggedInUserId,
+        message: message,
+      })
+    );
+    setTimeout(() => {
+      flatListRef.current?.scrollToEnd({ animated: true });
+    }, 100);
+    setMessage("");
+  };
 
   return (
     <LinearGradient
@@ -100,7 +158,7 @@ export default function Chat() {
           keyboardVerticalOffset={10}
         >
           <View className="mt-[4rem] px-[1rem] flex flex-row items-center justify-between">
-            <View className="bg-slate-900 w-[40px] h-[40px] relative border-[1px] border-gray-600 rounded-full">
+            <View className="w-[40px] h-[40px] relative border-[1px] border-gray-600 rounded-full">
               <Ionicons
                 name="chevron-back"
                 size={24}
@@ -108,7 +166,9 @@ export default function Chat() {
                 className="absolute top-[50%] left-[45%] translate-x-[-50%] translate-y-[-50%]"
               />
             </View>
-            <Text className="text-gray-100 text-xl font-cinzelBold">Sumit</Text>
+            <Text className="text-gray-100 text-xl font-cinzelBold">
+              {name}
+            </Text>
             <View>
               <Entypo name="dots-three-horizontal" size={24} color="white" />
             </View>
@@ -116,6 +176,7 @@ export default function Chat() {
 
           <View className=" h-[650px] rounded-xl mx-2">
             <FlatList
+              ref={flatListRef}
               data={data}
               keyExtractor={(item) => item.id.toString()}
               ItemSeparatorComponent={() => <View className="h-[10px]" />}
@@ -123,7 +184,7 @@ export default function Chat() {
               showsVerticalScrollIndicator={false}
               renderItem={({ item }) => (
                 <View className="flex flex-col">
-                  {item.from === loggedInUser ? (
+                  {item.from === "sumit" ? (
                     <View className="items-end">
                       <SendChatBubble message={item.message} time="now" />
                     </View>
@@ -142,11 +203,13 @@ export default function Chat() {
               <View className="flex flex-row gap-2 items-center  border-[1px] border-gray-600 rounded-full px-4">
                 <Entypo name="emoji-happy" size={24} color="white" />
                 <TextInput
+                  value={message}
+                  onChangeText={setMessage}
                   className="w-[250px] py-4 font-cinzel"
                   placeholder="send your message"
                 />
               </View>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => sendMessage(message)}>
                 <View className="w-[30px] h-[30px]">
                   <Image
                     source={require("@/assets/images/send-white.png")}
