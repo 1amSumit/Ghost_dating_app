@@ -2,19 +2,13 @@ import { getMatchedUsers } from "@/actions/getMatchedUSers";
 import Profile from "@/components/Profile";
 import SearchBox from "@/components/SearchBox";
 import { MatchedUser } from "@/lib/types";
+import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { FlatList, Text, View } from "react-native";
-
-const data = [
-  { id: 1, name: "sumit", message: "hallo" },
-  { id: 2, name: "sumit", message: "hallo" },
-  { id: 3, name: "sumit", message: "hallo" },
-  { id: 4, name: "sumit", message: "hallo" },
-];
+import { FlatList, Pressable, Text, View } from "react-native";
 
 export default function Matches() {
   const [matchedUsers, setMatchedUsers] = useState<MatchedUser[]>([]);
-  console.log(matchedUsers);
+  const router = useRouter();
 
   useEffect(() => {
     const getUserMatched = async () => {
@@ -45,14 +39,20 @@ export default function Matches() {
         showsVerticalScrollIndicator={false}
         keyExtractor={(_, index) => index.toString()}
         renderItem={({ item }) => (
-          <Profile
-            name={
-              item.user_details.first_name + " " + item.user_details.last_name
-            }
-            lastMessage={item.user_details.gender}
-            lastMessageTime="16 min"
-            profile_pic={item.user_details.profile_pic}
-          />
+          <Pressable
+            onPress={() => {
+              router.push("/chat/1");
+            }}
+          >
+            <Profile
+              name={
+                item.user_details.first_name + " " + item.user_details.last_name
+              }
+              lastMessage={item.user_details.gender}
+              lastMessageTime="16 min"
+              profile_pic={item.user_details.profile_pic}
+            />
+          </Pressable>
         )}
       />
     </View>
