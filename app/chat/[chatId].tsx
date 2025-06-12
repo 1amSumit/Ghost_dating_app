@@ -137,6 +137,7 @@ export default function Chat() {
         to: recieverUserId,
         from: loggedInUserId,
         message: message,
+        createdAt: new Date(),
       })
     );
     setTimeout(() => {
@@ -152,75 +153,77 @@ export default function Chat() {
       end={{ x: 1, y: 1 }}
       className="flex-1"
     >
-      <View className="flex-1">
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          keyboardVerticalOffset={10}
-        >
-          <View className="mt-[4rem] px-[1rem] flex flex-row items-center justify-between">
-            <View className="w-[40px] h-[40px] relative border-[1px] border-gray-600 rounded-full">
-              <Ionicons
-                name="chevron-back"
-                size={24}
-                color="white"
-                className="absolute top-[50%] left-[45%] translate-x-[-50%] translate-y-[-50%]"
-              />
-            </View>
-            <Text className="text-gray-100 text-xl font-cinzelBold">
-              {name}
-            </Text>
-            <View>
-              <Entypo name="dots-three-horizontal" size={24} color="white" />
-            </View>
-          </View>
-
-          <View className=" h-[650px] rounded-xl mx-2">
-            <FlatList
-              ref={flatListRef}
-              data={data}
-              keyExtractor={(item) => item.id.toString()}
-              ItemSeparatorComponent={() => <View className="h-[10px]" />}
-              keyboardShouldPersistTaps={"handled"}
-              showsVerticalScrollIndicator={false}
-              renderItem={({ item }) => (
-                <View className="flex flex-col">
-                  {item.from === "sumit" ? (
-                    <View className="items-end">
-                      <SendChatBubble message={item.message} time="now" />
-                    </View>
-                  ) : (
-                    <View>
-                      <RecieveChatBubble message={item.message} time="now" />
-                    </View>
-                  )}
-                </View>
-              )}
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 0}
+      >
+        <View className="mt-[4rem] px-[1rem] flex flex-row items-center justify-between">
+          <View className="w-[40px] h-[40px] relative border-[1px] border-gray-600 rounded-full">
+            <Ionicons
+              name="chevron-back"
+              size={24}
+              color="white"
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: [{ translateX: -12 }, { translateY: -12 }],
+              }}
             />
           </View>
+          <Text className="text-gray-100 text-xl font-cinzelBold">{name}</Text>
+          <View>
+            <Entypo name="dots-three-horizontal" size={24} color="white" />
+          </View>
+        </View>
 
-          <View className="message-send-box">
-            <View className="px-[1rem] mt-[1rem] flex flex-row justify-between items-center">
-              <View className="flex flex-row gap-2 items-center  border-[1px] border-gray-600 rounded-full px-4">
-                <Entypo name="emoji-happy" size={24} color="white" />
-                <TextInput
-                  value={message}
-                  onChangeText={setMessage}
-                  className="w-[250px] py-4 font-cinzel"
-                  placeholder="send your message"
+        <View className="flex-1 relative rounded-xl mx-2">
+          <FlatList
+            ref={flatListRef}
+            data={data}
+            contentContainerStyle={{ paddingBottom: 20 }}
+            keyExtractor={(item) => item.id.toString()}
+            ItemSeparatorComponent={() => <View className="h-[10px]" />}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item }) => (
+              <View className="flex flex-col">
+                {item.from === "sumit" ? (
+                  <View className="items-end">
+                    <SendChatBubble message={item.message} time="now" />
+                  </View>
+                ) : (
+                  <RecieveChatBubble message={item.message} time="now" />
+                )}
+              </View>
+            )}
+          />
+        </View>
+
+        <View className="pb-[20px]">
+          <View className="px-[1rem] mt-[1rem] flex flex-row justify-between items-center">
+            <View className="flex flex-row gap-2 items-center border-[1px] border-gray-600 rounded-full px-4">
+              <Entypo name="emoji-happy" size={24} color="white" />
+              <TextInput
+                value={message}
+                onChangeText={setMessage}
+                className="w-[250px] py-4 font-cinzel text-white"
+                placeholder="send your message"
+                placeholderTextColor="#ccc"
+              />
+            </View>
+            <TouchableOpacity onPress={() => sendMessage(message)}>
+              <View className="w-[30px] h-[30px]">
+                <Image
+                  source={require("@/assets/images/send-white.png")}
+                  className="h-full w-full"
                 />
               </View>
-              <TouchableOpacity onPress={() => sendMessage(message)}>
-                <View className="w-[30px] h-[30px]">
-                  <Image
-                    source={require("@/assets/images/send-white.png")}
-                    className="h-full w-full"
-                  />
-                </View>
-              </TouchableOpacity>
-            </View>
+            </TouchableOpacity>
           </View>
-        </KeyboardAvoidingView>
-      </View>
+        </View>
+      </KeyboardAvoidingView>
     </LinearGradient>
   );
 }
