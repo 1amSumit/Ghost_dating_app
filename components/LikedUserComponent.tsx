@@ -73,8 +73,6 @@ export default function LikedUserComponent({
       });
 
       Vibration.vibrate(50);
-    } else {
-      Vibration.vibrate(20);
     }
   }, [liked]);
 

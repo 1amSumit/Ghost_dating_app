@@ -44,7 +44,7 @@ export default function Index() {
         >
           <TouchableOpacity
             onPress={() => {
-              router.replace("/(create)/email");
+              router.push("/(create)/email");
             }}
             className="bg-purple-700  flex flex-col items-center justify-center py-5  w-[300px] rounded-full"
           >
@@ -69,7 +69,7 @@ export default function Index() {
         >
           <TouchableOpacity
             onPress={() => {
-              router.replace("/(create)/uploadImages");
+              router.push("/(create)/uploadImages");
             }}
             className="bg-white  flex flex-row items-center justify-center py-5  w-[300px] rounded-full gap-3"
           >
@@ -80,7 +80,7 @@ export default function Index() {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              router.replace("/signin");
+              router.push("/signin");
             }}
             className="bg-purple-700  flex flex-row gap-3 items-center justify-center py-5  w-[300px] rounded-full"
           >

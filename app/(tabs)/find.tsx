@@ -3,7 +3,8 @@ import { likedUserToDb } from "@/actions/likedUsers";
 import { setSeenUsersToCache } from "@/actions/setSeenUsers";
 import DisplayUser from "@/components/DisplayUser";
 import { userObject } from "@/lib/types";
-import React, { useEffect, useState } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import React, { useCallback, useState } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
@@ -42,48 +43,59 @@ export default function Find() {
     }
   };
 
-  useEffect(() => {
-    if (currentIndex === 8) {
+  useFocusEffect(
+    useCallback(() => {
+      if (currentIndex === 8) {
+        getUnMatchedHandler();
+        setCurrentIndex(0);
+      }
+
+      return () => {};
+    }, [currentIndex])
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      if (seenUser.length === 0) {
+        return;
+      } else {
+        const interval = setInterval(async () => {
+          try {
+            await setSeenUsersToCache(seenUser);
+          } catch (err) {
+            console.log(err);
+          }
+        }, 3 * 60 * 1000);
+        return () => clearInterval(interval);
+      }
+    }, [seenUser])
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      if (likedUser.length === 0) {
+        return;
+      } else {
+        const interval = setInterval(async () => {
+          try {
+            await likedUserToDb(likedUser);
+            setLikedUser([]);
+          } catch (err) {
+            console.log(err);
+          }
+        }, 3 * 60 * 1000);
+        return () => clearInterval(interval);
+      }
+    }, [likedUser])
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      setLoading(true);
       getUnMatchedHandler();
-      setCurrentIndex(0);
-    }
-  }, [currentIndex]);
-
-  useEffect(() => {
-    if (seenUser.length === 0) {
-      return;
-    } else {
-      const interval = setInterval(async () => {
-        try {
-          await setSeenUsersToCache(seenUser);
-        } catch (err) {
-          console.log(err);
-        }
-      }, 3 * 60 * 1000);
-      return () => clearInterval(interval);
-    }
-  }, [seenUser]);
-
-  useEffect(() => {
-    if (likedUser.length === 0) {
-      return;
-    } else {
-      const interval = setInterval(async () => {
-        try {
-          await likedUserToDb(likedUser);
-          setLikedUser([]);
-        } catch (err) {
-          console.log(err);
-        }
-      }, 3 * 60 * 1000);
-      return () => clearInterval(interval);
-    }
-  }, [likedUser]);
-
-  useEffect(() => {
-    setLoading(true);
-    getUnMatchedHandler();
-  }, []);
+      return () => {};
+    }, [])
+  );
 
   if (loading) {
     return (
@@ -107,7 +119,7 @@ export default function Find() {
     const ghost = data[dataIndex];
 
     return (
-      <View className="flex flex-col  h-[100vh] items-center mt-[5rem]  mx-[10px] ">
+      <View className="flex flex-col  h-[100vh] items-center mt-[4rem]  mx-[10px] ">
         <GestureHandlerRootView>
           <DisplayUser
             user_id={ghost.user_details.user_id}
@@ -125,7 +137,7 @@ export default function Find() {
   };
 
   return (
-    <View className="flex-1 pt-10 bg-black">
+    <View className="flex-1 bg-black">
       <View>
         <Text className="text-2xl font-cinzelBold text-gray-100 px-6 mt-4">
           Summon Your Soulmate

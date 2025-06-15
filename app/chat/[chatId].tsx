@@ -2,9 +2,8 @@ import RecieveChatBubble from "@/components/RecieveChatBubble";
 import SendChatBubble from "@/components/SendChatBubble";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { useLocalSearchParams } from "expo-router";
-import * as SecureStore from "expo-secure-store";
-import React, { useEffect, useRef, useState } from "react";
+import { useFocusEffect, useLocalSearchParams } from "expo-router";
+import React, { useCallback, useRef, useState } from "react";
 import {
   FlatList,
   Image,
@@ -35,55 +34,53 @@ export default function Chat() {
   const [loggedInUserId, setLoggedInUserId] = useState<string | null>(null);
   const flatListRef = useRef<FlatList>(null);
 
-  useEffect(() => {
-    const initWebSocket = async () => {
-      const logedInUser = await SecureStore.getItemAsync("userToken");
-      setLoggedInUserId(logedInUser);
-      const socket = new WebSocket("ws://192.168.1.3:8080");
-      ws.current = socket;
+  useFocusEffect(
+    useCallback(() => {
+      const initWebSocket = async () => {
+        const socket = new WebSocket("ws://192.168.1.3:8080");
+        ws.current = socket;
 
-      ws.current.onopen = () => {
-        console.log("websocket connect");
+        ws.current.onopen = () => {
+          console.log("websocket connect");
 
-        socket.send(
-          JSON.stringify({
-            type: "roomID",
-            loggedInUserId: loggedInUserId,
-            recieverUserId: recieverUserId,
-          })
-        );
+          socket.send(
+            JSON.stringify({
+              type: "roomID",
+              loggedInUserId: loggedInUserId,
+              recieverUserId: recieverUserId,
+            })
+          );
 
-        socket.onmessage = (event) => {
-          const data = event.data;
-          const parsedData = JSON.parse(data.toString());
+          socket.onmessage = (event) => {
+            const data = event.data;
+            const parsedData = JSON.parse(data.toString());
 
-          console.log(parsedData);
+            setMessages((prev) => {
+              const updated = [...prev, parsedData];
+              setTimeout(() => {
+                flatListRef.current?.scrollToEnd({ animated: true });
+              }, 100);
 
-          setMessages((prev) => {
-            const updated = [...prev, parsedData];
-            setTimeout(() => {
-              flatListRef.current?.scrollToEnd({ animated: true });
-            }, 100);
+              return updated;
+            });
+          };
 
-            return updated;
-          });
-        };
+          socket.onerror = (err) => {
+            console.log(err);
+          };
 
-        socket.onerror = (err) => {
-          console.log(err);
-        };
-
-        socket.onclose = () => {
-          console.log("WebSocket disconnected");
+          socket.onclose = () => {
+            console.log("WebSocket disconnected");
+          };
         };
       };
-    };
-    initWebSocket();
+      initWebSocket();
 
-    return () => {
-      ws.current?.close();
-    };
-  }, [chatId, recieverUserId]);
+      return () => {
+        ws.current?.close();
+      };
+    }, [chatId, recieverUserId])
+  );
 
   const sendMessage = (message: string) => {
     if (message.length === 0) {
@@ -104,15 +101,6 @@ export default function Chat() {
       createdAt: new Date(),
     };
 
-    // setMessages((prev) => {
-    //   const updated = [...prev, newMessage];
-    //   setTimeout(() => {
-    //     flatListRef.current?.scrollToEnd({ animated: true });
-    //   }, 100);
-
-    //   return updated;
-    // });
-
     ws.current?.send(JSON.stringify(newMessage));
 
     setMessage("");
@@ -130,7 +118,7 @@ export default function Chat() {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 0}
       >
-        <View className="mt-[4rem] px-[1rem] flex flex-row items-center justify-between">
+        <View className="px-[1rem] pt-2 flex flex-row items-center justify-between">
           <View className="w-[40px] h-[40px] relative border-[1px] border-gray-600 rounded-full">
             <Ionicons
               name="chevron-back"
@@ -150,12 +138,12 @@ export default function Chat() {
           </View>
         </View>
 
-        <View className="flex-1 relative rounded-xl mx-2 mt-4">
+        <View className="flex-1  rounded-xl mx-2 mt-4">
           <FlatList
             ref={flatListRef}
             data={messages}
             contentContainerStyle={{ paddingBottom: 20 }}
-            keyExtractor={(item, index) => item.id.toString()}
+            keyExtractor={(item) => item.id.toString()}
             ItemSeparatorComponent={() => <View className="h-[10px]" />}
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}
@@ -184,7 +172,7 @@ export default function Chat() {
           />
         </View>
 
-        <View className="pb-[20px]">
+        <View className="pb-[40px]">
           <View className="px-[1rem] mt-[1rem] flex flex-row justify-between items-center">
             <View className="flex flex-row gap-2 items-center border-[1px] border-gray-600 rounded-full px-4">
               <Entypo name="emoji-happy" size={24} color="white" />

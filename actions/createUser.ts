@@ -5,6 +5,7 @@ import * as SecureStore from "expo-secure-store";
 interface userObject {
   username: string;
   address: string;
+  email: string;
   bio: string;
   dob: string;
   education: string;
@@ -44,6 +45,7 @@ export const createUser = async (userObject: userObject) => {
   const formData = new FormData();
 
   formData.append("userId", userID!);
+  formData.append("email", userObject.email);
   formData.append("firstName", userObject.username.split(" ")[0]);
   formData.append("lastName", userObject.username.split(" ")[1] || " ");
   formData.append("gender", userObject.gender);

@@ -3,9 +3,10 @@ import Profile from "@/components/Profile";
 import SearchBox from "@/components/SearchBox";
 import { generateUSerID } from "@/lib/genRoomId";
 import { MatchedUser } from "@/lib/types";
+import { useFocusEffect } from "@react-navigation/native";
 import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { FlatList, Pressable, Text, View } from "react-native";
 
 export default function Matches() {
@@ -14,20 +15,24 @@ export default function Matches() {
   const router = useRouter();
   const loggedInUserId = SecureStore.getItem("userToken");
 
-  useEffect(() => {
-    const getUserMatched = async () => {
-      try {
-        const res = await getMatchedUsers();
-        setMatchedUsers(res.matchedUsers);
-      } catch (Err) {
-        console.log(Err);
-      }
-    };
-    getUserMatched();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      const getUserMatched = async () => {
+        try {
+          const res = await getMatchedUsers();
+          setMatchedUsers(res.matchedUsers);
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      getUserMatched();
+      return () => {};
+    }, [])
+  );
+
   return (
     <View className="bg-black flex-1 px-4 ">
-      <View className="pt-[4rem] flex flex-row justify-between pb-[0.6rem]">
+      <View className="mt-2 flex flex-row justify-between pb-[0.6rem]">
         <Text className="text-white font-cinzelBold text-xl">Messages</Text>
       </View>
       <FlatList
@@ -40,6 +45,7 @@ export default function Matches() {
         }
         ItemSeparatorComponent={() => <View className="h-[30px]" />}
         data={matchedUsers}
+        contentContainerStyle={{ paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}
         keyExtractor={(_, index) => index.toString()}
         renderItem={({ item }) => (

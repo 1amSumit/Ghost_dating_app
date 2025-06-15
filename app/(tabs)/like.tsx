@@ -2,7 +2,8 @@ import { addToMatch } from "@/actions/addToMach";
 import { getLikedUsers } from "@/actions/getLikedUser";
 import LikedUserComponent from "@/components/LikedUserComponent";
 import { LickedUser } from "@/lib/types";
-import { useEffect, useState } from "react";
+import { useFocusEffect } from "expo-router";
+import { useCallback, useState } from "react";
 import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Animated, { SlideInDown } from "react-native-reanimated";
@@ -12,54 +13,59 @@ export default function Liked() {
   const [loading, setLoading] = useState(false);
   const [likedUserIds, setLikedUserIds] = useState<string[]>([]);
 
-  console.log(likedUsers.length);
-
   const handleLikedUser = (userid: string) => {
     setLikedUserIds((prev) => [...prev, userid]);
   };
 
-  useEffect(() => {
-    if (likedUserIds.length === 0) {
-      return;
-    } else {
-      const interval = setInterval(async () => {
+  useFocusEffect(
+    useCallback(() => {
+      if (likedUserIds.length === 0) {
+        return;
+      } else {
+        const interval = setInterval(async () => {
+          try {
+            const res = await addToMatch(likedUserIds);
+            setLikedUserIds([]);
+          } catch (err) {
+            console.log(err);
+          }
+        }, 1000);
+
+        return () => clearInterval(interval);
+      }
+    }, [likedUserIds])
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      const fliterLikedUser = likedUsers.filter((user) =>
+        likedUserIds.includes(user.liked_by.user_details.user_id) ? false : true
+      );
+
+      setLikedUsers(fliterLikedUser);
+
+      return () => {};
+    }, [likedUserIds])
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      setLoading(true);
+      const getData = async () => {
         try {
-          const res = await addToMatch(likedUserIds);
-          setLikedUserIds([]);
+          const res = await getLikedUsers();
+          setLikedUsers(res.users);
         } catch (err) {
           console.log(err);
+        } finally {
+          setLoading(false);
         }
-      }, 60 * 1000);
+      };
 
-      return () => clearInterval(interval);
-    }
-  }, [likedUserIds]);
-
-  useEffect(() => {
-    const fliterLikedUser = likedUsers.filter((user) =>
-      likedUserIds.includes(user.liked_by.user_details.user_id) ? false : true
-    );
-
-    setLikedUsers(fliterLikedUser);
-
-    console.log(fliterLikedUser.length);
-  }, [likedUserIds]);
-
-  useEffect(() => {
-    setLoading(true);
-    const getData = async () => {
-      try {
-        const res = await getLikedUsers();
-        setLikedUsers(res.users);
-      } catch (err) {
-        console.log(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    getData();
-  }, []);
+      getData();
+      return () => {};
+    }, [])
+  );
 
   if (loading) {
     return (
@@ -79,8 +85,8 @@ export default function Liked() {
     );
   }
   return (
-    <View className="px-4   bg-black">
-      <View className="pt-[3rem]  flex flex-col items-center justify-center">
+    <View className="px-4 bg-black">
+      <View className="flex flex-col items-center justify-center">
         <FlatList
           showsVerticalScrollIndicator={false}
           data={likedUsers}
@@ -100,14 +106,6 @@ export default function Liked() {
             </View>
           }
           renderItem={({ item }) => {
-            const currentDate = new Date();
-            const userDateOfBirth = new Date(
-              item.liked_by.user_details.date_of_birth
-            );
-
-            const age =
-              currentDate.getFullYear() - userDateOfBirth.getFullYear();
-
             return (
               <GestureHandlerRootView>
                 <Animated.View
@@ -119,7 +117,7 @@ export default function Liked() {
                     pictures={item.liked_by.media.gallery}
                     firstName={item.liked_by.user_details.first_name}
                     lastName={item.liked_by.user_details.last_name}
-                    age={age}
+                    age={+item.liked_by.user_details.age}
                     handleLikedUser={handleLikedUser}
                   />
                 </Animated.View>

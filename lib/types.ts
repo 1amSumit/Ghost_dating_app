@@ -69,6 +69,7 @@ export interface LickedUser {
       interested_in_gender: string;
       sexuality: string;
       pronouns: PronounsItem[];
+      age: string;
     };
     preferences: {
       id: string;

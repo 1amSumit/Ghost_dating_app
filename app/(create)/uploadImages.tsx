@@ -12,6 +12,7 @@ import Animated, { SlideInLeft } from "react-native-reanimated";
 import { useSelector } from "react-redux";
 
 export default function UploadImages() {
+  const { email } = useSelector((state: RootState) => state.userReducer);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [imagesCount, setImagesCount] = useState(0);
@@ -38,6 +39,7 @@ export default function UploadImages() {
 
   const handleSubmit = async () => {
     const userObject = {
+      email,
       address,
       username,
       dob,
@@ -62,6 +64,7 @@ export default function UploadImages() {
       router.replace("/(tabs)/find");
     } catch (error) {
       console.log(error);
+      router.replace("/");
     } finally {
       setLoading(false);
     }
