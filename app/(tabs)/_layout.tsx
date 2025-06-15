@@ -13,7 +13,7 @@ export default function RootLayout() {
   useFocusEffect(
     useCallback(() => {
       const fetchToken = async () => {
-        const logedInUser = await SecureStore.getItemAsync("userToken");
+        const logedInUser = await SecureStore.getItemAsync("userId");
         if (logedInUser) {
           dispatch(addToken(logedInUser));
         }

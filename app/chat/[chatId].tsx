@@ -1,9 +1,10 @@
 import RecieveChatBubble from "@/components/RecieveChatBubble";
 import SendChatBubble from "@/components/SendChatBubble";
+import { RootState } from "@/store/store";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { useFocusEffect, useLocalSearchParams } from "expo-router";
-import React, { useCallback, useRef, useState } from "react";
+import { useLocalSearchParams } from "expo-router";
+import React, { useEffect, useRef, useState } from "react";
 import {
   FlatList,
   Image,
@@ -15,6 +16,7 @@ import {
   View,
 } from "react-native";
 import Animated, { SlideInLeft, SlideInRight } from "react-native-reanimated";
+import { useSelector } from "react-redux";
 
 interface Message {
   id: number;
@@ -31,56 +33,59 @@ export default function Chat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const { chatId, name, recieverUserId } = useLocalSearchParams();
   const ws = useRef<WebSocket>(null);
-  const [loggedInUserId, setLoggedInUserId] = useState<string | null>(null);
+  const loggedInUserId = useSelector(
+    (state: RootState) => state.tokenSlice.token
+  );
   const flatListRef = useRef<FlatList>(null);
 
-  useFocusEffect(
-    useCallback(() => {
-      const initWebSocket = async () => {
-        const socket = new WebSocket("ws://192.168.1.3:8080");
-        ws.current = socket;
+  useEffect(() => {
+    if (!loggedInUserId || !recieverUserId) return;
 
-        ws.current.onopen = () => {
-          console.log("websocket connect");
+    const initWebSocket = async () => {
+      const socket = new WebSocket("ws://192.168.1.3:8080");
+      ws.current = socket;
 
-          socket.send(
-            JSON.stringify({
-              type: "roomID",
-              loggedInUserId: loggedInUserId,
-              recieverUserId: recieverUserId,
-            })
-          );
+      socket.onopen = () => {
+        console.log("websocket connect");
 
-          socket.onmessage = (event) => {
-            const data = event.data;
-            const parsedData = JSON.parse(data.toString());
+        socket.send(
+          JSON.stringify({
+            type: "roomID",
+            loggedInUserId,
+            recieverUserId,
+          })
+        );
 
-            setMessages((prev) => {
-              const updated = [...prev, parsedData];
-              setTimeout(() => {
-                flatListRef.current?.scrollToEnd({ animated: true });
-              }, 100);
+        socket.onmessage = (event) => {
+          const data = event.data;
+          const parsedData = JSON.parse(data.toString());
 
-              return updated;
-            });
-          };
+          setMessages((prev) => {
+            const updated = [...prev, parsedData];
+            setTimeout(() => {
+              flatListRef.current?.scrollToEnd({ animated: true });
+            }, 100);
 
-          socket.onerror = (err) => {
-            console.log(err);
-          };
+            return updated;
+          });
+        };
 
-          socket.onclose = () => {
-            console.log("WebSocket disconnected");
-          };
+        socket.onerror = (err) => {
+          console.log(err);
+        };
+
+        socket.onclose = () => {
+          console.log("WebSocket disconnected");
         };
       };
-      initWebSocket();
+    };
 
-      return () => {
-        ws.current?.close();
-      };
-    }, [chatId, recieverUserId])
-  );
+    initWebSocket();
+
+    return () => {
+      ws.current?.close();
+    };
+  }, [loggedInUserId, recieverUserId]);
 
   const sendMessage = (message: string) => {
     if (message.length === 0) {
