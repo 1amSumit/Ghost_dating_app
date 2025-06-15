@@ -1,18 +1,18 @@
 import React from "react";
 import { Text, View } from "react-native";
 
-export default function SendChatBubble({
-  message,
-  time,
-}: {
+interface SendChatBubbleProps {
   message: string;
   time: string;
-}) {
-  const messageDate = new Date(time).toLocaleString();
-  const messageTime = messageDate.split(",")[1].split(":");
-  const hours = messageTime[0];
-  const minute = messageTime[1];
-  const am_pm = messageTime[2].split(" ")[1];
+}
+
+const SendChatBubble: React.FC<SendChatBubbleProps> = ({ message, time }) => {
+  const date = new Date(time);
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const am_pm = hours >= 12 ? "PM" : "AM";
+  const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
+  const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
 
   return (
     <View className="flex flex-col items-end gap-1">
@@ -20,8 +20,10 @@ export default function SendChatBubble({
         {message}
       </Text>
       <Text className="px-2 text-white text-[10px] font-cinzel">
-        {hours}:{minute} {am_pm}
+        {formattedHours}:{formattedMinutes} {am_pm}
       </Text>
     </View>
   );
-}
+};
+
+export default React.memo(SendChatBubble);

@@ -1,20 +1,23 @@
 import React from "react";
 import { Text, View } from "react-native";
 
-export default function RecieveChatBubble({
-  message,
-  time,
-}: {
+interface RecieveChatBubbleProps {
   message: string;
   time: string;
-}) {
+}
+
+const RecieveChatBubble: React.FC<RecieveChatBubbleProps> = ({
+  message,
+  time,
+}) => {
   const messageDate = new Date(time).toLocaleString();
   const messageTime = messageDate.split(",")[1].split(":");
   const hours = messageTime[0];
   const minute = messageTime[1];
   const am_pm = messageTime[2].split(" ")[1];
+
   return (
-    <View className="flex felx-col items-start gap-1">
+    <View className="flex flex-col items-start gap-1">
       <Text className="text-white font-cinzel bg-[#374151] px-[1rem] py-[0.5rem] rounded-full">
         {message}
       </Text>
@@ -23,4 +26,6 @@ export default function RecieveChatBubble({
       </Text>
     </View>
   );
-}
+};
+
+export default React.memo(RecieveChatBubble);
