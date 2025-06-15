@@ -5,7 +5,7 @@ import { RootState } from "@/store/store";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
@@ -13,6 +13,7 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
+  Pressable,
   Text,
   TextInput,
   TouchableOpacity,
@@ -46,6 +47,8 @@ export default function Chat() {
   );
   const [listLoading, setListLoading] = useState(false);
   const [page, setPage] = useState(1);
+
+  const router = useRouter();
 
   useEffect(() => {
     setLoading(true);
@@ -159,7 +162,12 @@ export default function Chat() {
         keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 0}
       >
         <View className="px-4 pt-2 flex flex-row items-center justify-between">
-          <View className="w-[40px] h-[40px] relative border border-gray-600 rounded-full">
+          <Pressable
+            onPress={() => {
+              router.back();
+            }}
+            className="w-[40px] h-[40px] relative border border-gray-600 rounded-full"
+          >
             <Ionicons
               name="chevron-back"
               size={24}
@@ -171,7 +179,8 @@ export default function Chat() {
                 transform: [{ translateX: -12 }, { translateY: -12 }],
               }}
             />
-          </View>
+          </Pressable>
+
           <Text className="text-gray-100 text-xl font-cinzelBold">{name}</Text>
           <Entypo name="dots-three-horizontal" size={24} color="white" />
         </View>
