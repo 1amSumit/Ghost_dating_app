@@ -8,7 +8,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import * as Location from "expo-location";
 import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Image,
   Pressable,
@@ -20,17 +20,15 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import RangeSlider from "rn-range-slider";
 
 export default function Profile() {
-  const dispatch = useDispatch();
   const [username, setUsername] = useState<string>("");
   const [bio, setBio] = useState("");
   const [howyoudie, setHowyoudie] = useState<string>("");
   const [address, setAddress] = useState<string>("");
-  const [hasLocationPermission, setHasLocationPermission] =
-    useState<boolean>(false);
+  const [_, setHasLocationPermission] = useState<boolean>(false);
   const [latitude, setLatitude] = useState<number>(0);
   const [longitude, setLongitude] = useState<number>(0);
   const [maxDistance, setMaxDistance] = useState<number>(10);
@@ -41,7 +39,22 @@ export default function Profile() {
   const [showOnFeed, setShowOnFeed] = useState(false);
   const [ghostMode, setGhostMode] = useState(false);
 
-  const [isChanged, setIsChanged] = useState(false);
+  const [isChanged, setIsChanged] = useState({
+    
+  });
+
+  const [isAnyFiledChanged, setIsAnyFieldChanged] = useState(false);
+
+  useEffect(() => {
+    const isFieldChanged = Object.values(isChanged).some((val) => val === true);
+    console.log(isAnyFiledChanged);
+
+    setIsAnyFieldChanged(isFieldChanged);
+  }, [isChanged]);
+
+  const handleChange = (field: any, value: any) => {
+    setIsChanged((prev) => ({ ...prev, [field]: value }));
+  };
 
   const router = useRouter();
 
@@ -69,7 +82,7 @@ export default function Profile() {
     }
 
     setProfilepic(res.assets[0].uri);
-    setIsChanged(true);
+    handleChange("profilePic", profilePic);
   };
 
   useFocusEffect(
@@ -90,7 +103,20 @@ export default function Profile() {
       setGhostMode(parsedUserData.preferences.is_ghost_mode);
       setShowOnFeed(parsedUserData.preferences.show_on_feed);
 
-      setIsChanged(false);
+      setIsChanged({
+        username: false,
+        bio: false,
+        howyoudie: false,
+        address: false,
+        latitude: false,
+        longitude: false,
+        maxDistance: false,
+        minAge: false,
+        maxAge: false,
+        profilePic: false,
+        showOnFeed: false,
+        ghostMode: false,
+      });
       return () => {};
     }, [])
   );
@@ -120,11 +146,44 @@ export default function Profile() {
         const address = addressArray[0];
         const formattedAddress = `${address.name}, ${address.street}, ${address.city}, ${address.region}, ${address.postalCode}, ${address.country}`;
         setAddress(formattedAddress);
-        setIsChanged(true);
+        handleChange("address", formattedAddress);
       }
     } catch (error) {
       console.error("Error getting location or address:", error);
     }
+  };
+
+  const handleUpdateUser = async () => {
+    const userObject: Record<string, string> = {};
+    Object.entries(isChanged).forEach(([key, value]) => {
+      console.log(value);
+      if (value !== false) {
+        console.log(value);
+      }
+    });
+
+    // console.log(x);
+    // try {
+    //   const res = await updateUser(userObject);
+    //   ToastAndroid.show("Details updated", ToastAndroid.SHORT);
+    //   setIsChanged({
+    //     username: false,
+    //     bio: false,
+    //     howyoudie: false,
+    //     address: false,
+    //     latitude: false,
+    //     longitude: false,
+    //     maxDistance: false,
+    //     minAge: false,
+    //     maxAge: false,
+    //     profilePic: false,
+    //     showOnFeed: false,
+    //     ghostMode: false,
+    //   });
+    // } catch (err) {
+    //   console.log(err);
+    //   ToastAndroid.show("Details updation failed", ToastAndroid.SHORT);
+    // }
   };
 
   return (
@@ -143,8 +202,12 @@ export default function Profile() {
             <Text className="text-gray-100 text-xl mt-4 font-cinzelBold">
               Profile
             </Text>
-            {isChanged === true && (
-              <TouchableOpacity>
+            {isAnyFiledChanged === true && (
+              <TouchableOpacity
+                onPress={() => {
+                  handleUpdateUser();
+                }}
+              >
                 <Image source={require("@/assets/images/check.png")} />
               </TouchableOpacity>
             )}
@@ -185,7 +248,7 @@ export default function Profile() {
                 value={username}
                 onChangeText={(text) => {
                   setUsername(text);
-                  if (text !== username) setIsChanged(true);
+                  if (text !== username) handleChange("username", text);
                 }}
               />
             </View>
@@ -196,7 +259,7 @@ export default function Profile() {
                 value={bio}
                 onChangeText={(text) => {
                   setBio(text);
-                  if (text !== bio) setIsChanged(true);
+                  if (text !== bio) handleChange("bio", text);
                 }}
               />
             </View>
@@ -209,7 +272,7 @@ export default function Profile() {
                 value={howyoudie}
                 onChangeText={(text) => {
                   setHowyoudie(text);
-                  if (text !== howyoudie) setIsChanged(true);
+                  if (text !== howyoudie) handleChange("howyoudie", text);
                 }}
               />
             </View>
@@ -226,7 +289,7 @@ export default function Profile() {
                   value={address}
                   onChangeText={(text) => {
                     setAddress(text);
-                    if (text !== address) setIsChanged(true);
+                    if (text !== address) handleChange("address", text);
                   }}
                 />
                 <View className="items-end">
@@ -252,7 +315,8 @@ export default function Profile() {
                   value={maxDistance}
                   onValueChange={(value) => {
                     setMaxDistance(value);
-                    if (value !== maxDistance) setIsChanged(true);
+                    if (value !== maxDistance)
+                      handleChange("maxDistance", value);
                   }}
                   minimumTrackTintColor="#FFFFFF"
                   maximumTrackTintColor="#000000"
@@ -272,7 +336,7 @@ export default function Profile() {
                 selectedValue={gender}
                 onValueChange={(itemValue) => {
                   setGender(itemValue);
-                  if (itemValue !== gender) setIsChanged(true);
+                  if (itemValue !== gender) handleChange("gender", itemValue);
                 }}
               >
                 <Picker.Item label="Male" value="Male" />
@@ -316,7 +380,10 @@ export default function Profile() {
                   onValueChanged={(low, high) => {
                     setMinAge(low);
                     setMaxAge(high);
-                    if (low !== minAge || high !== maxAge) setIsChanged(true);
+                    if (low !== minAge || high !== maxAge) {
+                      handleChange("minAge", low);
+                      handleChange("maxAge", high);
+                    }
                   }}
                 />
                 <Text className="text-gray-100 font-cinzelBold text-md">
@@ -337,7 +404,7 @@ export default function Profile() {
                 ios_backgroundColor="#3e3e3e"
                 onValueChange={(value) => {
                   setShowOnFeed(value);
-                  if (value !== showOnFeed) setIsChanged(true);
+                  if (value !== showOnFeed) handleChange("showOnFeed", value);
                 }}
                 value={showOnFeed}
               />
@@ -352,7 +419,7 @@ export default function Profile() {
                 ios_backgroundColor="#3e3e3e"
                 onValueChange={(value) => {
                   setGhostMode(value);
-                  if (value !== ghostMode) setIsChanged(true);
+                  if (value !== ghostMode) handleChange("ghostMode", value);
                 }}
                 value={ghostMode}
               />
