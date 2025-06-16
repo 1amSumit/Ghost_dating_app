@@ -14,10 +14,20 @@ export default function TabBar({
   descriptors: any;
   navigation: any;
 }) {
-  const userDate = useSelector(
+  const userDataString = useSelector(
     (state: RootState) => state.userDataSlice.userData
   );
-  const parsedUserData = JSON.parse(userDate);
+  let parsedUserData: any = null;
+  try {
+    parsedUserData = userDataString ? JSON.parse(userDataString) : null;
+  } catch {
+    parsedUserData = null;
+  }
+
+  const profilePic =
+    parsedUserData?.user_details?.profile_pic ??
+    "https://via.placeholder.com/100"; // fallback image
+
   const icons = {
     find: (props: any) => <SimpleLineIcons size={28} name="ghost" {...props} />,
     like: (props: any) => <AntDesign name="hearto" size={24} {...props} />,
@@ -34,7 +44,7 @@ export default function TabBar({
         }}
       >
         <Image
-          source={{ uri: parsedUserData.user_details.profile_pic }}
+          source={{ uri: profilePic }}
           className="w-full h-full rounded-full"
         />
       </View>
@@ -42,10 +52,9 @@ export default function TabBar({
   };
 
   return (
-    <View className="absolute border-[1px] border-gray-500 bottom-[8px] right-0 left-0  mx-5 bg-gray-900 px-8 flex flex-row items-center justify-between py-3 rounded-full shadow-xl shadow-black/30">
-      {state.routes.map((route: any, index: any) => {
+    <View className="absolute border-[1px] border-gray-500 bottom-[8px] right-0 left-0 mx-5 bg-gray-900 px-8 flex flex-row items-center justify-between py-3 rounded-full shadow-xl shadow-black/30">
+      {state.routes.map((route: any, index: number) => {
         const { options } = descriptors[route.key];
-
         const isFocused = state.index === index;
 
         const onPress = () => {
