@@ -37,7 +37,7 @@ export default function Profile() {
   const [gender, setGender] = useState<string>("");
   const [minAge, setMinAge] = useState<number>(0);
   const [maxAge, setMaxAge] = useState<number>(0);
-  const [profilePic, setProfilepic] = useState("");
+  const [profilePic, setProfilepic] = useState<string>("");
   const [showOnFeed, setShowOnFeed] = useState(false);
   const [ghostMode, setGhostMode] = useState(false);
 
@@ -120,8 +120,8 @@ export default function Profile() {
         const address = addressArray[0];
         const formattedAddress = `${address.name}, ${address.street}, ${address.city}, ${address.region}, ${address.postalCode}, ${address.country}`;
         setAddress(formattedAddress);
+        setIsChanged(true);
       }
-      setIsChanged(true);
     } catch (error) {
       console.error("Error getting location or address:", error);
     }
@@ -185,7 +185,7 @@ export default function Profile() {
                 value={username}
                 onChangeText={(text) => {
                   setUsername(text);
-                  setIsChanged(true);
+                  if (text !== username) setIsChanged(true);
                 }}
               />
             </View>
@@ -196,7 +196,7 @@ export default function Profile() {
                 value={bio}
                 onChangeText={(text) => {
                   setBio(text);
-                  setIsChanged(true);
+                  if (text !== bio) setIsChanged(true);
                 }}
               />
             </View>
@@ -209,7 +209,7 @@ export default function Profile() {
                 value={howyoudie}
                 onChangeText={(text) => {
                   setHowyoudie(text);
-                  setIsChanged(true);
+                  if (text !== howyoudie) setIsChanged(true);
                 }}
               />
             </View>
@@ -224,7 +224,10 @@ export default function Profile() {
                 <TextInput
                   className="bg-gray-200/30 text-gray-100 rounded-lg mt-2 px-3 font-cinzel"
                   value={address}
-                  onChangeText={setAddress}
+                  onChangeText={(text) => {
+                    setAddress(text);
+                    if (text !== address) setIsChanged(true);
+                  }}
                 />
                 <View className="items-end">
                   <TouchableOpacity onPress={() => getCurrentLocation()}>
@@ -249,7 +252,7 @@ export default function Profile() {
                   value={maxDistance}
                   onValueChange={(value) => {
                     setMaxDistance(value);
-                    setIsChanged(true);
+                    if (value !== maxDistance) setIsChanged(true);
                   }}
                   minimumTrackTintColor="#FFFFFF"
                   maximumTrackTintColor="#000000"
@@ -269,7 +272,7 @@ export default function Profile() {
                 selectedValue={gender}
                 onValueChange={(itemValue) => {
                   setGender(itemValue);
-                  setIsChanged(true);
+                  if (itemValue !== gender) setIsChanged(true);
                 }}
               >
                 <Picker.Item label="Male" value="Male" />
@@ -287,6 +290,8 @@ export default function Profile() {
                   min={19}
                   max={90}
                   step={1}
+                  low={minAge}
+                  high={maxAge}
                   floatingLabel
                   renderThumb={() => (
                     <View
@@ -311,7 +316,7 @@ export default function Profile() {
                   onValueChanged={(low, high) => {
                     setMinAge(low);
                     setMaxAge(high);
-                    setIsChanged(true);
+                    if (low !== minAge || high !== maxAge) setIsChanged(true);
                   }}
                 />
                 <Text className="text-gray-100 font-cinzelBold text-md">
@@ -332,7 +337,7 @@ export default function Profile() {
                 ios_backgroundColor="#3e3e3e"
                 onValueChange={(value) => {
                   setShowOnFeed(value);
-                  setIsChanged(true);
+                  if (value !== showOnFeed) setIsChanged(true);
                 }}
                 value={showOnFeed}
               />
@@ -347,7 +352,7 @@ export default function Profile() {
                 ios_backgroundColor="#3e3e3e"
                 onValueChange={(value) => {
                   setGhostMode(value);
-                  setIsChanged(true);
+                  if (value !== ghostMode) setIsChanged(true);
                 }}
                 value={ghostMode}
               />
