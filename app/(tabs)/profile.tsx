@@ -1,6 +1,7 @@
 import { RootState } from "@/store/store";
 import { Feather } from "@expo/vector-icons";
 import Slider from "@react-native-community/slider";
+import { Picker } from "@react-native-picker/picker";
 import { useFocusEffect } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Location from "expo-location";
@@ -16,6 +17,7 @@ import {
   View,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import RangeSlider from "rn-range-slider";
 
 export default function Profile() {
   const dispatch = useDispatch();
@@ -28,6 +30,9 @@ export default function Profile() {
   const [latitude, setLatitude] = useState<number>(0);
   const [longitude, setLongitude] = useState<number>(0);
   const [maxDistance, setMaxDistance] = useState<number>(10);
+  const [gender, setGender] = useState<string>("");
+  const [minAge, setMinAge] = useState<number>(0);
+  const [maxAge, setMaxAge] = useState<number>(0);
 
   const router = useRouter();
 
@@ -48,6 +53,9 @@ export default function Profile() {
       setHowyoudie(parsedUserData.user_details.howyoudie);
       setAddress(parsedUserData.user_details.location);
       setMaxDistance(parsedUserData.preferences.max_distance);
+      setMinAge(parsedUserData.preferences.prefered_min_age);
+      setMaxAge(parsedUserData.preferences.prefered_max_age);
+      setGender(parsedUserData.user_details.gender);
       return () => {};
     }, [])
   );
@@ -198,6 +206,57 @@ export default function Profile() {
 
           <View className="flex border-[1px] border-slate-300  flex-col  mt-8 bg-gray-200/20 rounded-xl px-4 py-6">
             <Text className="text-sm font-cinzel text-gray-100">Gender</Text>
+            <View>
+              <Picker
+                selectedValue={gender}
+                onValueChange={(itemValue) => setGender(itemValue)}
+              >
+                <Picker.Item label="Male" value="Male" />
+                <Picker.Item label="Female" value="Female" />
+                <Picker.Item label="Other" value="Other" />
+              </Picker>
+            </View>
+            <View>
+              <Text className="font-cinzel text-gray-100 text-sm">
+                Age range
+              </Text>
+              <View className="flex mt-3 flex-row justify-between w-[300px]">
+                <RangeSlider
+                  style={{ width: "100%" }}
+                  min={19}
+                  max={90}
+                  step={1}
+                  floatingLabel
+                  renderThumb={() => (
+                    <View
+                      style={{
+                        width: 15,
+                        height: 15,
+                        backgroundColor: "#FF4081",
+                        borderRadius: 10,
+                      }}
+                    />
+                  )}
+                  renderRail={() => (
+                    <View
+                      style={{ flex: 1, height: 2, backgroundColor: "#333" }}
+                    />
+                  )}
+                  renderRailSelected={() => (
+                    <View
+                      style={{ flex: 1, height: 2, backgroundColor: "#fff" }}
+                    />
+                  )}
+                  onValueChanged={(low, high) => {
+                    setMinAge(low);
+                    setMaxAge(high);
+                  }}
+                />
+                <Text className="text-gray-100 font-cinzelBold text-md">
+                  {minAge}-{maxAge}
+                </Text>
+              </View>
+            </View>
           </View>
         </View>
         <StatusBar backgroundColor={"#271e1e"} />
