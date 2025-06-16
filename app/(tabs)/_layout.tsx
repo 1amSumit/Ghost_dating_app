@@ -4,6 +4,7 @@ import { StatusBar } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { addToken } from "@/store/token";
+import { addUserData } from "@/store/userData";
 import * as SecureStore from "expo-secure-store";
 import { useCallback } from "react";
 import { useDispatch } from "react-redux";
@@ -14,8 +15,14 @@ export default function RootLayout() {
     useCallback(() => {
       const fetchToken = async () => {
         const logedInUser = await SecureStore.getItemAsync("userId");
+        const user = await SecureStore.getItem("user");
+
         if (logedInUser) {
           dispatch(addToken(logedInUser));
+        }
+
+        if (user) {
+          dispatch(addUserData(user));
         }
       };
 

@@ -69,8 +69,8 @@ export default function Liked() {
 
   if (loading) {
     return (
-      <View className="flex-1 items-center justify-center">
-        <ActivityIndicator size={"large"} color="white" />
+      <View className="flex-1 bg-black items-center justify-center">
+        <ActivityIndicator size={"large"} color="purple" />
       </View>
     );
   }
@@ -109,7 +109,7 @@ export default function Liked() {
             return (
               <GestureHandlerRootView>
                 <Animated.View
-                  entering={SlideInDown.duration(500)}
+                  entering={SlideInDown.duration(300)}
                   className="flex items-center justify-center"
                 >
                   <LikedUserComponent

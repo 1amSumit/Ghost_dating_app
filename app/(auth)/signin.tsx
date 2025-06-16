@@ -24,6 +24,7 @@ export default function Signin() {
       const res = await signin(email, password);
       await SecureStore.setItem("userToken", res.token);
       await SecureStore.setItem("userId", res.userId);
+      await SecureStore.setItem("user", JSON.stringify(res.user));
       router.replace("/(tabs)/find");
     } catch (err) {
       console.log(err);

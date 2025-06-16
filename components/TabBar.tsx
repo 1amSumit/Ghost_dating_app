@@ -1,5 +1,7 @@
+import { RootState } from "@/store/store";
 import { AntDesign, Ionicons, SimpleLineIcons } from "@expo/vector-icons";
-import { TouchableOpacity, View } from "react-native";
+import { Image, TouchableOpacity, View } from "react-native";
+import { useSelector } from "react-redux";
 
 type RouteName = "find" | "like" | "matches" | "profile";
 
@@ -12,6 +14,10 @@ export default function TabBar({
   descriptors: any;
   navigation: any;
 }) {
+  const userDate = useSelector(
+    (state: RootState) => state.userDataSlice.userData
+  );
+  const parsedUserData = JSON.parse(userDate);
   const icons = {
     find: (props: any) => <SimpleLineIcons size={28} name="ghost" {...props} />,
     like: (props: any) => <AntDesign name="hearto" size={24} {...props} />,
@@ -26,7 +32,12 @@ export default function TabBar({
           height: 28,
           borderRadius: 9999,
         }}
-      />
+      >
+        <Image
+          source={{ uri: parsedUserData.user_details.profile_pic }}
+          className="w-full h-full rounded-full"
+        />
+      </View>
     ),
   };
 
