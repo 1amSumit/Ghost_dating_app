@@ -1,16 +1,20 @@
 import { RootState } from "@/store/store";
-import { Feather } from "@expo/vector-icons";
+import { Feather, MaterialIcons } from "@expo/vector-icons";
 import Slider from "@react-native-community/slider";
 import { Picker } from "@react-native-picker/picker";
 import { useFocusEffect } from "@react-navigation/native";
+import * as ImagePicker from "expo-image-picker";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Location from "expo-location";
 import { useRouter } from "expo-router";
+import * as SecureStore from "expo-secure-store";
 import { useCallback, useState } from "react";
 import {
   Image,
+  Pressable,
   ScrollView,
   StatusBar,
+  Switch,
   Text,
   TextInput,
   TouchableOpacity,
@@ -33,6 +37,11 @@ export default function Profile() {
   const [gender, setGender] = useState<string>("");
   const [minAge, setMinAge] = useState<number>(0);
   const [maxAge, setMaxAge] = useState<number>(0);
+  const [profilePic, setProfilepic] = useState("");
+  const [showOnFeed, setShowOnFeed] = useState(false);
+  const [ghostMode, setGhostMode] = useState(false);
+
+  const [isChanged, setIsChanged] = useState(false);
 
   const router = useRouter();
 
@@ -42,8 +51,30 @@ export default function Profile() {
 
   const parsedUserData = JSON.parse(userData);
 
+  const logout = async () => {
+    await SecureStore.deleteItemAsync("userToken");
+    router.replace("/");
+  };
+
+  const uploadImage = async () => {
+    const res = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: "images",
+      allowsEditing: false,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!res.assets) {
+      return;
+    }
+
+    setProfilepic(res.assets[0].uri);
+    setIsChanged(true);
+  };
+
   useFocusEffect(
     useCallback(() => {
+      setProfilepic(parsedUserData.user_details.profile_pic);
       setUsername(
         parsedUserData.user_details.first_name +
           " " +
@@ -56,6 +87,10 @@ export default function Profile() {
       setMinAge(parsedUserData.preferences.prefered_min_age);
       setMaxAge(parsedUserData.preferences.prefered_max_age);
       setGender(parsedUserData.user_details.gender);
+      setGhostMode(parsedUserData.preferences.is_ghost_mode);
+      setShowOnFeed(parsedUserData.preferences.show_on_feed);
+
+      setIsChanged(false);
       return () => {};
     }, [])
   );
@@ -86,6 +121,7 @@ export default function Profile() {
         const formattedAddress = `${address.name}, ${address.street}, ${address.city}, ${address.region}, ${address.postalCode}, ${address.country}`;
         setAddress(formattedAddress);
       }
+      setIsChanged(true);
     } catch (error) {
       console.error("Error getting location or address:", error);
     }
@@ -103,20 +139,30 @@ export default function Profile() {
         showsVerticalScrollIndicator={false}
       >
         <View className="">
-          <Text className="text-gray-100 text-xl mt-4 font-cinzelBold">
-            Profile
-          </Text>
+          <View className="flex flex-row justify-between items-center">
+            <Text className="text-gray-100 text-xl mt-4 font-cinzelBold">
+              Profile
+            </Text>
+            {isChanged === true && (
+              <TouchableOpacity>
+                <Image source={require("@/assets/images/check.png")} />
+              </TouchableOpacity>
+            )}
+          </View>
 
           <View className="flex border-[1px] border-slate-300  flex-col items-center mt-8 bg-gray-200/20 rounded-xl px-4 py-6">
-            <View className="relative w-20 h-20 rounded-full">
+            <Pressable
+              onPress={() => uploadImage()}
+              className="relative w-20 h-20 rounded-full"
+            >
               <Image
-                source={{ uri: parsedUserData.user_details.profile_pic }}
+                source={{ uri: profilePic }}
                 className="w-full h-full rounded-full"
               />
               <View className="absolute right-0 bottom-0 bg-pink-600 w-7 h-7 rounded-full flex items-center justify-center">
                 <Feather name="camera" size={16} color="white" />
               </View>
-            </View>
+            </Pressable>
 
             <View className="flex flex-row gap-x-1 mt-2">
               <Text className="text-gray-100 font-cinzelBold text-sm text-center">
@@ -137,7 +183,10 @@ export default function Profile() {
               <TextInput
                 className="bg-gray-200/30 text-gray-100 rounded-lg mt-2 px-3 font-cinzel"
                 value={username}
-                onChangeText={setUsername}
+                onChangeText={(text) => {
+                  setUsername(text);
+                  setIsChanged(true);
+                }}
               />
             </View>
             <View>
@@ -145,7 +194,10 @@ export default function Profile() {
               <TextInput
                 className="bg-gray-200/30 text-gray-100 rounded-lg mt-2 px-3 font-cinzel"
                 value={bio}
-                onChangeText={setBio}
+                onChangeText={(text) => {
+                  setBio(text);
+                  setIsChanged(true);
+                }}
               />
             </View>
             <View>
@@ -155,7 +207,10 @@ export default function Profile() {
               <TextInput
                 className="bg-gray-200/30 text-gray-100 rounded-lg mt-2 px-3 font-cinzel"
                 value={howyoudie}
-                onChangeText={setHowyoudie}
+                onChangeText={(text) => {
+                  setHowyoudie(text);
+                  setIsChanged(true);
+                }}
               />
             </View>
           </View>
@@ -192,7 +247,10 @@ export default function Profile() {
                   maximumValue={100}
                   step={1}
                   value={maxDistance}
-                  onValueChange={setMaxDistance}
+                  onValueChange={(value) => {
+                    setMaxDistance(value);
+                    setIsChanged(true);
+                  }}
                   minimumTrackTintColor="#FFFFFF"
                   maximumTrackTintColor="#000000"
                   thumbTintColor="#FF4081"
@@ -209,7 +267,10 @@ export default function Profile() {
             <View>
               <Picker
                 selectedValue={gender}
-                onValueChange={(itemValue) => setGender(itemValue)}
+                onValueChange={(itemValue) => {
+                  setGender(itemValue);
+                  setIsChanged(true);
+                }}
               >
                 <Picker.Item label="Male" value="Male" />
                 <Picker.Item label="Female" value="Female" />
@@ -250,6 +311,7 @@ export default function Profile() {
                   onValueChanged={(low, high) => {
                     setMinAge(low);
                     setMaxAge(high);
+                    setIsChanged(true);
                   }}
                 />
                 <Text className="text-gray-100 font-cinzelBold text-md">
@@ -258,6 +320,66 @@ export default function Profile() {
               </View>
             </View>
           </View>
+
+          <View className="flex border-[1px] border-slate-300  flex-col gap-3  mt-8 bg-gray-200/20 rounded-xl px-4 py-6">
+            <View className="flex flex-row justify-between items-center">
+              <Text className="text-sm font-cinzel text-gray-100">
+                Show on feed
+              </Text>
+              <Switch
+                trackColor={{ false: "#767577", true: "#fff" }}
+                thumbColor={showOnFeed ? "#FF4081" : "#f4f3f4"}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={(value) => {
+                  setShowOnFeed(value);
+                  setIsChanged(true);
+                }}
+                value={showOnFeed}
+              />
+            </View>
+            <View className="flex flex-row justify-between items-center">
+              <Text className="text-sm font-cinzel text-gray-100">
+                Ghost mode
+              </Text>
+              <Switch
+                trackColor={{ false: "#767577", true: "#fff" }}
+                thumbColor={ghostMode ? "#FF4081" : "#f4f3f4"}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={(value) => {
+                  setGhostMode(value);
+                  setIsChanged(true);
+                }}
+                value={ghostMode}
+              />
+            </View>
+          </View>
+
+          <TouchableOpacity className="flex border-[1px] border-slate-300  flex-col  mt-8 bg-gray-200/20 rounded-xl px-4 py-6">
+            <View className="flex flex-row gap-4 items-center">
+              <Text className="text-gray-100 font-cinzel text-sm ">
+                My membership
+              </Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity className="flex border-[1px] border-slate-300  flex-col  mt-8 bg-gray-200/20 rounded-xl px-4 py-6">
+            <View className="flex flex-row gap-4 items-center">
+              <Text className="text-gray-100 font-cinzel text-sm ">
+                Terms and conditions
+              </Text>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => logout()}
+            className="flex border-[1px] border-slate-300  flex-col  mt-8 bg-gray-200/20 rounded-xl px-4 py-6"
+          >
+            <View className="flex flex-row gap-4 items-center">
+              <MaterialIcons name="logout" size={24} color="white" />
+              <Text className="text-gray-100 font-cinzelBold text-sm ">
+                Log out
+              </Text>
+            </View>
+          </TouchableOpacity>
         </View>
         <StatusBar backgroundColor={"#271e1e"} />
       </ScrollView>
