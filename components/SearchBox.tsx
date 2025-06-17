@@ -3,11 +3,11 @@ import { TextInput, View } from "react-native";
 
 export default function SearchBox() {
   return (
-    <View className="bg-stone-800  flex flex-row gap-4 items-center px-4 py-2 rounded-full">
+    <View className="bg-stone-800  flex flex-row gap-4 items-center px-4 py-2 rounded-full border-[1px] border-gray-300">
       <Ionicons name="search" color={"#e6dede"} size={20} />
       <TextInput
         placeholder="search"
-        className="bg-stone-800 font-cinzelBold w-[300px]"
+        className="bg-stone-800 font-cinzelBold w-[300px] "
       />
     </View>
   );

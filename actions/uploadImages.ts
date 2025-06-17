@@ -8,8 +8,6 @@ export const uploadImages = async (pictures: ImageSlot[]) => {
 
   const formData = new FormData();
 
-  console.log(pictures);
-
   pictures.forEach((img, index) => {
     formData.append("images", {
       uri: img.uri,

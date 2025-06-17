@@ -2,6 +2,7 @@ import { addToMatch } from "@/actions/addToMach";
 import { getLikedUsers } from "@/actions/getLikedUser";
 import LikedUserComponent from "@/components/LikedUserComponent";
 import { LickedUser } from "@/lib/types";
+import { LinearGradient } from "expo-linear-gradient";
 import { useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
 import { ActivityIndicator, FlatList, Text, View } from "react-native";
@@ -85,47 +86,49 @@ export default function Liked() {
     );
   }
   return (
-    <View className="px-4 bg-black">
-      <View className="flex flex-col items-center justify-center">
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={likedUsers}
-          contentContainerStyle={{ paddingBottom: 200 }}
-          contentContainerClassName="bg-black"
-          keyExtractor={(item) => item.liked_by.user_details.user_id}
-          ItemSeparatorComponent={() => <View className="h-[20px]" />}
-          className="w-full"
-          ListHeaderComponent={
-            <View className="mb-12">
-              <Text className="text-gray-100 pt-4 font-cinzelBold text-2xl">
-                You&apos;ve Haunted Their Heart
-              </Text>
-              <Text className="pt-1 font-cinzelBold text-sm text-gray-200">
-                It wasn&apos;t a cold breeze... it was love.
-              </Text>
-            </View>
-          }
-          renderItem={({ item }) => {
-            return (
-              <GestureHandlerRootView>
-                <Animated.View
-                  entering={SlideInDown.duration(300)}
-                  className="flex items-center justify-center"
-                >
-                  <LikedUserComponent
-                    userId={item.liked_by.user_details.user_id}
-                    pictures={item.liked_by.media.gallery}
-                    firstName={item.liked_by.user_details.first_name}
-                    lastName={item.liked_by.user_details.last_name}
-                    age={+item.liked_by.user_details.age}
-                    handleLikedUser={handleLikedUser}
-                  />
-                </Animated.View>
-              </GestureHandlerRootView>
-            );
-          }}
-        />
-      </View>
-    </View>
+    <LinearGradient
+      colors={["#252123", "#7a235d"]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      className="flex-1  px-4"
+    >
+      <FlatList
+        showsVerticalScrollIndicator={false}
+        data={likedUsers}
+        contentContainerStyle={{ paddingBottom: 200 }}
+        keyExtractor={(item) => item.liked_by.user_details.user_id}
+        ItemSeparatorComponent={() => <View className="h-[100px]" />}
+        className="w-full bg-none"
+        ListHeaderComponent={
+          <View className="mb-12">
+            <Text className="text-gray-100 pt-4 font-cinzelBold text-2xl">
+              You&apos;ve Haunted Their Heart
+            </Text>
+            <Text className="pt-1 font-cinzelBold text-sm text-gray-200">
+              It wasn&apos;t a cold breeze... it was love.
+            </Text>
+          </View>
+        }
+        renderItem={({ item }) => {
+          return (
+            <GestureHandlerRootView>
+              <Animated.View
+                entering={SlideInDown.duration(300).springify()}
+                className="flex items-center justify-center"
+              >
+                <LikedUserComponent
+                  userId={item.liked_by.user_details.user_id}
+                  pictures={item.liked_by.media.gallery}
+                  firstName={item.liked_by.user_details.first_name}
+                  lastName={item.liked_by.user_details.last_name}
+                  age={+item.liked_by.user_details.age}
+                  handleLikedUser={handleLikedUser}
+                />
+              </Animated.View>
+            </GestureHandlerRootView>
+          );
+        }}
+      />
+    </LinearGradient>
   );
 }

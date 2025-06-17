@@ -4,6 +4,7 @@ import { setSeenUsersToCache } from "@/actions/setSeenUsers";
 import DisplayUser from "@/components/DisplayUser";
 import { userObject } from "@/lib/types";
 import { useFocusEffect } from "@react-navigation/native";
+import { LinearGradient } from "expo-linear-gradient";
 import React, { useCallback, useState } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -108,11 +109,16 @@ export default function Find() {
   const renderCard = () => {
     if (!data || currentIndex >= data.length) {
       return (
-        <View className="flex-1 bg-black items-center justify-center">
+        <LinearGradient
+          colors={["#252123", "#500177"]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          className="flex-1 items-center justify-center "
+        >
           <Text className="text-2xl font-cinzelBold text-purple-400">
             No more souls 👻
           </Text>
-        </View>
+        </LinearGradient>
       );
     }
 
@@ -137,13 +143,18 @@ export default function Find() {
   };
 
   return (
-    <View className="flex-1 bg-black">
+    <LinearGradient
+      colors={["#252123", "#7a235d"]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      className="flex-1  "
+    >
       <View>
-        <Text className="text-2xl font-cinzelBold text-gray-100 px-6 mt-4">
+        <Text className="text-2xl font-cinzelBold text-gray-100 px-3 mt-2">
           Summon Your Soulmate
         </Text>
       </View>
       <View>{renderCard()}</View>
-    </View>
+    </LinearGradient>
   );
 }

@@ -13,6 +13,7 @@ import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import { useCallback, useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   Image,
   Pressable,
   ScrollView,
@@ -42,6 +43,8 @@ export default function Profile() {
   const [profilePic, setProfilepic] = useState<string>("");
   const [showOnFeed, setShowOnFeed] = useState(false);
   const [ghostMode, setGhostMode] = useState(false);
+
+  const [updating, setUpdating] = useState(false);
 
   const [isChanged, setIsChanged] = useState({});
 
@@ -92,7 +95,6 @@ export default function Profile() {
 
   useFocusEffect(
     useCallback(() => {
-      console.log(parsedUserData);
       setProfilepic(parsedUserData.user_details.profile_pic);
       setUsername(
         parsedUserData.user_details.first_name +
@@ -172,6 +174,19 @@ export default function Profile() {
       ToastAndroid.show("Details updation failed", ToastAndroid.SHORT);
     }
   };
+
+  if (updating) {
+    return (
+      <LinearGradient
+        colors={["#252123", "#500177"]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        className="flex-1 items-center justify-center "
+      >
+        <ActivityIndicator color={"purple"} size={"large"} />
+      </LinearGradient>
+    );
+  }
 
   return (
     <LinearGradient

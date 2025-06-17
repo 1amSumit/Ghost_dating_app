@@ -4,6 +4,7 @@ import SearchBox from "@/components/SearchBox";
 import { generateUSerID } from "@/lib/genRoomId";
 import { MatchedUser } from "@/lib/types";
 import { useFocusEffect } from "@react-navigation/native";
+import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import { useCallback, useState } from "react";
@@ -31,7 +32,12 @@ export default function Matches() {
   );
 
   return (
-    <View className="bg-black flex-1 px-4 ">
+    <LinearGradient
+      colors={["#252123", "#7a235d"]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      className="flex-1  px-4"
+    >
       <View className="mt-2 flex flex-row justify-between pb-[0.6rem]">
         <Text className="text-white font-cinzelBold text-xl">Messages</Text>
       </View>
@@ -75,6 +81,6 @@ export default function Matches() {
           </Pressable>
         )}
       />
-    </View>
+    </LinearGradient>
   );
 }
