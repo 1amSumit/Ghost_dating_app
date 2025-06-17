@@ -1,4 +1,7 @@
+import { getLoggedInUserDetails } from "@/actions/getLoggedInUserDetails";
+import { updateUser } from "@/actions/updateUser";
 import { RootState } from "@/store/store";
+import { addUserData } from "@/store/userData";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
 import Slider from "@react-native-community/slider";
 import { Picker } from "@react-native-picker/picker";
@@ -17,10 +20,11 @@ import {
   Switch,
   Text,
   TextInput,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from "react-native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import RangeSlider from "rn-range-slider";
 
 export default function Profile() {
@@ -39,17 +43,18 @@ export default function Profile() {
   const [showOnFeed, setShowOnFeed] = useState(false);
   const [ghostMode, setGhostMode] = useState(false);
 
-  const [isChanged, setIsChanged] = useState({
-    
-  });
+  const [isChanged, setIsChanged] = useState({});
 
   const [isAnyFiledChanged, setIsAnyFieldChanged] = useState(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const isFieldChanged = Object.values(isChanged).some((val) => val === true);
-    console.log(isAnyFiledChanged);
+    setIsAnyFieldChanged(false);
+    const isFieldChanged = Object.keys(isChanged).filter((key) => key);
 
-    setIsAnyFieldChanged(isFieldChanged);
+    if (isFieldChanged.length !== 0) {
+      setIsAnyFieldChanged(true);
+    }
   }, [isChanged]);
 
   const handleChange = (field: any, value: any) => {
@@ -87,6 +92,7 @@ export default function Profile() {
 
   useFocusEffect(
     useCallback(() => {
+      console.log(parsedUserData);
       setProfilepic(parsedUserData.user_details.profile_pic);
       setUsername(
         parsedUserData.user_details.first_name +
@@ -103,22 +109,9 @@ export default function Profile() {
       setGhostMode(parsedUserData.preferences.is_ghost_mode);
       setShowOnFeed(parsedUserData.preferences.show_on_feed);
 
-      setIsChanged({
-        username: false,
-        bio: false,
-        howyoudie: false,
-        address: false,
-        latitude: false,
-        longitude: false,
-        maxDistance: false,
-        minAge: false,
-        maxAge: false,
-        profilePic: false,
-        showOnFeed: false,
-        ghostMode: false,
-      });
+      setIsChanged({});
       return () => {};
-    }, [])
+    }, [userData])
   );
 
   const getCurrentLocation = async () => {
@@ -154,36 +147,28 @@ export default function Profile() {
   };
 
   const handleUpdateUser = async () => {
-    const userObject: Record<string, string> = {};
+    const userObject: Record<string, string | boolean> = {};
     Object.entries(isChanged).forEach(([key, value]) => {
-      console.log(value);
-      if (value !== false) {
-        console.log(value);
+      if (key) {
+        userObject[key] = value as string | boolean;
       }
     });
 
-    // console.log(x);
-    // try {
-    //   const res = await updateUser(userObject);
-    //   ToastAndroid.show("Details updated", ToastAndroid.SHORT);
-    //   setIsChanged({
-    //     username: false,
-    //     bio: false,
-    //     howyoudie: false,
-    //     address: false,
-    //     latitude: false,
-    //     longitude: false,
-    //     maxDistance: false,
-    //     minAge: false,
-    //     maxAge: false,
-    //     profilePic: false,
-    //     showOnFeed: false,
-    //     ghostMode: false,
-    //   });
-    // } catch (err) {
-    //   console.log(err);
-    //   ToastAndroid.show("Details updation failed", ToastAndroid.SHORT);
-    // }
+    try {
+      await updateUser(userObject);
+      const res = await getLoggedInUserDetails();
+      await SecureStore.setItem("user", JSON.stringify(res.user));
+      const user = await SecureStore.getItemAsync("user");
+
+      dispatch(addUserData(user));
+      ToastAndroid.show("Details updated", ToastAndroid.SHORT);
+
+      setIsChanged({});
+      setIsAnyFieldChanged(false);
+    } catch (err) {
+      console.log(err);
+      ToastAndroid.show("Details updation failed", ToastAndroid.SHORT);
+    }
   };
 
   return (
