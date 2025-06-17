@@ -87,7 +87,7 @@ export default function Profile() {
     }
 
     setProfilepic(res.assets[0].uri);
-    handleChange("profilePic", profilePic);
+    handleChange("profilePic", res.assets[0].uri);
   };
 
   useFocusEffect(
@@ -129,6 +129,8 @@ export default function Profile() {
       const { latitude, longitude } = loca.coords;
       setLatitude(latitude);
       setLongitude(longitude);
+      handleChange("latitude", latitude);
+      handleChange("longitude", longitude);
 
       const addressArray = await Location.reverseGeocodeAsync({
         latitude: latitude,

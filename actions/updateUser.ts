@@ -4,10 +4,8 @@ import * as SecureStore from "expo-secure-store";
 export const updateUser = async (userObject: any) => {
   const API_URL = "http://192.168.1.3:3000/api/v1/user";
   const token = await SecureStore.getItemAsync("userToken");
-  const userID = await SecureStore.getItemAsync("token");
+  const userID = await SecureStore.getItemAsync("userId");
   const formData = new FormData();
-
-  console.log(userObject);
 
   if (userObject.username !== undefined)
     formData.append("firstName", userObject.username.split(" ")[0]);
@@ -35,12 +33,10 @@ export const updateUser = async (userObject: any) => {
 
   if (userObject.profilePic !== undefined)
     formData.append("image", {
-      uri: userObject.profile_pic,
+      uri: userObject.profilePic,
       name: `profile-pic-${userID}.jpg`,
       type: "image/jpeg",
     } as any);
-
-  console.log(formData.get("firstName"));
 
   const res = await axios.put(`${API_URL}/update-user`, formData, {
     headers: {
@@ -48,4 +44,6 @@ export const updateUser = async (userObject: any) => {
       "Content-Type": "multipart/form-data",
     },
   });
+
+  return res.data;
 };
