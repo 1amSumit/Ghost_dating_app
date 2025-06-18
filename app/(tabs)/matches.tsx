@@ -31,6 +31,21 @@ export default function Matches() {
     }, [])
   );
 
+  if (matchedUsers.length === 0) {
+    return (
+      <LinearGradient
+        colors={["#252123", "#7a235d"]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        className="flex-1 items-center justify-center "
+      >
+        <Text className="text-purple-200 text-xl font-cinzelBold ">
+          No Matched found to haunt!
+        </Text>
+      </LinearGradient>
+    );
+  }
+
   return (
     <LinearGradient
       colors={["#252123", "#7a235d"]}
@@ -87,13 +102,6 @@ export default function Matches() {
             </Pressable>
           )}
         />
-      )}
-      {matchedUsers.length === 0 && (
-        <View className="flex-1 items-center justify-center">
-          <Text className="text-purple-200 font-cinzelBold ">
-            No Matched found to haunt!
-          </Text>
-        </View>
       )}
     </LinearGradient>
   );

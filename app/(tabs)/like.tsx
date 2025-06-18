@@ -4,7 +4,7 @@ import LikedUserComponent from "@/components/LikedUserComponent";
 import { LickedUser } from "@/lib/types";
 import { LinearGradient } from "expo-linear-gradient";
 import { useFocusEffect } from "expo-router";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Animated, { SlideInDown } from "react-native-reanimated";
@@ -18,36 +18,32 @@ export default function Liked() {
     setLikedUserIds((prev) => [...prev, userid]);
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      if (likedUserIds.length === 0) {
-        return;
-      } else {
-        const interval = setInterval(async () => {
-          try {
-            const res = await addToMatch(likedUserIds);
-            setLikedUserIds([]);
-          } catch (err) {
-            console.log(err);
-          }
-        }, 1000);
+  useEffect(() => {
+    if (likedUserIds.length === 0) {
+      return;
+    } else {
+      const interval = setInterval(async () => {
+        try {
+          const res = await addToMatch(likedUserIds);
+          setLikedUserIds([]);
+        } catch (err) {
+          console.log(err);
+        }
+      }, 1000);
 
-        return () => clearInterval(interval);
-      }
-    }, [likedUserIds])
-  );
+      return () => clearInterval(interval);
+    }
+  }, [likedUserIds]);
 
-  useFocusEffect(
-    useCallback(() => {
-      const fliterLikedUser = likedUsers.filter((user) =>
-        likedUserIds.includes(user.liked_by.user_details.user_id) ? false : true
-      );
+  useEffect(() => {
+    const fliterLikedUser = likedUsers.filter((user) =>
+      likedUserIds.includes(user.liked_by.user_details.user_id) ? false : true
+    );
 
-      setLikedUsers(fliterLikedUser);
+    setLikedUsers(fliterLikedUser);
 
-      return () => {};
-    }, [likedUserIds])
-  );
+    return () => {};
+  }, [likedUserIds]);
 
   useFocusEffect(
     useCallback(() => {
