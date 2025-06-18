@@ -1,7 +1,14 @@
+import { resendOtp } from "@/actions/resendOtp";
 import { RootState } from "@/store/store";
 import { addOtp } from "@/store/userSlice";
 import { useRef } from "react";
-import { Text, TextInput, View } from "react-native";
+import {
+  Text,
+  TextInput,
+  ToastAndroid,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function OtpInput() {
@@ -26,12 +33,22 @@ export default function OtpInput() {
     }
   };
 
+  const resendotp = async () => {
+    try {
+      await resendOtp(email);
+      ToastAndroid.show("Opt sent", ToastAndroid.SHORT);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <View className="px-4">
       <View>
         <Text className="text-3xl font-cinzelBold">
           Enter your verification code
         </Text>
+
         <Text className="font-cinzel text-xs mt-4">send to {email}</Text>
       </View>
       <View className="mt-[10rem] flex flex-row gap-[1.5rem] items-center justify-center">
@@ -48,6 +65,11 @@ export default function OtpInput() {
             />
           </View>
         ))}
+      </View>
+      <View className="px-2 mt-4">
+        <TouchableOpacity onPress={() => resendotp()}>
+          <Text className="mt-2 font-cinzelBold underline">Resend otp</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

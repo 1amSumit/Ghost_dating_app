@@ -75,7 +75,7 @@ export default function Username() {
       </View>
       <View className="absolute bottom-5 right-10">
         <FloatingButton
-          active={username.trim().length > 5 ? true : false}
+          active={username.trim().length > 5 && pickedImage ? true : false}
           onPress={() => {
             router.push("/(create)/dob");
           }}

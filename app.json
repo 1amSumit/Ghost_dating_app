@@ -44,20 +44,14 @@
           "backgroundColor": "#ffffff"
         }
       ],
+
       [
         "expo-image-picker",
         {
           "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
       ],
-      [
-        "react-native-maps",
-        {
-          "config": {
-            "googleMapsApiKey": "AIzaSyDG3jxfcdNhzpXfmVYtPLxy0nkYbvrH43U"
-          }
-        }
-      ],
+      "react-native-maps",
       "expo-font",
       [
         "expo-location",
@@ -65,15 +59,7 @@
           "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
         }
       ],
-      [
-        "expo-maps",
-        {
-          "requestLocationPermission": true,
-          "apiKey": {
-            "android": "AIzaSyDG3jxfcdNhzpXfmVYtPLxy0nkYbvrH43U"
-          }
-        }
-      ],
+
       "expo-secure-store"
     ],
     "experiments": {

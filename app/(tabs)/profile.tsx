@@ -193,11 +193,12 @@ export default function Profile() {
       colors={["#252123", "#500177"]}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
-      className="flex-1 px-4 pt-2"
+      className="flex-1 px-4 pt-2 "
     >
       <ScrollView
         contentContainerStyle={{ paddingBottom: 200 }}
         showsVerticalScrollIndicator={false}
+        className="ios:p-6"
       >
         <View className="">
           <View className="flex flex-row justify-between items-center">

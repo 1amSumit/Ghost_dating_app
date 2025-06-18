@@ -13,6 +13,7 @@ export default function RootLayout() {
   useEffect(() => {
     const checkUser = async () => {
       const token = await SecureStore.getItemAsync("token");
+
       const userToken = await SecureStore.getItemAsync("userToken");
 
       if (userToken) {

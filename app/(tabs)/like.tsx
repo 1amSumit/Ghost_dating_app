@@ -78,11 +78,18 @@ export default function Liked() {
 
   if (!likedUsers || likedUsers.length === 0) {
     return (
-      <View className="px-2 flex-1 bg-black items-center justify-center">
-        <Text className="text-xl text-purple-400 text-center font-cinzelBold">
-          Apparently Love Is Still in the Coffin...
-        </Text>
-      </View>
+      <LinearGradient
+        colors={["#252123", "#7a235d"]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        className="flex-1  px-4"
+      >
+        <View className="px-2  flex-1 items-center justify-center">
+          <Text className="text-xl  text-purple-200 text-center font-cinzelBold">
+            Apparently Love Is Still in the Coffin...
+          </Text>
+        </View>
+      </LinearGradient>
     );
   }
   return (
@@ -100,7 +107,7 @@ export default function Liked() {
         ItemSeparatorComponent={() => <View className="h-[100px]" />}
         className="w-full bg-none"
         ListHeaderComponent={
-          <View className="mb-12">
+          <View className="mb-12 ios:p-4">
             <Text className="text-gray-100 pt-4 font-cinzelBold text-2xl">
               You&apos;ve Haunted Their Heart
             </Text>

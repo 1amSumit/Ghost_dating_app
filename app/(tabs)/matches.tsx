@@ -39,48 +39,62 @@ export default function Matches() {
       className="flex-1  px-4"
     >
       <View className="mt-2 flex flex-row justify-between pb-[0.6rem]">
-        <Text className="text-white font-cinzelBold text-xl">Messages</Text>
+        <Text className="text-white font-cinzelBold text-xl ios:p-6">
+          Messages
+        </Text>
       </View>
-      <FlatList
-        ListHeaderComponent={
-          <View className="">
-            <View className="mt-4 mb-[1.5rem]">
-              <SearchBox />
+      {matchedUsers.length > 0 && (
+        <FlatList
+          ListHeaderComponent={
+            <View className="">
+              <View className=" mt-4 mb-[1.5rem]">
+                <SearchBox />
+              </View>
             </View>
-          </View>
-        }
-        ItemSeparatorComponent={() => <View className="h-[30px]" />}
-        data={matchedUsers}
-        contentContainerStyle={{ paddingBottom: 100 }}
-        showsVerticalScrollIndicator={false}
-        keyExtractor={(_, index) => index.toString()}
-        renderItem={({ item }) => (
-          <Pressable
-            onPress={() => {
-              router.push({
-                pathname: "/chat/[chatId]",
-                params: {
-                  chatId: generateUSerID(
-                    loggedInUserId!,
-                    item.user_details.user_id
-                  ),
-                  name: item.user_details.first_name,
-                  recieverUserId: item.user_details.user_id,
-                },
-              });
-            }}
-          >
-            <Profile
-              name={
-                item.user_details.first_name + " " + item.user_details.last_name
-              }
-              lastMessage={item.user_details.gender}
-              lastMessageTime="16 min"
-              profile_pic={item.user_details.profile_pic}
-            />
-          </Pressable>
-        )}
-      />
+          }
+          ItemSeparatorComponent={() => <View className="h-[30px]" />}
+          data={matchedUsers}
+          className="ios:px-6"
+          contentContainerStyle={{ paddingBottom: 100 }}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(_, index) => index.toString()}
+          renderItem={({ item }) => (
+            <Pressable
+              onPress={() => {
+                router.push({
+                  pathname: "/chat/[chatId]",
+                  params: {
+                    chatId: generateUSerID(
+                      loggedInUserId!,
+                      item.user_details.user_id
+                    ),
+                    name: item.user_details.first_name,
+                    recieverUserId: item.user_details.user_id,
+                  },
+                });
+              }}
+            >
+              <Profile
+                name={
+                  item.user_details.first_name +
+                  " " +
+                  item.user_details.last_name
+                }
+                lastMessage={item.user_details.gender}
+                lastMessageTime="16 min"
+                profile_pic={item.user_details.profile_pic}
+              />
+            </Pressable>
+          )}
+        />
+      )}
+      {matchedUsers.length === 0 && (
+        <View className="flex-1 items-center justify-center">
+          <Text className="text-purple-200 font-cinzelBold ">
+            No Matched found to haunt!
+          </Text>
+        </View>
+      )}
     </LinearGradient>
   );
 }
