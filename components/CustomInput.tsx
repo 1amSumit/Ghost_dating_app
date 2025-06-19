@@ -5,6 +5,7 @@ interface CustomInputProps {
   value: string;
   label: string;
   onChange: (text: string) => void;
+  keyboardType: string;
 }
 
 export default function CustomInput({
@@ -12,6 +13,7 @@ export default function CustomInput({
   onChange,
   label,
   placeholder,
+  keyboardType,
 }: CustomInputProps) {
   return (
     <View className="px-4">
@@ -22,6 +24,8 @@ export default function CustomInput({
         autoFocus={false}
         autoCorrect
         value={value}
+        keyboardType={keyboardType === "email" ? "email-address" : "default"}
+        autoCapitalize="none"
         onChangeText={onChange}
         className=" w-[350px]  font-cinzelBold placeholder:font-cinzelBold text-lg placeholder:text-gray-500  text-gray-800  rounded-lg"
         placeholder={placeholder}

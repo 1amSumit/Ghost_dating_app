@@ -27,6 +27,7 @@ export default function Password() {
             label="Please provide your Passowrd"
             value={password}
             placeholder=""
+            keyboardType="password"
             onChange={(text) => dispatch(addPassword(text))}
           />
         </Animated.View>

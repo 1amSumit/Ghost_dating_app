@@ -107,6 +107,7 @@ const createUserSlice = createSlice({
     addImages: (state, action: PayloadAction<ImageSlot[]>) => {
       state.images = action.payload;
     },
+    resetCreateUser: () => initialState,
   },
 });
 
@@ -126,6 +127,7 @@ export const {
   addLocation,
   addImages,
   addProfilePic,
+  resetCreateUser,
 } = createUserSlice.actions;
 
 export default createUserSlice;

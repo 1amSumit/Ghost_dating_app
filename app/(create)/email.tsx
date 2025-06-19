@@ -49,6 +49,7 @@ export default function Email() {
           <CustomInput
             label="Please provide your Email"
             value={email}
+            keyboardType="email"
             placeholder="bloddymarry@ghostmail.com"
             onChange={(text) => dispatch(addEmail(text))}
           />

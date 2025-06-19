@@ -1,6 +1,7 @@
 import { createUser } from "@/actions/createUser";
 import AddImages from "@/components/AddImages";
 import FloatingButton from "@/components/FloatingButton";
+import { resetCreateUser } from "@/store/createUserSlice";
 import { RootState } from "@/store/store";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
@@ -9,13 +10,14 @@ import React, { useState } from "react";
 import { ActivityIndicator, View } from "react-native";
 
 import Animated, { SlideInLeft } from "react-native-reanimated";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function UploadImages() {
   const { email } = useSelector((state: RootState) => state.userReducer);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [imagesCount, setImagesCount] = useState(0);
+  const dispatch = useDispatch();
   const requiredImage = (count: number) => {
     setImagesCount(count);
   };
@@ -63,6 +65,7 @@ export default function UploadImages() {
       await SecureStore.setItem("userToken", res.token);
       await SecureStore.setItem("userId", res.user.id);
       await SecureStore.setItem("user", JSON.stringify(res.user));
+      dispatch(resetCreateUser());
       router.replace("/(tabs)/find");
     } catch (error) {
       console.log(error);
