@@ -27,7 +27,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
 import RangeSlider from "rn-range-slider";
 
@@ -78,6 +77,8 @@ export default function Profile() {
 
   const logout = async () => {
     await SecureStore.deleteItemAsync("userToken");
+    await SecureStore.deleteItemAsync("userId");
+    await SecureStore.deleteItemAsync("user");
     router.replace("/");
   };
 
@@ -200,304 +201,295 @@ export default function Profile() {
   }
 
   return (
-    <SafeAreaView
-      style={{ flex: 1, backgroundColor: "#252123" }}
-      edges={["top"]}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+      style={{ flex: 1 }}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
     >
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-        style={{ flex: 1 }}
-        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+      <LinearGradient
+        colors={["#252123", "#500177"]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        className="flex-1 px-4 pt-2 "
       >
-        <LinearGradient
-          colors={["#252123", "#500177"]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          className="flex-1 px-4 pt-2 "
+        <ScrollView
+          contentContainerStyle={{ paddingBottom: 200 }}
+          showsVerticalScrollIndicator={false}
+          className="ios:p-6"
         >
-          <ScrollView
-            contentContainerStyle={{ paddingBottom: 200 }}
-            showsVerticalScrollIndicator={false}
-            className="ios:p-6"
-          >
-            <View className="">
-              <View className="flex flex-row justify-between items-center">
-                <Text className="text-gray-100 text-xl mt-4 font-cinzelBold">
-                  Profile
-                </Text>
-                {isAnyFiledChanged === true && (
-                  <TouchableOpacity
-                    onPress={() => {
-                      handleUpdateUser();
-                    }}
-                  >
-                    <Image source={require("@/assets/images/check.png")} />
-                  </TouchableOpacity>
-                )}
-              </View>
-
-              <View className="flex border-[1px] border-slate-300  flex-col items-center mt-8 bg-gray-200/20 rounded-xl px-4 py-6">
-                <Pressable
-                  onPress={() => uploadImage()}
-                  className="relative w-20 h-20 rounded-full"
+          <View className="">
+            <View className="flex flex-row justify-between items-center">
+              <Text className="text-gray-100 text-xl mt-4 font-cinzelBold">
+                Profile
+              </Text>
+              {isAnyFiledChanged === true && (
+                <TouchableOpacity
+                  onPress={() => {
+                    handleUpdateUser();
+                  }}
                 >
-                  <Image
-                    source={{ uri: profilePic }}
-                    className="w-full h-full rounded-full"
-                  />
-                  <View className="absolute right-0 bottom-0 bg-pink-600 w-7 h-7 rounded-full flex items-center justify-center">
-                    <Feather name="camera" size={16} color="white" />
-                  </View>
-                </Pressable>
-
-                <View className="flex flex-row gap-x-1 mt-2">
-                  <Text className="text-gray-100 font-cinzelBold text-sm text-center">
-                    {parsedUserData.user_details.first_name}{" "}
-                    {parsedUserData.user_details.last_name},
-                  </Text>
-                  <Text className="text-gray-100 font-cinzelBold text-sm text-center">
-                    {parsedUserData.user_details.age}
-                  </Text>
-                </View>
-              </View>
-
-              <View className="flex border-[1px] border-slate-300 flex-col gap-4 mt-8 bg-gray-200/20 rounded-xl px-4 py-6">
-                <View>
-                  <Text className="text-gray-100 text-sm font-cinzel">
-                    Display Name
-                  </Text>
-                  <TextInput
-                    className="bg-gray-200/30 text-gray-100 rounded-lg mt-2 px-3 font-cinzel"
-                    value={username}
-                    onChangeText={(text) => {
-                      setUsername(text);
-                      if (text !== username) handleChange("username", text);
-                    }}
-                  />
-                </View>
-                <View>
-                  <Text className="text-gray-100 text-sm font-cinzel">Bio</Text>
-                  <TextInput
-                    className="bg-gray-200/30 text-gray-100 rounded-lg mt-2 px-3 font-cinzel"
-                    value={bio}
-                    onChangeText={(text) => {
-                      setBio(text);
-                      if (text !== bio) handleChange("bio", text);
-                    }}
-                  />
-                </View>
-                <View>
-                  <Text className="text-gray-100 text-sm font-cinzel">
-                    How you die!
-                  </Text>
-                  <TextInput
-                    className="bg-gray-200/30 text-gray-100 rounded-lg mt-2 px-3 font-cinzel"
-                    value={howyoudie}
-                    onChangeText={(text) => {
-                      setHowyoudie(text);
-                      if (text !== howyoudie) handleChange("howyoudie", text);
-                    }}
-                  />
-                </View>
-              </View>
-
-              <View className="flex border-[1px] border-slate-300 flex-col gap-4 mt-8 bg-gray-200/20 rounded-xl px-4 py-6">
-                <View>
-                  <Text className="text-gray-100 font-cinzel text-sm">
-                    Location
-                  </Text>
-                  <View className="flex flex-col">
-                    <TextInput
-                      className="bg-gray-200/30 text-gray-100 rounded-lg mt-2 px-3 font-cinzel"
-                      value={address}
-                      onChangeText={(text) => {
-                        setAddress(text);
-                        if (text !== address) handleChange("address", text);
-                      }}
-                    />
-                    <View className="items-end mt-2">
-                      <TouchableOpacity onPress={() => getCurrentLocation()}>
-                        {gettingLocation === false ? (
-                          <Text className="font-cinzel mt-3  text-gray-100 text-xs">
-                            Get current Location
-                          </Text>
-                        ) : (
-                          <View className="mt-1">
-                            <ActivityIndicator size={"small"} color={"white"} />
-                          </View>
-                        )}
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                </View>
-
-                <View>
-                  <Text className="font-cinzel text-gray-100 text-sm">
-                    Maximum Distance
-                  </Text>
-                  <View className="flex flex-row justify-between">
-                    <Slider
-                      style={{ width: 300, height: 20 }}
-                      minimumValue={10}
-                      maximumValue={100}
-                      step={1}
-                      value={maxDistance}
-                      onValueChange={(value) => {
-                        setMaxDistance(value);
-                        if (value !== maxDistance)
-                          handleChange("maxDistance", value);
-                      }}
-                      minimumTrackTintColor="#FFFFFF"
-                      maximumTrackTintColor="#000000"
-                      thumbTintColor="#FF4081"
-                    />
-                    <Text className="text-gray-100 font-cinzelBold text-md">
-                      {maxDistance}
-                    </Text>
-                  </View>
-                </View>
-              </View>
-
-              <View className="flex border-[1px] border-slate-300  flex-col  mt-8 bg-gray-200/20 rounded-xl px-4 py-6">
-                <Text className="text-sm font-cinzel text-gray-100">
-                  Gender
-                </Text>
-                <View>
-                  <Picker
-                    selectedValue={gender}
-                    onValueChange={(itemValue) => {
-                      setGender(itemValue);
-                      if (itemValue !== gender)
-                        handleChange("gender", itemValue);
-                    }}
-                  >
-                    <Picker.Item label="Male" value="Male" />
-                    <Picker.Item label="Female" value="Female" />
-                    <Picker.Item label="Other" value="Other" />
-                  </Picker>
-                </View>
-                <View>
-                  <Text className="font-cinzel text-gray-100 text-sm">
-                    Age range
-                  </Text>
-                  <View className="flex mt-3 flex-row justify-between w-[300px]">
-                    <RangeSlider
-                      style={{ width: "100%" }}
-                      min={19}
-                      max={90}
-                      step={1}
-                      low={minAge}
-                      high={maxAge}
-                      floatingLabel
-                      renderThumb={() => (
-                        <View
-                          style={{
-                            width: 15,
-                            height: 15,
-                            backgroundColor: "#FF4081",
-                            borderRadius: 10,
-                          }}
-                        />
-                      )}
-                      renderRail={() => (
-                        <View
-                          style={{
-                            flex: 1,
-                            height: 2,
-                            backgroundColor: "#333",
-                          }}
-                        />
-                      )}
-                      renderRailSelected={() => (
-                        <View
-                          style={{
-                            flex: 1,
-                            height: 2,
-                            backgroundColor: "#fff",
-                          }}
-                        />
-                      )}
-                      onValueChanged={(low, high) => {
-                        setMinAge(low);
-                        setMaxAge(high);
-                        if (low !== minAge || high !== maxAge) {
-                          handleChange("minAge", low);
-                          handleChange("maxAge", high);
-                        }
-                      }}
-                    />
-                    <Text className="text-gray-100 font-cinzelBold text-md">
-                      {minAge}-{maxAge}
-                    </Text>
-                  </View>
-                </View>
-              </View>
-
-              <View className="flex border-[1px] border-slate-300  flex-col gap-3  mt-8 bg-gray-200/20 rounded-xl px-4 py-6">
-                <View className="flex flex-row justify-between items-center">
-                  <Text className="text-sm font-cinzel text-gray-100">
-                    Show on feed
-                  </Text>
-                  <Switch
-                    trackColor={{ false: "#767577", true: "#fff" }}
-                    thumbColor={showOnFeed ? "#FF4081" : "#f4f3f4"}
-                    ios_backgroundColor="#3e3e3e"
-                    onValueChange={(value) => {
-                      setShowOnFeed(value);
-                      if (value !== showOnFeed)
-                        handleChange("showOnFeed", value);
-                    }}
-                    value={showOnFeed}
-                  />
-                </View>
-                <View className="flex flex-row justify-between items-center">
-                  <Text className="text-sm font-cinzel text-gray-100">
-                    Ghost mode
-                  </Text>
-                  <Switch
-                    trackColor={{ false: "#767577", true: "#fff" }}
-                    thumbColor={ghostMode ? "#FF4081" : "#f4f3f4"}
-                    ios_backgroundColor="#3e3e3e"
-                    onValueChange={(value) => {
-                      setGhostMode(value);
-                      if (value !== ghostMode) handleChange("ghostMode", value);
-                    }}
-                    value={ghostMode}
-                  />
-                </View>
-              </View>
-
-              <TouchableOpacity className="flex border-[1px] border-slate-300  flex-col  mt-8 bg-gray-200/20 rounded-xl px-4 py-6">
-                <View className="flex flex-row gap-4 items-center">
-                  <Text className="text-gray-100 font-cinzel text-sm ">
-                    My membership
-                  </Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity className="flex border-[1px] border-slate-300  flex-col  mt-8 bg-gray-200/20 rounded-xl px-4 py-6">
-                <View className="flex flex-row gap-4 items-center">
-                  <Text className="text-gray-100 font-cinzel text-sm ">
-                    Terms and conditions
-                  </Text>
-                </View>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                onPress={() => logout()}
-                className="flex border-[1px] border-slate-300  flex-col  mt-8 bg-gray-200/20 rounded-xl px-4 py-6"
-              >
-                <View className="flex flex-row gap-4 items-center">
-                  <MaterialIcons name="logout" size={24} color="white" />
-                  <Text className="text-gray-100 font-cinzelBold text-sm ">
-                    Log out
-                  </Text>
-                </View>
-              </TouchableOpacity>
+                  <Image source={require("@/assets/images/check.png")} />
+                </TouchableOpacity>
+              )}
             </View>
-            <StatusBar backgroundColor={"#271e1e"} />
-          </ScrollView>
-        </LinearGradient>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+
+            <View className="flex border-[1px] border-slate-300  flex-col items-center mt-8 bg-gray-200/20 rounded-xl px-4 py-6">
+              <Pressable
+                onPress={() => uploadImage()}
+                className="relative w-20 h-20 rounded-full"
+              >
+                <Image
+                  source={{ uri: profilePic }}
+                  className="w-full h-full rounded-full"
+                />
+                <View className="absolute right-0 bottom-0 bg-pink-600 w-7 h-7 rounded-full flex items-center justify-center">
+                  <Feather name="camera" size={16} color="white" />
+                </View>
+              </Pressable>
+
+              <View className="flex flex-row gap-x-1 mt-2">
+                <Text className="text-gray-100 font-cinzelBold text-sm text-center">
+                  {parsedUserData.user_details.first_name}{" "}
+                  {parsedUserData.user_details.last_name},
+                </Text>
+                <Text className="text-gray-100 font-cinzelBold text-sm text-center">
+                  {parsedUserData.user_details.age}
+                </Text>
+              </View>
+            </View>
+
+            <View className="flex border-[1px] border-slate-300 flex-col gap-4 mt-8 bg-gray-200/20 rounded-xl px-4 py-6">
+              <View>
+                <Text className="text-gray-100 text-sm font-cinzel">
+                  Display Name
+                </Text>
+                <TextInput
+                  className="bg-gray-200/30 text-gray-100 rounded-lg mt-2 px-3 font-cinzel"
+                  value={username}
+                  onChangeText={(text) => {
+                    setUsername(text);
+                    if (text !== username) handleChange("username", text);
+                  }}
+                />
+              </View>
+              <View>
+                <Text className="text-gray-100 text-sm font-cinzel">Bio</Text>
+                <TextInput
+                  className="bg-gray-200/30 text-gray-100 rounded-lg mt-2 px-3 font-cinzel"
+                  value={bio}
+                  onChangeText={(text) => {
+                    setBio(text);
+                    if (text !== bio) handleChange("bio", text);
+                  }}
+                />
+              </View>
+              <View>
+                <Text className="text-gray-100 text-sm font-cinzel">
+                  How you die!
+                </Text>
+                <TextInput
+                  className="bg-gray-200/30 text-gray-100 rounded-lg mt-2 px-3 font-cinzel"
+                  value={howyoudie}
+                  onChangeText={(text) => {
+                    setHowyoudie(text);
+                    if (text !== howyoudie) handleChange("howyoudie", text);
+                  }}
+                />
+              </View>
+            </View>
+
+            <View className="flex border-[1px] border-slate-300 flex-col gap-4 mt-8 bg-gray-200/20 rounded-xl px-4 py-6">
+              <View>
+                <Text className="text-gray-100 font-cinzel text-sm">
+                  Location
+                </Text>
+                <View className="flex flex-col">
+                  <TextInput
+                    className="bg-gray-200/30 text-gray-100 rounded-lg mt-2 px-3 font-cinzel"
+                    value={address}
+                    onChangeText={(text) => {
+                      setAddress(text);
+                      if (text !== address) handleChange("address", text);
+                    }}
+                  />
+                  <View className="items-end mt-2">
+                    <TouchableOpacity onPress={() => getCurrentLocation()}>
+                      {gettingLocation === false ? (
+                        <Text className="font-cinzel mt-3  text-gray-100 text-xs">
+                          Get current Location
+                        </Text>
+                      ) : (
+                        <View className="mt-1">
+                          <ActivityIndicator size={"small"} color={"white"} />
+                        </View>
+                      )}
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+
+              <View>
+                <Text className="font-cinzel text-gray-100 text-sm">
+                  Maximum Distance
+                </Text>
+                <View className="flex flex-row justify-between">
+                  <Slider
+                    style={{ width: 300, height: 20 }}
+                    minimumValue={10}
+                    maximumValue={100}
+                    step={1}
+                    value={maxDistance}
+                    onValueChange={(value) => {
+                      setMaxDistance(value);
+                      if (value !== maxDistance)
+                        handleChange("maxDistance", value);
+                    }}
+                    minimumTrackTintColor="#FFFFFF"
+                    maximumTrackTintColor="#000000"
+                    thumbTintColor="#FF4081"
+                  />
+                  <Text className="text-gray-100 font-cinzelBold text-md">
+                    {maxDistance}
+                  </Text>
+                </View>
+              </View>
+            </View>
+
+            <View className="flex border-[1px] border-slate-300  flex-col  mt-8 bg-gray-200/20 rounded-xl px-4 py-6">
+              <Text className="text-sm font-cinzel text-gray-100">Gender</Text>
+              <View>
+                <Picker
+                  selectedValue={gender}
+                  onValueChange={(itemValue) => {
+                    setGender(itemValue);
+                    if (itemValue !== gender) handleChange("gender", itemValue);
+                  }}
+                >
+                  <Picker.Item label="Male" value="Male" />
+                  <Picker.Item label="Female" value="Female" />
+                  <Picker.Item label="Other" value="Other" />
+                </Picker>
+              </View>
+              <View>
+                <Text className="font-cinzel text-gray-100 text-sm">
+                  Age range
+                </Text>
+                <View className="flex mt-3 flex-row justify-between w-[300px]">
+                  <RangeSlider
+                    style={{ width: "100%" }}
+                    min={19}
+                    max={90}
+                    step={1}
+                    low={minAge}
+                    high={maxAge}
+                    floatingLabel
+                    renderThumb={() => (
+                      <View
+                        style={{
+                          width: 15,
+                          height: 15,
+                          backgroundColor: "#FF4081",
+                          borderRadius: 10,
+                        }}
+                      />
+                    )}
+                    renderRail={() => (
+                      <View
+                        style={{
+                          flex: 1,
+                          height: 2,
+                          backgroundColor: "#333",
+                        }}
+                      />
+                    )}
+                    renderRailSelected={() => (
+                      <View
+                        style={{
+                          flex: 1,
+                          height: 2,
+                          backgroundColor: "#fff",
+                        }}
+                      />
+                    )}
+                    onValueChanged={(low, high) => {
+                      setMinAge(low);
+                      setMaxAge(high);
+                      if (low !== minAge || high !== maxAge) {
+                        handleChange("minAge", low);
+                        handleChange("maxAge", high);
+                      }
+                    }}
+                  />
+                  <Text className="text-gray-100 font-cinzelBold text-md">
+                    {minAge}-{maxAge}
+                  </Text>
+                </View>
+              </View>
+            </View>
+
+            <View className="flex border-[1px] border-slate-300  flex-col gap-3  mt-8 bg-gray-200/20 rounded-xl px-4 py-6">
+              <View className="flex flex-row justify-between items-center">
+                <Text className="text-sm font-cinzel text-gray-100">
+                  Show on feed
+                </Text>
+                <Switch
+                  trackColor={{ false: "#767577", true: "#fff" }}
+                  thumbColor={showOnFeed ? "#FF4081" : "#f4f3f4"}
+                  ios_backgroundColor="#3e3e3e"
+                  onValueChange={(value) => {
+                    setShowOnFeed(value);
+                    if (value !== showOnFeed) handleChange("showOnFeed", value);
+                  }}
+                  value={showOnFeed}
+                />
+              </View>
+              <View className="flex flex-row justify-between items-center">
+                <Text className="text-sm font-cinzel text-gray-100">
+                  Ghost mode
+                </Text>
+                <Switch
+                  trackColor={{ false: "#767577", true: "#fff" }}
+                  thumbColor={ghostMode ? "#FF4081" : "#f4f3f4"}
+                  ios_backgroundColor="#3e3e3e"
+                  onValueChange={(value) => {
+                    setGhostMode(value);
+                    if (value !== ghostMode) handleChange("ghostMode", value);
+                  }}
+                  value={ghostMode}
+                />
+              </View>
+            </View>
+
+            <TouchableOpacity className="flex border-[1px] border-slate-300  flex-col  mt-8 bg-gray-200/20 rounded-xl px-4 py-6">
+              <View className="flex flex-row gap-4 items-center">
+                <Text className="text-gray-100 font-cinzel text-sm ">
+                  My membership
+                </Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity className="flex border-[1px] border-slate-300  flex-col  mt-8 bg-gray-200/20 rounded-xl px-4 py-6">
+              <View className="flex flex-row gap-4 items-center">
+                <Text className="text-gray-100 font-cinzel text-sm ">
+                  Terms and conditions
+                </Text>
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => logout()}
+              className="flex border-[1px] border-slate-300  flex-col  mt-8 bg-gray-200/20 rounded-xl px-4 py-6"
+            >
+              <View className="flex flex-row gap-4 items-center">
+                <MaterialIcons name="logout" size={24} color="white" />
+                <Text className="text-gray-100 font-cinzelBold text-sm ">
+                  Log out
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+          <StatusBar backgroundColor={"#271e1e"} />
+        </ScrollView>
+      </LinearGradient>
+    </KeyboardAvoidingView>
   );
 }

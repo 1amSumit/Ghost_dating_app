@@ -31,6 +31,8 @@ export const updateUser = async (userObject: any) => {
   if (userObject.ghostMode !== undefined)
     formData.append("is_ghost_mode", userObject.ghostMode.toString());
 
+  console.log(userID);
+
   if (userObject.profilePic !== undefined)
     formData.append("image", {
       uri: userObject.profilePic,

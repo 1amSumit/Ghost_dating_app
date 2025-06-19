@@ -61,6 +61,7 @@ export default function UploadImages() {
       setLoading(true);
       const res = await createUser(userObject);
       await SecureStore.setItem("userToken", res.token);
+      await SecureStore.setItem("userId", res.user.id);
       await SecureStore.setItem("user", JSON.stringify(res.user));
       router.replace("/(tabs)/find");
     } catch (error) {

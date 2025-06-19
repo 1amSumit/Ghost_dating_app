@@ -61,6 +61,11 @@ export default function OtpInput() {
               maxLength={1}
               value={digit}
               onChangeText={(text) => handleChange(text, i)}
+              onKeyPress={({ nativeEvent }) => {
+                if (nativeEvent.key === "Backspace" && otp[i] === "" && i > 0) {
+                  inputRefs.current[i - 1]?.focus();
+                }
+              }}
               className="text-2xl text-center w-[40px] h-[50px] font-cinzelBold border-b-[2px] border-gray-800"
             />
           </View>

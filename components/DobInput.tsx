@@ -102,6 +102,11 @@ export default function DobInput() {
               onChangeText={(text) => handleChangeDay(text, i)}
               className="border-b-2 text-center text-xl font-cinzelBold w-[25px] border-gray-800 text-gray-800 placeholder:text-gray-500"
               placeholder="D"
+              onKeyPress={({ nativeEvent }) => {
+                if (nativeEvent.key === "Backspace" && day[i] === "" && i > 0) {
+                  dayRef.current[i - 1]?.focus();
+                }
+              }}
             />
           ))}
         </View>
@@ -118,6 +123,15 @@ export default function DobInput() {
               onChangeText={(text) => handleChangeMonth(text, i)}
               className="border-b-2 text-center text-gray-800 placeholder:text-gray-500 text-xl font-cinzelBold w-[25px] border-gray-800"
               placeholder="M"
+              onKeyPress={({ nativeEvent }) => {
+                if (
+                  nativeEvent.key === "Backspace" &&
+                  month[i] === "" &&
+                  i > 0
+                ) {
+                  monthRef.current[i - 1]?.focus();
+                }
+              }}
             />
           ))}
         </View>
@@ -134,6 +148,15 @@ export default function DobInput() {
               onChangeText={(text) => handleChangeYear(text, i)}
               className="border-b-2 text-center text-gray-800 placeholder:text-gray-500 text-xl font-cinzelBold w-[25px] border-gray-800"
               placeholder="Y"
+              onKeyPress={({ nativeEvent }) => {
+                if (
+                  nativeEvent.key === "Backspace" &&
+                  year[i] === "" &&
+                  i > 0
+                ) {
+                  yearRef.current[i - 1]?.focus();
+                }
+              }}
             />
           ))}
         </View>
