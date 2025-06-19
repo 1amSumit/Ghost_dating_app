@@ -2,7 +2,7 @@ import axios from "axios";
 import * as SecureStorage from "expo-secure-store";
 
 export const getUnMatchedUsers = async (page: number) => {
-  const API_URL = "https://ghost.sumitjha.site/api/v1feed";
+  const API_URL = "https://ghost.sumitjha.site/api/v1/feed";
   const token = await SecureStorage.getItemAsync("userToken");
 
   const res = await axios.get(`${API_URL}/getUnMatchedFeed/${page}`, {

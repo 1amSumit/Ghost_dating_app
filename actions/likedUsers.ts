@@ -2,7 +2,7 @@ import axios from "axios";
 import * as SecureStorage from "expo-secure-store";
 
 export const likedUserToDb = async (users: string[]) => {
-  const API_URL = "https://ghost.sumitjha.site/api/v1liked";
+  const API_URL = "https://ghost.sumitjha.site/api/v1/liked";
   const token = await SecureStorage.getItemAsync("userToken");
 
   const res = await axios.post(

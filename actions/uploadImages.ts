@@ -3,7 +3,7 @@ import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 
 export const uploadImages = async (pictures: ImageSlot[]) => {
-  const API_URL = "https://ghost.sumitjha.site/api/v1upload";
+  const API_URL = "https://ghost.sumitjha.site/api/v1/upload";
   const token = await SecureStore.getItemAsync("userToken");
 
   const formData = new FormData();

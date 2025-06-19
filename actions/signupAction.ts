@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const generateOtp = async (email: string) => {
-  const API_URL = "https://ghost.sumitjha.site/api/v1user";
+  const API_URL = "https://ghost.sumitjha.site/api/v1/user";
 
   const res = await axios.post(
     `${API_URL}/signup`,
