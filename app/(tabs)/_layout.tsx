@@ -4,7 +4,8 @@ import { addUserData } from "@/store/userData";
 import { SplashScreen, Tabs } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import { useEffect } from "react";
-import { SafeAreaView, StatusBar } from "react-native";
+import { StatusBar } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useDispatch } from "react-redux";
 
@@ -38,7 +39,7 @@ export default function RootLayout() {
   }, [dispatch]);
 
   return (
-    <SafeAreaView className="flex-1">
+    <SafeAreaView className="flex-1" edges={["top"]}>
       <Tabs tabBar={(props) => <TabBar {...props} />}>
         <Tabs.Screen name="find" options={{ headerShown: false }} />
         <Tabs.Screen name="like" options={{ headerShown: false }} />

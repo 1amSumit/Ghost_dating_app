@@ -4,28 +4,29 @@ import { setSeenUsersToCache } from "@/actions/setSeenUsers";
 import DisplayUser from "@/components/DisplayUser";
 import { userObject } from "@/lib/types";
 import { LinearGradient } from "expo-linear-gradient";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function Find() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [likedUser, setLikedUser] = useState<string[]>([]);
+  const likedUserRef = useRef<string[]>([]);
   const [dataIndex, setDataIndex] = useState<number>(0);
-  const [seenUser, setSeenUser] = useState<string[]>([]);
+  const seenUserRef = useRef<string[]>([]);
   const [data, setData] = useState<userObject[]>([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
 
   const updateLikedUser = (userId: string) => {
-    setLikedUser((prev) => [...prev, userId]);
+    likedUserRef.current.push(userId);
   };
 
-  const updateCurrentIndex = () => {
-    setSeenUser((prev) => [...prev, data[dataIndex].user_details.user_id]);
+  const updateCurrentIndex = useCallback(() => {
+    const id = data[dataIndex]?.user_details?.user_id;
+    if (id) seenUserRef.current.push(id);
     setCurrentIndex((prev) => prev + 1);
     setDataIndex((prev) => prev + 1);
-  };
+  }, [dataIndex]);
 
   const getUnMatchedHandler = async () => {
     try {
@@ -44,44 +45,25 @@ export default function Find() {
   };
 
   useEffect(() => {
-    if (currentIndex === 8) {
+    if (currentIndex > 0 && currentIndex % 8 === 0) {
       getUnMatchedHandler();
-      setCurrentIndex(0);
     }
-
-    return () => {};
   }, [currentIndex]);
 
   useEffect(() => {
-    if (seenUser.length === 0) {
-      return;
-    } else {
-      const interval = setInterval(async () => {
-        try {
-          await setSeenUsersToCache(seenUser);
-        } catch (err) {
-          console.log(err);
-        }
-      }, 60 * 1000);
-      return () => clearInterval(interval);
-    }
-  }, [seenUser]);
+    const interval = setInterval(async () => {
+      if (seenUserRef.current.length > 0) {
+        await setSeenUsersToCache(seenUserRef.current);
+        seenUserRef.current = [];
+      }
+      if (likedUserRef.current.length > 0) {
+        await likedUserToDb(likedUserRef.current);
+        likedUserRef.current = [];
+      }
+    }, 60 * 1000);
 
-  useEffect(() => {
-    if (likedUser.length === 0) {
-      return;
-    } else {
-      const interval = setInterval(async () => {
-        try {
-          await likedUserToDb(likedUser);
-          setLikedUser([]);
-        } catch (err) {
-          console.log(err);
-        }
-      }, 60 * 1000);
-      return () => clearInterval(interval);
-    }
-  }, [likedUser]);
+    return () => clearInterval(interval);
+  }, [seenUserRef.current.length, likedUserRef.current.length]);
 
   useEffect(() => {
     setLoading(true);

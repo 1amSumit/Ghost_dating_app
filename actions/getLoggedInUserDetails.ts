@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 export const getLoggedInUserDetails = async () => {
-  const API_URL = "https://ghost.sumitjha.site/api/v1/user";
+  const API_URL = "http://192.168.1.3:3000/api/v1/user";
   const token = await SecureStore.getItemAsync("userToken");
 
   const res = await axios.get(`${API_URL}/getLoggedInUser`, {

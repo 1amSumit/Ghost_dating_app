@@ -1,10 +1,9 @@
 import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   ActivityIndicator,
   Dimensions,
-  Image,
   Pressable,
   Text,
   View,
@@ -18,6 +17,8 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 
+import Image from "react-native-fast-image";
+
 interface DisplayuserProps {
   user_id: string;
   firstName: string;
@@ -29,7 +30,7 @@ interface DisplayuserProps {
   updateLikedUser: (id: string) => void;
 }
 
-export default function DisplayUser({
+const DisplayUser = ({
   user_id,
   firstName,
   lastName,
@@ -38,7 +39,7 @@ export default function DisplayUser({
   pictures,
   updateCurrentIndex,
   updateLikedUser,
-}: DisplayuserProps) {
+}: DisplayuserProps) => {
   const [loading, setLoading] = useState(false);
   const translateX = useSharedValue(0);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -183,4 +184,6 @@ export default function DisplayUser({
       </View>
     </View>
   );
-}
+};
+
+export default React.memo(DisplayUser);

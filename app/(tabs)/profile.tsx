@@ -210,7 +210,7 @@ export default function Profile() {
         showsVerticalScrollIndicator={false}
         className="ios:p-6"
       >
-        <View className="mt-[3rem]">
+        <View className="mt-[1rem]">
           <View className="flex flex-row justify-between items-center">
             <Text className="text-gray-100 text-xl font-cinzelBold">
               Profile
