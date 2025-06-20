@@ -22,16 +22,22 @@ export default function Signin() {
     setLoading(true);
     try {
       const res = await signin(email, password);
+
+      if (!res || !res.token) {
+        throw new Error("Invalid login response");
+      }
+
       await SecureStore.setItem("userToken", res.token);
       await SecureStore.setItem("userId", res.userId);
       await SecureStore.setItem("user", JSON.stringify(res.user));
+
       router.replace("/(tabs)/find");
-    } catch (err) {
-      console.log(err);
-      ToastAndroid.show("Incorrect eamil or password", ToastAndroid.SHORT);
+    } catch (err: any) {
+      console.log("Signin Error:");
+      ToastAndroid.show("Login failed", ToastAndroid.SHORT);
       router.replace("/");
     } finally {
-      setLoading(true);
+      setLoading(false);
     }
   };
 
@@ -60,6 +66,7 @@ export default function Signin() {
             <CustomInput
               label="Provide your email"
               value={email}
+              keyboardType="email"
               placeholder="bloodymarry@ghostmail.com"
               onChange={(text) => setEmail(text)}
             />
@@ -73,6 +80,7 @@ export default function Signin() {
             <CustomInput
               label="Provide your password"
               value={password}
+              keyboardType="text"
               placeholder=""
               onChange={(text) => setPassword(text)}
             />

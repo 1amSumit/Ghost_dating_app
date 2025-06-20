@@ -83,7 +83,7 @@ export default function Chat() {
     useCallback(() => {
       if (!loggedInUserId || !recieverUserId) return;
 
-      const socket = new WebSocket("ws://ghost-ws.sumitjha.site:8080");
+      const socket = new WebSocket("wss://ghost-ws.sumitjha.site");
       ws.current = socket;
 
       socket.onopen = () => {

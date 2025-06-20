@@ -66,6 +66,7 @@ export default function Username() {
             </Pressable>
           </View>
           <CustomInput
+            keyboardType="text"
             label="Please provide your Username"
             value={username}
             placeholder="Bloody Marry"

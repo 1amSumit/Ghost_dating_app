@@ -14,7 +14,7 @@ export const signin = async (email: string, password: string) => {
       }
     );
     return res.data;
-  } catch (err) {
-    console.log("err", err);
+  } catch (err: any) {
+    throw new Error(err.response.data);
   }
 };
