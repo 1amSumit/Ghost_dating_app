@@ -1,6 +1,6 @@
 import { AntDesign } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
-import { Dimensions, Image, Text, Vibration, View } from "react-native";
+import { Dimensions, Text, Vibration, View } from "react-native";
 import {
   Gesture,
   GestureDetector,
@@ -13,7 +13,9 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 
-export default function LikedUserComponent({
+import Image from "react-native-fast-image";
+
+const LikedUserComponent = ({
   pictures,
   firstName,
   lastName,
@@ -27,7 +29,7 @@ export default function LikedUserComponent({
   age: number;
   userId: string;
   handleLikedUser: (userId: string) => void;
-}) {
+}) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const SCREEN_WIDTH = Dimensions.get("window").width;
   const translateX = useSharedValue(0);
@@ -83,10 +85,11 @@ export default function LikedUserComponent({
   return (
     <View className="relative overflow-hidden  h-[350px] w-[350px] rounded-[3rem]">
       <View className="absolute top-5 left-6 z-[10000] flex flex-row gap-2">
-        <View className="rounded-xl border-[2px] border-orange-600 shadow-xl shadow-orange-700 w-10 h-10">
+        <View className="rounded-xl border-[2px] border-orange-600 shadow-xl shadow-orange-700 w-10 h-10 overflow-hidden">
           <Image
-            source={{ uri: pictures[2] }}
-            className="w-full h-full rounded-xl"
+            source={{ uri: pictures[1] }}
+            style={{ width: "100%", height: "100%" }}
+            resizeMode="contain"
           />
         </View>
         <View className="flex flex-col ">
@@ -162,4 +165,6 @@ export default function LikedUserComponent({
       </GestureDetector>
     </View>
   );
-}
+};
+
+export default React.memo(LikedUserComponent);

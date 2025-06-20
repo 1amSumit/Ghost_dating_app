@@ -4,7 +4,7 @@ import LikedUserComponent from "@/components/LikedUserComponent";
 import { LickedUser } from "@/lib/types";
 import { LinearGradient } from "expo-linear-gradient";
 import { useFocusEffect } from "expo-router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Animated, { SlideInDown } from "react-native-reanimated";
@@ -12,20 +12,20 @@ import Animated, { SlideInDown } from "react-native-reanimated";
 export default function Liked() {
   const [likedUsers, setLikedUsers] = useState<LickedUser[]>([]);
   const [loading, setLoading] = useState(false);
-  const [likedUserIds, setLikedUserIds] = useState<string[]>([]);
+  const likedUserIdsRef = useRef<string[]>([]);
 
   const handleLikedUser = (userid: string) => {
-    setLikedUserIds((prev) => [...prev, userid]);
+    likedUserIdsRef.current.push(userid);
   };
 
   useEffect(() => {
-    if (likedUserIds.length === 0) {
+    if (likedUserIdsRef.current.length === 0) {
       return;
     } else {
       const interval = setInterval(async () => {
         try {
-          const res = await addToMatch(likedUserIds);
-          setLikedUserIds([]);
+          const res = await addToMatch(likedUserIdsRef.current);
+          likedUserIdsRef.current = [];
         } catch (err) {
           console.log(err);
         }
@@ -33,17 +33,17 @@ export default function Liked() {
 
       return () => clearInterval(interval);
     }
-  }, [likedUserIds]);
+  }, [likedUserIdsRef.current.length]);
 
   useEffect(() => {
     const fliterLikedUser = likedUsers.filter((user) =>
-      likedUserIds.includes(user.liked_by.user_details.user_id) ? false : true
+      likedUserIdsRef.current.includes(user.liked_by.user_details.user_id)
+        ? false
+        : true
     );
 
     setLikedUsers(fliterLikedUser);
-
-    return () => {};
-  }, [likedUserIds]);
+  }, [likedUserIdsRef.current.length]);
 
   useFocusEffect(
     useCallback(() => {
@@ -100,6 +100,11 @@ export default function Liked() {
         data={likedUsers}
         contentContainerStyle={{ paddingBottom: 200 }}
         keyExtractor={(item) => item.liked_by.user_details.user_id}
+        getItemLayout={(data, index) => ({
+          length: 400,
+          offset: 400 * index,
+          index,
+        })}
         ItemSeparatorComponent={() => <View className="h-[100px]" />}
         className="w-full bg-none"
         ListHeaderComponent={
@@ -112,11 +117,11 @@ export default function Liked() {
             </Text>
           </View>
         }
-        renderItem={({ item }) => {
+        renderItem={({ item, index }) => {
           return (
             <GestureHandlerRootView>
               <Animated.View
-                entering={SlideInDown.duration(300).springify()}
+                entering={SlideInDown.springify().delay(index * 100)}
                 className="flex items-center justify-center"
               >
                 <LikedUserComponent
