@@ -5,7 +5,7 @@ import * as Location from "expo-location";
 
 import MapView, { MapPressEvent, Marker } from "react-native-maps";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, TextInput, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -75,16 +75,6 @@ export default function LocationInput() {
   const isValidLocation =
     hasLocationPermission && latitude != null && longitude != null;
 
-  const initialRegion = useMemo(() => {
-    if (!latitude || !longitude) return null;
-    return {
-      latitude,
-      longitude,
-      latitudeDelta: 0.002,
-      longitudeDelta: 0.002,
-    };
-  }, [latitude, longitude]);
-
   return (
     <View className="w-screen px-[1rem]">
       <Text className="font-cinzelBold text-3xl px-[1rem]">
@@ -100,12 +90,17 @@ export default function LocationInput() {
         />
       </View>
 
-      {isValidLocation && initialRegion ? (
+      {isValidLocation ? (
         <View className="mt-[2rem] flex flex-col items-center">
           <View className="w-[300px] h-[300px] rounded-lg overflow-hidden">
             <MapView
               style={{ width: "100%", height: "100%" }}
-              initialRegion={initialRegion}
+              initialRegion={{
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
+                latitudeDelta: 0.002,
+                longitudeDelta: 0.002,
+              }}
               zoomEnabled
               onPress={handleMapPress}
             >

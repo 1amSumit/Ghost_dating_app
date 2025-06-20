@@ -4,8 +4,7 @@ import { addUserData } from "@/store/userData";
 import { SplashScreen, Tabs } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import { useEffect } from "react";
-import { StatusBar } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView, StatusBar } from "react-native";
 
 import { useDispatch } from "react-redux";
 
