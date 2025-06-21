@@ -93,6 +93,20 @@ export default function Find() {
       </LinearGradient>
     );
   }
+  if (data.length === 0) {
+    return (
+      <LinearGradient
+        colors={["#252123", "#7a235d"]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        className="flex-1  items-center justify-center"
+      >
+        <Text className="text-2xl font-cinzelBold text-gray-100 ">
+          No matching user found
+        </Text>
+      </LinearGradient>
+    );
+  }
 
   const renderCard = () => {
     if (!data || currentIndex >= data.length) {

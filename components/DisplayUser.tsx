@@ -17,7 +17,7 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 
-import Image from "react-native-fast-image";
+import Image from "@d11/react-native-fast-image";
 
 interface DisplayuserProps {
   user_id: string;
@@ -80,7 +80,7 @@ const DisplayUser = ({
   return (
     <View>
       <View
-        className={`relative overflow-hidden bg-gray-300 h-[500px] w-[350px] rounded-[3rem] shadow-2xl shadow-purple-600`}
+        className={`relative overflow-hidden bg-gray-300 h-[500px] w-[350px] flex items-center  rounded-[3rem] shadow-2xl shadow-purple-300`}
       >
         <View className="flex flex-row gap-2 mx-[1rem] z-[10000] w-[100px] h-[10px] absolute top-5 left-0">
           <View
@@ -104,7 +104,11 @@ const DisplayUser = ({
             style={[{ flex: 1, width: SCREEN_WIDTH }, animatedStyle]}
           >
             {pictures.map((picture, i) => (
-              <View key={i} style={{ width: SCREEN_WIDTH, height: "100%" }}>
+              <View
+                key={i}
+                className="flex items-center justify-center bg-red-600 border-2"
+                style={{ width: SCREEN_WIDTH }}
+              >
                 <Image
                   source={{ uri: picture }}
                   style={{ width: "100%", height: "100%" }}

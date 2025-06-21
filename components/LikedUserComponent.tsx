@@ -13,7 +13,7 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 
-import Image from "react-native-fast-image";
+import Image from "@d11/react-native-fast-image";
 
 const LikedUserComponent = ({
   pictures,
@@ -150,19 +150,21 @@ const LikedUserComponent = ({
         ></View>
       </View>
 
-      <GestureDetector gesture={panGesture}>
-        <Animated.View style={[{ width: SCREEN_WIDTH }, animatedStyle]}>
-          {pictures.map((picture, i) => (
-            <View key={i} style={{ width: "100%", height: "100%" }}>
-              <Image
-                source={{ uri: picture }}
-                style={{ width: "100%", height: "100%" }}
-                resizeMode="cover"
-              />
-            </View>
-          ))}
-        </Animated.View>
-      </GestureDetector>
+      <View className="flex flex-col items-center">
+        <GestureDetector gesture={panGesture}>
+          <Animated.View style={[{ width: SCREEN_WIDTH }, animatedStyle]}>
+            {pictures.map((picture, i) => (
+              <View key={i} style={{ width: "100%", height: "100%" }}>
+                <Image
+                  source={{ uri: picture }}
+                  style={{ width: "100%", height: "100%" }}
+                  resizeMode="cover"
+                />
+              </View>
+            ))}
+          </Animated.View>
+        </GestureDetector>
+      </View>
     </View>
   );
 };
