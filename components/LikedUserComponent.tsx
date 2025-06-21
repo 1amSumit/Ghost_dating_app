@@ -83,7 +83,7 @@ const LikedUserComponent = ({
   }));
 
   return (
-    <View className="relative overflow-hidden  h-[350px] w-[350px] rounded-[3rem]">
+    <Animated.View className="relative overflow-hidden  h-[350px] w-[350px] rounded-[3rem]">
       <View className="absolute top-5 left-6 z-[10000] flex flex-row gap-2">
         <View className="rounded-xl border-[2px] border-orange-600 shadow-xl shadow-orange-700 w-10 h-10 overflow-hidden">
           <Image
@@ -165,7 +165,7 @@ const LikedUserComponent = ({
           </Animated.View>
         </GestureDetector>
       </View>
-    </View>
+    </Animated.View>
   );
 };
 
