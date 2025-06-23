@@ -39,7 +39,7 @@ interface PronounsItem {
 }
 
 export const createUser = async (userObject: userObject) => {
-  const API_URL = "http://192.168.1.3:3000/api/v1/user";
+  const API_URL = "https://ghost-backend.sumitjha.site/api/v1/user";
   const userID = await SecureStore.getItemAsync("token");
 
   const formData = new FormData();

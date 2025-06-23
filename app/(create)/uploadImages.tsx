@@ -69,6 +69,10 @@ export default function UploadImages() {
       router.replace("/(tabs)/find");
     } catch (error) {
       console.log(error);
+      await SecureStore.deleteItemAsync("userToken");
+      await SecureStore.deleteItemAsync("userId");
+      await SecureStore.deleteItemAsync("user");
+      dispatch(resetCreateUser());
       router.replace("/");
     } finally {
       setLoading(false);
