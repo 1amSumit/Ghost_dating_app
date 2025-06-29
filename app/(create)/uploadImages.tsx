@@ -65,15 +65,13 @@ export default function UploadImages() {
       await SecureStore.setItem("userToken", res.token);
       await SecureStore.setItem("userId", res.user.id);
       await SecureStore.setItem("user", JSON.stringify(res.user));
+      await SecureStore.deleteItemAsync("token");
       dispatch(resetCreateUser());
       router.replace("/(tabs)/find");
     } catch (error) {
       console.log(error);
-      await SecureStore.deleteItemAsync("userToken");
-      await SecureStore.deleteItemAsync("userId");
-      await SecureStore.deleteItemAsync("user");
       dispatch(resetCreateUser());
-      router.replace("/");
+      router.replace("/username");
     } finally {
       setLoading(false);
     }
