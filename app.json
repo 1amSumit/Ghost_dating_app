@@ -13,11 +13,6 @@
     },
     "android": {
       "package": "com.ghostdate.sumit",
-      "config": {
-        "googleMaps": {
-          "apiKey": "AIzaSyDG3jxfcdNhzpXfmVYtPLxy0nkYbvrH43U"
-        }
-      },
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"

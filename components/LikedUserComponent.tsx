@@ -13,7 +13,7 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 
-import Image from "@d11/react-native-fast-image";
+import { Image } from "expo-image";
 
 const LikedUserComponent = ({
   pictures,
@@ -89,7 +89,7 @@ const LikedUserComponent = ({
           <Image
             source={{ uri: pictures[1] }}
             style={{ width: "100%", height: "100%" }}
-            resizeMode="contain"
+            contentFit="contain"
           />
         </View>
         <View className="flex flex-col ">

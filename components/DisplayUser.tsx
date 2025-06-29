@@ -17,7 +17,7 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 
-import Image from "@d11/react-native-fast-image";
+import { Image } from "expo-image";
 
 interface DisplayuserProps {
   user_id: string;
@@ -112,7 +112,7 @@ const DisplayUser = ({
                 <Image
                   source={{ uri: picture }}
                   style={{ width: "100%", height: "100%" }}
-                  resizeMode="cover"
+                  contentFit="cover"
                   onLoadStart={() => setLoading(true)}
                   onLoadEnd={() => setLoading(false)}
                 />
