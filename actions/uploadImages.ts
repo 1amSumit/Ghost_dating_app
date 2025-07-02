@@ -3,7 +3,7 @@ import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 
 export const uploadImages = async (pictures: ImageSlot[]) => {
-  const API_URL = "https://ghost-backend.sumitjha.site/api/v1/upload";
+  const API_URL = "http://192.168.1.3:3000/api/v1/upload";
   const token = await SecureStore.getItemAsync("userToken");
 
   const formData = new FormData();
@@ -16,13 +16,18 @@ export const uploadImages = async (pictures: ImageSlot[]) => {
     } as any);
   });
 
-  const res = await axios.post(`${API_URL}/upload-images`, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-      authorization: token,
-    },
-    body: formData,
-  });
+  try {
+    const res = await axios.post(`${API_URL}/upload-images`, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        authorization: token,
+      },
+      body: formData,
+    });
 
-  return res.data;
+    return res.data;
+  } catch (err: any) {
+    console.log(err.response.data);
+    throw new Error(err.response.data.message);
+  }
 };

@@ -2,11 +2,16 @@ import { generateOtp } from "@/actions/signupAction";
 import CustomInput from "@/components/CustomInput";
 import FloatingButton from "@/components/FloatingButton";
 import { RootState } from "@/store/store";
-import { addEmail } from "@/store/userSlice";
+import { addEmail, resetSinginUser } from "@/store/userSlice";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { ActivityIndicator, ToastAndroid, View } from "react-native";
+import {
+  ActivityIndicator,
+  ScrollView,
+  ToastAndroid,
+  View,
+} from "react-native";
 import Animated, { SlideInLeft } from "react-native-reanimated";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -22,10 +27,11 @@ export default function Email() {
       const res = await generateOtp(email);
       router.push("/(create)/password");
     } catch (err: any) {
-      console.log(err.message);
-      ToastAndroid.show("User Already Exists" + err, ToastAndroid.SHORT);
+      dispatch(resetSinginUser());
+      ToastAndroid.show(err.message, ToastAndroid.SHORT);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   if (loading) {
@@ -37,7 +43,7 @@ export default function Email() {
   }
 
   return (
-    <View className=" relative flex-1 flex flex-col bg-gray-200 items-center pt-[6rem]">
+    <ScrollView contentContainerClassName="items-center pt-[6rem] flex-1 flex-col bg-gray-200">
       <View className="flex flex-col gap-4 items-center justify-center">
         <SimpleLineIcons name="ghost" size={40} color={"#C084FC"} />
       </View>
@@ -63,6 +69,6 @@ export default function Email() {
           }}
         />
       </View>
-    </View>
+    </ScrollView>
   );
 }

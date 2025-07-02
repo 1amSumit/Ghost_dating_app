@@ -6,7 +6,12 @@ import { SimpleLineIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import { useState } from "react";
-import { ActivityIndicator, ToastAndroid, View } from "react-native";
+import {
+  ActivityIndicator,
+  ScrollView,
+  ToastAndroid,
+  View,
+} from "react-native";
 import Animated, { SlideInLeft } from "react-native-reanimated";
 import { useSelector } from "react-redux";
 
@@ -44,7 +49,7 @@ export default function Otp() {
   }
 
   return (
-    <View className=" relative flex-1 flex flex-col bg-gray-200 items-center pt-[6rem]">
+    <ScrollView contentContainerClassName="items-center pt-[6rem] flex-1 flex-col bg-gray-200">
       <View className="flex flex-col gap-4 ">
         <SimpleLineIcons name="ghost" size={40} color={"#C084FC"} />
       </View>
@@ -64,6 +69,6 @@ export default function Otp() {
           }}
         />
       </View>
-    </View>
+    </ScrollView>
   );
 }

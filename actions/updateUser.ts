@@ -2,7 +2,7 @@ import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 
 export const updateUser = async (userObject: any) => {
-  const API_URL = "https://ghost-backend.sumitjha.site/api/v1/user";
+  const API_URL = "http://192.168.1.3:3000/api/v1/user";
   const token = await SecureStore.getItemAsync("userToken");
   const userID = await SecureStore.getItemAsync("userId");
   const formData = new FormData();
@@ -40,12 +40,17 @@ export const updateUser = async (userObject: any) => {
       type: "image/jpeg",
     } as any);
 
-  const res = await axios.put(`${API_URL}/update-user`, formData, {
-    headers: {
-      authorization: token,
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  try {
+    const res = await axios.put(`${API_URL}/update-user`, formData, {
+      headers: {
+        authorization: token,
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
-  return res.data;
+    return res.data;
+  } catch (err: any) {
+    console.log(err.response.data);
+    throw new Error(err.response.data.message);
+  }
 };

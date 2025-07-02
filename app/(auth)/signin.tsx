@@ -33,8 +33,7 @@ export default function Signin() {
 
       router.replace("/(tabs)/find");
     } catch (err: any) {
-      console.log("Signin Error:", err);
-      ToastAndroid.show("Login failed", ToastAndroid.SHORT);
+      ToastAndroid.show(err.message, ToastAndroid.SHORT);
       router.replace("/");
     } finally {
       setLoading(false);

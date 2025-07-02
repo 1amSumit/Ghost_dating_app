@@ -22,7 +22,7 @@ export default function Liked() {
     if (likedUserIds.length === 0) {
       return;
     } else {
-      const interval = setInterval(async () => {
+      const timeout = setTimeout(async () => {
         try {
           const res = await addToMatch(likedUserIds);
           setLikedUserIds([]);
@@ -31,7 +31,7 @@ export default function Liked() {
         }
       }, 1000);
 
-      return () => clearInterval(interval);
+      return () => clearTimeout(timeout);
     }
   }, [likedUserIds.length]);
 

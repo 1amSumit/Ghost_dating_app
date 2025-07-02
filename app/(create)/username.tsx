@@ -6,7 +6,7 @@ import { SimpleLineIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Image, Pressable, Text, View } from "react-native";
+import { Image, Pressable, ScrollView, Text, View } from "react-native";
 import Animated, { SlideInLeft } from "react-native-reanimated";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -29,7 +29,7 @@ export default function Username() {
   };
 
   return (
-    <View className=" relative flex-1 flex flex-col bg-gray-200 items-center pt-[6rem]">
+    <ScrollView contentContainerClassName="items-center pt-[6rem] flex-1 flex-col bg-gray-200">
       <View className="flex flex-col gap-4 items-center justify-center">
         <SimpleLineIcons name="ghost" size={40} color={"#C084FC"} />
         <Text className="text-gray-700 font-cinzelBold text-3xl">
@@ -82,6 +82,6 @@ export default function Username() {
           }}
         />
       </View>
-    </View>
+    </ScrollView>
   );
 }

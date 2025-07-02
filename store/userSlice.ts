@@ -19,8 +19,13 @@ const userSlice = createSlice({
     addOtp: (state, action) => {
       state.otp = action.payload;
     },
+
+    resetSinginUser: (state) => {
+      return initialState;
+    },
   },
 });
 
-export const { addEmail, addPassword, addOtp } = userSlice.actions;
+export const { addEmail, addPassword, addOtp, resetSinginUser } =
+  userSlice.actions;
 export default userSlice;

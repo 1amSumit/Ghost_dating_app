@@ -25,7 +25,6 @@ export default function LocationInput() {
     }
 
     setHasLocationPermission(true);
-    console.log("hallo");
 
     const loca = await Location.getCurrentPositionAsync({});
 
@@ -39,7 +38,6 @@ export default function LocationInput() {
       const address = addressArray[0];
       const formattedAddress = `${address.name}, ${address.street}, ${address.city}, ${address.region}, ${address.postalCode}, ${address.country}`;
       dispatch(addAddress(formattedAddress));
-      console.log(formattedAddress);
     }
     dispatch(addLocation(loca));
   };

@@ -107,7 +107,9 @@ const createUserSlice = createSlice({
     addImages: (state, action: PayloadAction<ImageSlot[]>) => {
       state.images = action.payload;
     },
-    resetCreateUser: () => initialState,
+    resetCreateUser: (state) => {
+      return initialState;
+    },
   },
 });
 

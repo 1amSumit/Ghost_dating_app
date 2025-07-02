@@ -39,7 +39,7 @@ interface PronounsItem {
 }
 
 export const createUser = async (userObject: userObject) => {
-  const API_URL = "https://ghost-backend.sumitjha.site/api/v1/user";
+  const API_URL = "http://192.168.1.3:3000/api/v1/user";
   const userID = await SecureStore.getItemAsync("token");
 
   const formData = new FormData();
@@ -89,11 +89,16 @@ export const createUser = async (userObject: userObject) => {
     } as any);
   });
 
-  const res = await axios.post(`${API_URL}/create-user`, formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  try {
+    const res = await axios.post(`${API_URL}/create-user`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
-  return res.data;
+    return res.data;
+  } catch (err: any) {
+    console.log(err.response.data);
+    throw new Error(err.response.data.message);
+  }
 };

@@ -4,26 +4,26 @@ import { setSeenUsersToCache } from "@/actions/setSeenUsers";
 import DisplayUser from "@/components/DisplayUser";
 import { userObject } from "@/lib/types";
 import { LinearGradient } from "expo-linear-gradient";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function Find() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const likedUserRef = useRef<string[]>([]);
+  const [likedUsers, setLikedUsers] = useState<string[]>([]);
   const [dataIndex, setDataIndex] = useState<number>(0);
-  const seenUserRef = useRef<string[]>([]);
+  const [seenUsers, setSeenUsers] = useState<string[]>([]);
   const [data, setData] = useState<userObject[]>([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
 
   const updateLikedUser = (userId: string) => {
-    likedUserRef.current.push(userId);
+    setLikedUsers((prev) => [...prev, userId]);
   };
 
   const updateCurrentIndex = useCallback(() => {
     const id = data[dataIndex]?.user_details?.user_id;
-    if (id) seenUserRef.current.push(id);
+    if (id) setSeenUsers((prev) => [...prev, id]);
     setCurrentIndex((prev) => prev + 1);
     setDataIndex((prev) => prev + 1);
   }, [dataIndex]);
@@ -51,19 +51,19 @@ export default function Find() {
   }, [currentIndex]);
 
   useEffect(() => {
-    const interval = setInterval(async () => {
-      if (seenUserRef.current.length > 0) {
-        await setSeenUsersToCache(seenUserRef.current);
-        seenUserRef.current = [];
+    const timeout = setTimeout(async () => {
+      if (seenUsers.length > 0) {
+        await setSeenUsersToCache(seenUsers);
+        setSeenUsers([]);
       }
-      if (likedUserRef.current.length > 0) {
-        await likedUserToDb(likedUserRef.current);
-        likedUserRef.current = [];
+      if (likedUsers.length > 0) {
+        await likedUserToDb(likedUsers);
+        setLikedUsers([]);
       }
-    }, 60 * 1000);
+    }, 2000);
 
-    return () => clearInterval(interval);
-  }, [seenUserRef.current.length, likedUserRef.current.length]);
+    return () => clearTimeout(timeout);
+  }, [seenUsers.length, likedUsers.length]);
 
   useEffect(() => {
     setLoading(true);
